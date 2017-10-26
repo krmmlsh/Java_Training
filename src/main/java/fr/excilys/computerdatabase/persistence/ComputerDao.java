@@ -8,20 +8,38 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.excilys.computerdatabase.model.Computer;
 
 public class ComputerDao {
 
+	private static final String UPDATE_COMPUTER = "UPDATE computer set name=?, introduced=?, discontinued=?, company_id=? where id=";
+
+	private static final String INSERT_COMPUTER = "INSERT INTO computer values (NULL, ?, ?, ?, ?)";
+
+	private static final String DELETE_FROM_ID = "DELETE FROM computer WHERE id = ";
+
+	private static final String GET_ALL_COMPUTERS = "SELECT * FROM computer";
+
+	private static final String COMPUTER_BY_NAME = "SELECT * FROM computer where name = ";
+
+	private static final String GET_COMPUTER = "SELECT * FROM computer where id = ";
+
+	private final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
+
 	private static ComputerDao computerDao;
-	
+
 	private CompanyDao companyDao = CompanyDao.getInstance();
-	
+
 	private ComputerDao() {
-		
+
 	}
-	
+
 	/**
 	 * Get the singleton of ComputerDao.
+	 * 
 	 * @return ComputerDao instance
 	 */
 	public synchronized static ComputerDao getInstance() {
@@ -29,162 +47,190 @@ public class ComputerDao {
 			computerDao = new ComputerDao();
 		return computerDao;
 	}
-	
-	
+
 	/**
 	 * Fill computer with ResultSet values.
-	 * @param rs ResultSet from the select query.
+	 * 
+	 * @param rs
+	 *            ResultSet from the select query.
 	 * @return Computer newly filled.
 	 * @throws SQLException
 	 */
 	private Computer createComputerFromDatabase(ResultSet rs) throws SQLException {
-		Computer c = new Computer();
-		c.setId(rs.getInt("id"));
-		c.setName(rs.getString("name"));
-		c.setCompany(companyDao.getCompany(rs.getInt("company_id")));
-		c.setIntroducedDate(rs.getTimestamp("introduced"));
-		c.setDiscontinuedDate(rs.getTimestamp("discontinued"));
-		return c;
+		Computer computer = new Computer();
+		computer.setId(rs.getInt("id"));
+		computer.setName(rs.getString("name"));
+		computer.setCompany(companyDao.getCompany(rs.getInt("company_id")));
+		computer.setIntroducedDate(rs.getTimestamp("introduced"));
+		computer.setDiscontinuedDate(rs.getTimestamp("discontinued"));
+		return computer;
 
 	}
 
 	/**
 	 * Get a computer from his id.
-	 * @param id Id of a computer.
+	 * 
+	 * @param id
+	 *            Id of a computer.
 	 * @return A computer.
 	 */
 	public Computer getComputer(int id) {
+		logger.info("ENTER GET COMPUTER BY ID");
+
 		try (Connection conn = DatabaseConnexion.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM computer where id = " + id)) {
+				ResultSet rs = stmt.executeQuery(GET_COMPUTER + id)) {
 
 			if (rs.next()) {
 
 				return createComputerFromDatabase(rs);
 			} else {
-				System.out.println("No computer found");
+				logger.error("Error while getting computer from : " + id + " id");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error while getting computer from : " + id + " id");
 		}
+		logger.info("EXIT GET COMPUTER");
+
 		return null;
 	}
 
 	/**
 	 * Get a computer by name, if multiple found, return the first one in the list.
-	 * @param name Name of the computer.
+	 * 
+	 * @param name
+	 *            Name of the computer.
 	 * @return A computer.
 	 */
 	public Computer getComputer(String name) {
+		logger.info("ENTER GET COMPUTER BY NAME");
+
 		try (Connection conn = DatabaseConnexion.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM computer where name = " + name)) {
+				ResultSet rs = stmt.executeQuery(COMPUTER_BY_NAME + name)) {
 
 			if (rs.next()) {
+				logger.info("EXIT GET COMPUTER");
+
 				return createComputerFromDatabase(rs);
 			} else {
-				System.out.println("No computer found");
+				logger.error("Error while getting computer from : " + name + " name");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error while getting computer from : " + name + " name");
 		}
+		logger.info("EXIT GET COMPUTER");
 		return null;
 	}
-	
-	
+
 	/**
 	 * Get all the computers from the database
+	 * 
 	 * @return List of Computer.
 	 */
 	public List<Computer> getComputers() {
+		logger.info("ENTER GET ALL COMPUTERS");
+
 		List<Computer> list = new ArrayList<>();
 		try (Connection conn = DatabaseConnexion.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM computer");) {
+				ResultSet rs = stmt.executeQuery(GET_ALL_COMPUTERS);) {
 			while (rs.next()) {
 				list.add(createComputerFromDatabase(rs));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error while getting computers from database");
 		}
+		logger.info("EXIT GET ALL COMPUTER");
+
 		return list;
 	}
 
-	
 	/**
 	 * Remove a computer from his id.
-	 * @param id Id of the computer to remove.
+	 * 
+	 * @param id
+	 *            Id of the computer to remove.
 	 * @return true if it worked, else false.
 	 */
 	public boolean removeComputer(int id) {
+		logger.info("ENTER REMOVE COMPUTER");
+
 		try (Connection conn = DatabaseConnexion.getConnection(); Statement stmt = conn.createStatement()) {
 
-			int i = stmt.executeUpdate("DELETE FROM computer WHERE id = " + id);
+			int i = stmt.executeUpdate(DELETE_FROM_ID + id);
 			if (i == 1) {
-				System.out.println("Computer deleted");
-
+				logger.info("Computer deleted");
+				logger.info("EXIT REMOVE COMPUTER");
 				return true;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 		}
-		System.out.println("Computer cannot be deleted");
-
+		logger.error("Cannot remove computer : " + id + " name");
+		logger.info("EXIT REMOVE COMPUTER");
 		return false;
 	}
 
-	
 	/**
 	 * Insert a computer in the database.
-	 * @param c Computer to add.
+	 * 
+	 * @param computer
+	 *            Computer to add.
 	 * @return true if it worked, else false.
 	 */
-	public boolean insertComputer(Computer c) {
-		try (Connection conn = DatabaseConnexion.getConnection();
-				PreparedStatement ps = conn.prepareStatement("INSERT INTO computer values (NULL, ?, ?, ?, ?)")) {
+	public boolean insertComputer(Computer computer) {
+		logger.info("ENTER INSERT COMPUTER");
 
-			ps.setString(1, c.getName());
-			ps.setTimestamp(2, c.getIntroducedDate());
-			ps.setTimestamp(3, c.getDiscontinuedDate());
-			ps.setObject(4, (c.getCompId() >= 0) ? companyDao.getCompany(c.getCompany()) : null);
+		try (Connection conn = DatabaseConnexion.getConnection();
+				PreparedStatement ps = conn.prepareStatement(INSERT_COMPUTER)) {
+
+			ps.setString(1, computer.getName());
+			ps.setTimestamp(2, computer.getIntroducedDate());
+			ps.setTimestamp(3, computer.getDiscontinuedDate());
+			ps.setObject(4, (computer.getCompId() >= 0) ? companyDao.getCompany(computer.getCompany()) : null);
 			int i = ps.executeUpdate();
 
 			if (i == 1) {
-				System.out.println("Computer added");
+				logger.info("Computer added");
 				return true;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 		}
-		System.out.println("Computer cannot be added");
+		logger.error("Computer cannot be added");
+		logger.info("EXIT INSERT COMPUTER");
 
 		return false;
 	}
 
-	
 	/**
 	 * Update an existing computer.
-	 * @param c New computer details to incorporate.
+	 * 
+	 * @param computer
+	 *            New computer details to incorporate.
 	 * @return true if it worked, else false.
 	 */
-	public boolean updateComputer(Computer c) {
-		try (Connection conn = DatabaseConnexion.getConnection();
-				PreparedStatement ps = conn.prepareStatement(
-						"UPDATE computer set name=?, introduced=?, discontinued=?, company_id=? where id=" + c.getId())) {
+	public boolean updateComputer(Computer computer) {
+		logger.info("ENTER UPDATE COMPUTER");
 
-			ps.setString(1, c.getName());
-			ps.setTimestamp(2, c.getIntroducedDate());
-			ps.setTimestamp(3, c.getDiscontinuedDate());
-			ps.setObject(4, c.getCompId());
+		try (Connection conn = DatabaseConnexion.getConnection();
+				PreparedStatement ps = conn.prepareStatement(UPDATE_COMPUTER + computer.getId())) {
+
+			ps.setString(1, computer.getName());
+			ps.setTimestamp(2, computer.getIntroducedDate());
+			ps.setTimestamp(3, computer.getDiscontinuedDate());
+			ps.setObject(4, computer.getCompId());
 
 			int i = ps.executeUpdate();
 
 			if (i == 1) {
+				logger.info("EXIT UPDATE COMPUTER");
 				return true;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 		}
+		logger.error("Error while updating computer from database");
+		logger.info("EXIT UPDATE COMPUTER");
+
 		return false;
 	}
 }

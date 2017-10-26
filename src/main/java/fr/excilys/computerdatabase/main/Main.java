@@ -23,7 +23,7 @@ public class Main {
 		CompanyServices companyService = CompanyServices.getCompanyServices();
 
 		// User information
-		System.out.println("" + "a to add a new computer" + "\n" + "c to get an existing computer by id" + "\n"
+		System.out.println("a to add a new computer" + "\n" + "c to get an existing computer by id" + "\n"
 				+ "p to get an existing computer by name " + "\n" + "r to remove a computer" + "\n"
 				+ "s to get all computers from the database" + "\n" + "C to list all the companies" + "\n");
 		try (Scanner s = new Scanner(System.in)) {

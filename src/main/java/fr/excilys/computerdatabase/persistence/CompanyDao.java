@@ -7,6 +7,10 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Optional;
 
 
@@ -17,10 +21,14 @@ import java.util.Optional;
  */
 public class CompanyDao {
 
+	private final static String getAllCompanies ="SELECT * FROM company"; 
+	
 	private static final Map<Integer, String> companies;
 
 	private static CompanyDao companyDao;
 	
+	private static final Logger logger = LoggerFactory.getLogger(CompanyDao.class);
+
 	
 	private CompanyDao() {
 		
@@ -37,17 +45,21 @@ public class CompanyDao {
 	 * At the first call of this class, we store the whole table locally to improve performances.
 	 */
 	static {
+		logger.info("STORAGE OF ALL COMPANIES START");
 		companies = new HashMap<>();
 		try (Connection conn = DatabaseConnexion.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM company");) {
+				ResultSet rs = stmt.executeQuery(getAllCompanies);) {
 
 			while (rs.next()) {
 				companies.put(rs.getInt("id"), rs.getString("name"));
 			}
 		} catch (SQLException e) {
+			logger.error("Error on companies storage");
 			e.printStackTrace();
 		}
+		logger.info("END OF STORAGE OF ALL COMPANIES");
+
 	}
 
 	/**
