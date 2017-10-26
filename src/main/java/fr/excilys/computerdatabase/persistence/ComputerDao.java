@@ -77,7 +77,7 @@ public class ComputerDao {
 	public Computer getComputer(int id) {
 		logger.info("ENTER GET COMPUTER BY ID");
 
-		try (Connection conn = DatabaseConnexion.getConnection();
+		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(GET_COMPUTER + id)) {
 
@@ -90,7 +90,6 @@ public class ComputerDao {
 		} catch (SQLException e) {
 			logger.error("Error while getting computer from : " + id + " id");
 		}
-		logger.info("EXIT GET COMPUTER");
 
 		return null;
 	}
@@ -105,12 +104,11 @@ public class ComputerDao {
 	public Computer getComputer(String name) {
 		logger.info("ENTER GET COMPUTER BY NAME");
 
-		try (Connection conn = DatabaseConnexion.getConnection();
+		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(COMPUTER_BY_NAME + name)) {
 
 			if (rs.next()) {
-				logger.info("EXIT GET COMPUTER");
 
 				return createComputerFromDatabase(rs);
 			} else {
@@ -119,7 +117,6 @@ public class ComputerDao {
 		} catch (SQLException e) {
 			logger.error("Error while getting computer from : " + name + " name");
 		}
-		logger.info("EXIT GET COMPUTER");
 		return null;
 	}
 
@@ -132,7 +129,7 @@ public class ComputerDao {
 		logger.info("ENTER GET ALL COMPUTERS");
 
 		List<Computer> list = new ArrayList<>();
-		try (Connection conn = DatabaseConnexion.getConnection();
+		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(GET_ALL_COMPUTERS);) {
 			while (rs.next()) {
@@ -141,8 +138,6 @@ public class ComputerDao {
 		} catch (SQLException e) {
 			logger.error("Error while getting computers from database");
 		}
-		logger.info("EXIT GET ALL COMPUTER");
-
 		return list;
 	}
 
@@ -156,7 +151,7 @@ public class ComputerDao {
 	public boolean removeComputer(int id) {
 		logger.info("ENTER REMOVE COMPUTER");
 
-		try (Connection conn = DatabaseConnexion.getConnection(); Statement stmt = conn.createStatement()) {
+		try (Connection conn = DatabaseConnection.getConnection(); Statement stmt = conn.createStatement()) {
 
 			int i = stmt.executeUpdate(DELETE_FROM_ID + id);
 			if (i == 1) {
@@ -165,9 +160,8 @@ public class ComputerDao {
 				return true;
 			}
 		} catch (SQLException e) {
+			logger.error("Cannot remove computer : " + id + " name");
 		}
-		logger.error("Cannot remove computer : " + id + " name");
-		logger.info("EXIT REMOVE COMPUTER");
 		return false;
 	}
 
@@ -181,7 +175,7 @@ public class ComputerDao {
 	public boolean insertComputer(Computer computer) {
 		logger.info("ENTER INSERT COMPUTER");
 
-		try (Connection conn = DatabaseConnexion.getConnection();
+		try (Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement ps = conn.prepareStatement(INSERT_COMPUTER)) {
 
 			ps.setString(1, computer.getName());
@@ -195,10 +189,8 @@ public class ComputerDao {
 				return true;
 			}
 		} catch (SQLException e) {
+			logger.error("Computer cannot be added");
 		}
-		logger.error("Computer cannot be added");
-		logger.info("EXIT INSERT COMPUTER");
-
 		return false;
 	}
 
@@ -212,7 +204,7 @@ public class ComputerDao {
 	public boolean updateComputer(Computer computer) {
 		logger.info("ENTER UPDATE COMPUTER");
 
-		try (Connection conn = DatabaseConnexion.getConnection();
+		try (Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement ps = conn.prepareStatement(UPDATE_COMPUTER + computer.getId())) {
 
 			ps.setString(1, computer.getName());
@@ -223,14 +215,11 @@ public class ComputerDao {
 			int i = ps.executeUpdate();
 
 			if (i == 1) {
-				logger.info("EXIT UPDATE COMPUTER");
 				return true;
 			}
 		} catch (SQLException e) {
+			logger.error("Error while updating computer from database");
 		}
-		logger.error("Error while updating computer from database");
-		logger.info("EXIT UPDATE COMPUTER");
-
 		return false;
 	}
 }

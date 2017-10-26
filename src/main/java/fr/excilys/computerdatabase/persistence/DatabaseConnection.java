@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mysql.cj.jdbc.Driver;
 
-public class DatabaseConnexion {
+public class DatabaseConnection {
 
 	private final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 

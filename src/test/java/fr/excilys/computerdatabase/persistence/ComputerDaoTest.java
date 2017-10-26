@@ -31,8 +31,8 @@ public class ComputerDaoTest {
 	    	databaseRequest("config/db/createComputers.sql");
 	        return;
 	    }
-		String s[] = DatabaseConnexion.url.split("computer-database-db");
-		DatabaseConnexion.url = s[0] + "computer-database-db-test" + s[1];
+		String s[] = DatabaseConnection.url.split("computer-database-db");
+		DatabaseConnection.url = s[0] + "computer-database-db-test" + s[1];
     	databaseRequest("config/db/createComputers.sql");
 
 	    setUpIsDone = true;
@@ -44,7 +44,7 @@ public class ComputerDaoTest {
 	}
 	
 	private void databaseRequest(String file) {
-		Connection con = DatabaseConnexion.getConnection();
+		Connection con = DatabaseConnection.getConnection();
 		try {
 			// Initialize object for ScripRunner
 			ScriptRunner sr = new ScriptRunner(con, false, false);

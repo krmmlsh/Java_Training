@@ -47,7 +47,7 @@ public class CompanyDao {
 	static {
 		logger.info("STORAGE OF ALL COMPANIES START");
 		companies = new HashMap<>();
-		try (Connection conn = DatabaseConnexion.getConnection();
+		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(getAllCompanies);) {
 
@@ -56,10 +56,7 @@ public class CompanyDao {
 			}
 		} catch (SQLException e) {
 			logger.error("Error on companies storage");
-			e.printStackTrace();
 		}
-		logger.info("END OF STORAGE OF ALL COMPANIES");
-
 	}
 
 	/**
