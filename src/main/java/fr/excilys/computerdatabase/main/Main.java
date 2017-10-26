@@ -41,7 +41,7 @@ public class Main {
 						String name = s.nextLine();
 						// Never add a computer with an empty name
 						if (name.isEmpty()) {
-							System.err.println("Name cannot be empty.");
+							System.out.println("Name cannot be empty.");
 							break;
 						}
 						System.out.println("What is the brand ? (Leave the field blank to not add a brand)");
@@ -54,7 +54,7 @@ public class Main {
 						// A brand must exist to create the computer with it
 						int comp_id = companyService.getCompany(company);
 						if (!company.isEmpty() && comp_id < 0) {
-							System.err.println("Brand name not incorrect");
+							System.out.println("Brand name not incorrect");
 							break;
 						}
 
@@ -66,7 +66,7 @@ public class Main {
 						System.out.println("Discontinuation date : (dd/mm/yyyy)");
 						String discontinuation = s.nextLine();
 						Timestamp disc = Util.convertStringToTimestamp(discontinuation);
-						computerService.addComputer(new Computer(name, company, intro, disc, comp_id));
+						computerService.addComputer(new Computer(name, company, intro, disc));
 
 						break;
 					}
@@ -79,7 +79,7 @@ public class Main {
 						try {
 							id = s.nextInt();
 						} catch (InputMismatchException e) {
-							System.err.println("You must enter a valid id !");
+							System.out.println("You must enter a valid id !");
 							break;
 						} finally {
 							// nextInt() doesn't consume \n
@@ -108,7 +108,7 @@ public class Main {
 							// Must be a number
 							id = s.nextInt();
 						} catch (InputMismatchException e) {
-							System.err.println("You must enter a valid id !");
+							System.out.println("You must enter a valid id !");
 							break;
 						} finally {
 							s.nextLine();
@@ -128,7 +128,7 @@ public class Main {
 						int compId = -1;
 						// break the loop if a wrong brand is entered
 						if (!brand.isEmpty() && (compId = companyService.getCompany(brand)) < 0) {
-							System.err.println("Company doesn't exist");
+							System.out.println("Company doesn't exist");
 							break;
 						}
 						c.setCompId((brand.isEmpty()) ? c.getCompId() : compId);
@@ -158,7 +158,7 @@ public class Main {
 						try {
 							id = s.nextInt();
 						} catch (InputMismatchException e) {
-							System.err.println("You must enter a valid id !");
+							System.out.println("You must enter a valid id !");
 							break;
 						} finally {
 							s.nextLine();

@@ -75,7 +75,6 @@ public class ComputerDao {
 		try (Connection conn = DatabaseConnexion.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT * FROM computer");) {
-
 			while (rs.next()) {
 				list.add(createComputerFromDatabase(rs));
 			}

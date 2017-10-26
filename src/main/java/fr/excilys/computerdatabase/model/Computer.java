@@ -20,12 +20,12 @@ public class Computer {
 	
 	private Timestamp discontinuedDate;
 	
-	private int comp_id;
+	private int compId;
 	
 	public Computer() {
 	}
 
-	public Computer( String name, String company, Timestamp introducedDate, Timestamp discontinuedDate, int comp_id) {
+	public Computer( String name, String company, Timestamp introducedDate, Timestamp discontinuedDate) {
 		this.company = company;
 		this.name = name;
 		this.introducedDate = introducedDate;
@@ -34,7 +34,7 @@ public class Computer {
 
 	public Computer(String name, int i) {
 		this.name = name;
-		comp_id = i;
+		compId = i;
 	}
 
 	public int getId() {
@@ -88,11 +88,11 @@ public class Computer {
 	}
 
 	public int getCompId() {
-		return comp_id;
+		return compId;
 	}
 
 	public void setCompId(int comp_id) {
-		this.comp_id = comp_id;
+		this.compId = comp_id;
 	}
 	
 	@Override

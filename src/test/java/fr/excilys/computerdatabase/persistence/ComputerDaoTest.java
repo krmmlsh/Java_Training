@@ -6,56 +6,43 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ibatis.common.jdbc.ScriptRunner;
 
 import fr.excilys.computerdatabase.model.Computer;
-import fr.excilys.computerdatabase.persistence.ComputerDao;
-import fr.excilys.computerdatabase.persistence.DatabaseConnexion;
-import fr.excilys.computerdatabase.service.ComputerServices;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerDaoTest {
 
-	@InjectMocks
-	public ComputerServices cs;
-	
-	@Mock
-	public ComputerDao computerDao;
+	private ComputerDao computerDao = ComputerDao.getInstance();
 	
 	private static boolean setUpIsDone = false;
 	
 	@Before
 	public void setUp() {
-//		cs = ComputerServices.getComputerServices();
 	    if (setUpIsDone) {
+	    	databaseRequest("config/db/createComputers.sql");
 	        return;
 	    }
 		String s[] = DatabaseConnexion.url.split("computer-database-db");
 		DatabaseConnexion.url = s[0] + "computer-database-db-test" + s[1];
+    	databaseRequest("config/db/createComputers.sql");
+
 	    setUpIsDone = true;
 	}
-	
-	
-	
+
 	@After
 	public void destroyEverything() {
-    	emptyDatabase();
+    	databaseRequest("config/db/dropTable.sql");
 	}
 	
-	private void emptyDatabase() {
-		String sqlDrop ="config/db/dropTable.sql";
+	private void databaseRequest(String file) {
 		Connection con = DatabaseConnexion.getConnection();
 		try {
 			// Initialize object for ScripRunner
@@ -63,46 +50,40 @@ public class ComputerDaoTest {
 
 			// Give the input file to Reader
 			Reader reader = new BufferedReader(
-                               new FileReader(sqlDrop));
+                               new FileReader(file));
 
 			// Exctute script
 			sr.runScript(reader);
-
+			
 		} catch (Exception e) {
-			System.err.println("Failed to Execute" + sqlDrop
+			System.err.println("Failed to Execute" + file
 					+ " The error is " + e.getMessage());
 		}
 	}
 	
-	@Test
-	public void getNothing() {
-		List<Computer> computers = cs.getAllComputers();
-		assertEquals(0, computers.size());
-	}
-	
+
 	@Test
 	public void getAllComputersTest_SUCCESS() {
-		List<Computer> computers = new ArrayList<>();
-		computers.add(new Computer());
-		computers.add(new Computer());
-
-		Mockito.when(computerDao.getComputers()).thenReturn(computers);
-		assertEquals(cs.getAllComputers().size(), 2);
+		assertEquals(computerDao.getComputers().size(), 3);
 	}
 	@Test
 	public void addOne() {
-		cs.addComputer(new Computer("Karim",-1));
-		List<Computer> computers = cs.getAllComputers();
-		assertEquals(1, computers.size());
+		assertEquals(true, computerDao.insertComputer(new Computer("Karim",-1)));
 	}
 	
 	@Test
 	public void updateOne() {
-		cs.addComputer(new Computer("Karim",-1));
-		Computer c = cs.getComputerByName("Karim");
-		c.setName("Oezdemir");
-		List<Computer> computers = cs.getAllComputers();
-		assertEquals(1, computers.size());
+		Computer c = new Computer("MacBook Pro 15.4 inch","Apple",null,null);
+		c.setId(1);
+		c.setCompId(1);
+		c.setName("KarimMacbookPro");
+		assertEquals(true,	computerDao.updateComputer(c));
+	}
+	
+	@Test
+	public void removeComputer() {
+		assertEquals(true,	computerDao.removeComputer(1));
+
 	}
 	
 	
