@@ -1,0 +1,92 @@
+package fr.excilys.computerdatabase.persistence;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+
+
+/**
+ * Link between java code and compagny table
+ * @author krmmlsh
+ *
+ */
+public class CompanyDao {
+
+	private static final Map<Integer, String> companies;
+
+	private static CompanyDao companyDao;
+	
+	
+	private CompanyDao() {
+		
+	}
+	
+	public synchronized static CompanyDao getInstance() {
+		if (companyDao == null)
+			companyDao = new CompanyDao();
+		return companyDao;
+	}
+	
+	/**
+	 * Since we can't add anything to the company table and it is rather short.
+	 * At the first call of this class, we store the whole table locally to improve performances.
+	 */
+	static {
+		companies = new HashMap<>();
+		try (Connection conn = DatabaseConnexion.getConnection();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM company");) {
+
+			while (rs.next()) {
+				companies.put(rs.getInt("id"), rs.getString("name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Find company id by its name.
+	 * @param name name of the company
+	 * @return id of the company or -1 if it doesn't exist.
+	 */
+	public int getCompany(String name) {
+		Optional<Entry<Integer, String>> entryO = companies
+				.entrySet()
+				.stream()
+				.filter(e -> e.getValue().equals(name))
+				.findFirst();
+		if(entryO.isPresent()) {
+			Entry<Integer, String> e = entryO.get();
+			if ( e == null) {
+				return -1;
+			}
+			return e.getKey();
+		}
+		return -1;
+	}
+
+	/**
+	 * Name of a company 
+	 * @param id id of a company
+	 * @return company's name
+	 * @throws SQLException
+	 */
+	public String getCompany(int id) throws SQLException {
+		return companies.get(id);
+	}
+
+	/**
+	 * Get all the companies
+	 * @return map of companies
+	 */
+	public Map<Integer, String> getCompanies() {
+		return companies;
+	}
+
+}
