@@ -20,12 +20,23 @@ public class ComputerDao {
 		
 	}
 	
+	/**
+	 * Get the singleton of ComputerDao.
+	 * @return ComputerDao instance
+	 */
 	public synchronized static ComputerDao getInstance() {
 		if (computerDao == null)
 			computerDao = new ComputerDao();
 		return computerDao;
 	}
 	
+	
+	/**
+	 * Fill computer with ResultSet values.
+	 * @param rs ResultSet from the select query.
+	 * @return Computer newly filled.
+	 * @throws SQLException
+	 */
 	private Computer createComputerFromDatabase(ResultSet rs) throws SQLException {
 		Computer c = new Computer();
 		c.setId(rs.getInt("id"));
@@ -37,6 +48,11 @@ public class ComputerDao {
 
 	}
 
+	/**
+	 * Get a computer from his id.
+	 * @param id Id of a computer.
+	 * @return A computer.
+	 */
 	public Computer getComputer(int id) {
 		try (Connection conn = DatabaseConnexion.getConnection();
 				Statement stmt = conn.createStatement();
@@ -54,6 +70,11 @@ public class ComputerDao {
 		return null;
 	}
 
+	/**
+	 * Get a computer by name, if multiple found, return the first one in the list.
+	 * @param name Name of the computer.
+	 * @return A computer.
+	 */
 	public Computer getComputer(String name) {
 		try (Connection conn = DatabaseConnexion.getConnection();
 				Statement stmt = conn.createStatement();
@@ -69,7 +90,12 @@ public class ComputerDao {
 		}
 		return null;
 	}
-
+	
+	
+	/**
+	 * Get all the computers from the database
+	 * @return List of Computer.
+	 */
 	public List<Computer> getComputers() {
 		List<Computer> list = new ArrayList<>();
 		try (Connection conn = DatabaseConnexion.getConnection();
@@ -84,6 +110,12 @@ public class ComputerDao {
 		return list;
 	}
 
+	
+	/**
+	 * Remove a computer from his id.
+	 * @param id Id of the computer to remove.
+	 * @return true if it worked, else false.
+	 */
 	public boolean removeComputer(int id) {
 		try (Connection conn = DatabaseConnexion.getConnection(); Statement stmt = conn.createStatement()) {
 
@@ -101,6 +133,12 @@ public class ComputerDao {
 		return false;
 	}
 
+	
+	/**
+	 * Insert a computer in the database.
+	 * @param c Computer to add.
+	 * @return true if it worked, else false.
+	 */
 	public boolean insertComputer(Computer c) {
 		try (Connection conn = DatabaseConnexion.getConnection();
 				PreparedStatement ps = conn.prepareStatement("INSERT INTO computer values (NULL, ?, ?, ?, ?)")) {
@@ -123,6 +161,12 @@ public class ComputerDao {
 		return false;
 	}
 
+	
+	/**
+	 * Update an existing computer.
+	 * @param c New computer details to incorporate.
+	 * @return true if it worked, else false.
+	 */
 	public boolean updateComputer(Computer c) {
 		try (Connection conn = DatabaseConnexion.getConnection();
 				PreparedStatement ps = conn.prepareStatement(

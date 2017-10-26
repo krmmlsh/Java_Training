@@ -1,6 +1,7 @@
 package fr.excilys.computerdatabase.persistence;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -66,13 +67,23 @@ public class ComputerDaoTest {
 	public void getAllComputersTest_SUCCESS() {
 		assertEquals(computerDao.getComputers().size(), 3);
 	}
+	
 	@Test
-	public void addOne() {
+	public void getAllComputersTest_FAILURE() {
+		assertNotEquals(computerDao.getComputers().size(), 4);
+	}
+	@Test
+	public void addOne_SUCCESS() {
 		assertEquals(true, computerDao.insertComputer(new Computer("Karim",-1)));
 	}
 	
+	
 	@Test
-	public void updateOne() {
+	public void addOne_FAILURE() {
+		assertEquals(false, computerDao.insertComputer(new Computer("Karim", 100)));
+	}
+	@Test
+	public void updateOne_SUCCESS() {
 		Computer c = new Computer("MacBook Pro 15.4 inch","Apple",null,null);
 		c.setId(1);
 		c.setCompId(1);
@@ -81,8 +92,23 @@ public class ComputerDaoTest {
 	}
 	
 	@Test
-	public void removeComputer() {
+	public void updateOne_FAILURE() {
+		Computer c = new Computer("MacBook Pro 15.4 inch","Apple",null,null);
+		c.setId(-2);
+		c.setCompId(1);
+		c.setName("KarimMacbookPro");
+		assertEquals(false,	computerDao.updateComputer(c));
+	}
+	
+	@Test
+	public void removeComputer_SUCCESS() {
 		assertEquals(true,	computerDao.removeComputer(1));
+
+	}
+	
+	@Test
+	public void removeComputer_FAILURE() {
+		assertEquals(false,	computerDao.removeComputer(-1));
 
 	}
 	

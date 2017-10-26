@@ -56,11 +56,13 @@ public class CompanyDao {
 	 * @return id of the company or -1 if it doesn't exist.
 	 */
 	public int getCompany(String name) {
+		// look in all the values of the map to find a company with this name
 		Optional<Entry<Integer, String>> entryO = companies
 				.entrySet()
 				.stream()
 				.filter(e -> e.getValue().equals(name))
 				.findFirst();
+		// At least one company has this name
 		if(entryO.isPresent()) {
 			Entry<Integer, String> e = entryO.get();
 			if ( e == null) {
