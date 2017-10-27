@@ -48,8 +48,8 @@ public class ComputerServices {
 	 * @param name : Name of the computer to be found.
 	 * @return A computer
 	 */
-	public Computer getComputerByName(String name) {
-		return computerDao.getComputer(name);
+	public List<Computer> getComputerByName(String name) {
+		return computerDao.getComputers(name);
 	}
 	
 	/**

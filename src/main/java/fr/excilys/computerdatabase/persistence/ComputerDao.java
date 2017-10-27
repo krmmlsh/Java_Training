@@ -33,9 +33,8 @@ public class ComputerDao {
 	private static ComputerDao computerDao;
 
 	private CompanyDao companyDao = CompanyDao.getInstance();
-	
-	private ComputerMapper computerMapper =  ComputerMapper.getInstance();
 
+	private ComputerMapper computerMapper = ComputerMapper.getInstance();
 
 	private ComputerDao() {
 
@@ -51,7 +50,6 @@ public class ComputerDao {
 			computerDao = new ComputerDao();
 		return computerDao;
 	}
-
 
 	/**
 	 * Get a computer from his id.
@@ -87,23 +85,21 @@ public class ComputerDao {
 	 *            Name of the computer.
 	 * @return A computer.
 	 */
-	public Computer getComputer(String name) {
+	public List<Computer> getComputers(String name) {
 		logger.info("ENTER GET COMPUTER BY NAME");
+		List<Computer> list = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(COMPUTER_BY_NAME + name)) {
+				ResultSet rs = stmt.executeQuery(COMPUTER_BY_NAME + "'" +name+"'")) {
 
-			if (rs.next()) {
-
-				return computerMapper.createComputerFromDatabase(rs, companyDao);
-			} else {
-				logger.error("Error while getting computer from : " + name + " name");
+			while (rs.next()) {
+				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
 			}
 		} catch (SQLException e) {
 			logger.error("Error while getting computer from : " + name + " name");
 		}
-		return null;
+		return list;
 	}
 
 	/**

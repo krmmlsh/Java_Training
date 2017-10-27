@@ -1,12 +1,14 @@
 package fr.excilys.computerdatabase.servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.excilys.computerdatabase.model.Computer;
 import fr.excilys.computerdatabase.service.ComputerServices;
 
 public class ComputerServlet extends HttpServlet {
@@ -31,32 +33,38 @@ public class ComputerServlet extends HttpServlet {
 
 	private final ComputerServices computerService = ComputerServices.getComputerServices();
 
+	public List<Computer> computers;
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		String requestType = (String) request.getAttribute(ACTION_TYPE);
+		String requestType = (String) request.getParameter(ACTION_TYPE);
 		if (requestType != null) {
 			switch (requestType) {
-			case GET_ALL:
-				request.setAttribute("computers", computerService.getAllComputers());
-				request.getRequestDispatcher("WEB-INF/dashboard.jsp").forward(request, response);
-				break;
 			case GET_BY_ID:
-				String name = (String) request.getAttribute(NAME);
-				request.setAttribute("computer", computerService.getComputerByName(name));
+				Integer id = (Integer) request.getAttribute(ID);
+				request.setAttribute("computers", computerService.getComputerById(id));
+				request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 				break;
 			case GET_BY_NAME:
-				Integer id = (Integer) request.getAttribute(ID);
-				request.setAttribute("computer", computerService.getComputerById(id));
+				String name = (String) request.getParameter("search");
+				if (!name.isEmpty()) {
+					computers = computerService.getComputerByName(name);
+					request.setAttribute("computers", computers);
+					request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+					break;
+				}
+			case GET_ALL:
+				computers = computerService.getAllComputers();
+				request.setAttribute("computers", computers);
+				request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 				break;
-			default:
-
 			}
-		}
-		request.setAttribute("computers",computerService.getAllComputers());
-		request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+		} else {
+			request.setAttribute("computers", computerService.getAllComputers());
+			request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 
+		}
 	}
 
 	@Override

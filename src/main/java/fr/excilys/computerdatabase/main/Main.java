@@ -95,9 +95,9 @@ public class Main {
 					case 'p': {
 						System.out.println("Enter the name of the computer :");
 						String name = s.nextLine();
-						Computer computer = computerService.getComputerByName(name);
-						if (computer != null)
-							System.out.println(computer);
+						computerService.getComputerByName(name);
+//						if (computer != null)
+//							System.out.println(computer);
 						break;
 					}
 					// update an existing computer
