@@ -34,6 +34,16 @@
 			<artifactId>ibatis-sqlmap</artifactId>
 			<version>2.3.4.726</version>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -60,7 +70,14 @@
 					<configLocation>config/checkstyle/checkstyle.xml</configLocation>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
 		</plugins>
+
 
 	</build>
 	<reporting>

@@ -11,6 +11,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.excilys.computerdatabase.mapper.ComputerMapper;
 import fr.excilys.computerdatabase.model.Computer;
 
 public class ComputerDao {
@@ -27,11 +28,14 @@ public class ComputerDao {
 
 	private static final String GET_COMPUTER = "SELECT * FROM computer where id = ";
 
-	private final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
+	private static final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 
 	private static ComputerDao computerDao;
 
 	private CompanyDao companyDao = CompanyDao.getInstance();
+	
+	private ComputerMapper computerMapper =  ComputerMapper.getInstance();
+
 
 	private ComputerDao() {
 
@@ -48,24 +52,6 @@ public class ComputerDao {
 		return computerDao;
 	}
 
-	/**
-	 * Fill computer with ResultSet values.
-	 * 
-	 * @param rs
-	 *            ResultSet from the select query.
-	 * @return Computer newly filled.
-	 * @throws SQLException
-	 */
-	private Computer createComputerFromDatabase(ResultSet rs) throws SQLException {
-		Computer computer = new Computer();
-		computer.setId(rs.getInt("id"));
-		computer.setName(rs.getString("name"));
-		computer.setCompany(companyDao.getCompany(rs.getInt("company_id")));
-		computer.setIntroducedDate(rs.getTimestamp("introduced"));
-		computer.setDiscontinuedDate(rs.getTimestamp("discontinued"));
-		return computer;
-
-	}
 
 	/**
 	 * Get a computer from his id.
@@ -83,7 +69,7 @@ public class ComputerDao {
 
 			if (rs.next()) {
 
-				return createComputerFromDatabase(rs);
+				return computerMapper.createComputerFromDatabase(rs, companyDao);
 			} else {
 				logger.error("Error while getting computer from : " + id + " id");
 			}
@@ -110,7 +96,7 @@ public class ComputerDao {
 
 			if (rs.next()) {
 
-				return createComputerFromDatabase(rs);
+				return computerMapper.createComputerFromDatabase(rs, companyDao);
 			} else {
 				logger.error("Error while getting computer from : " + name + " name");
 			}
@@ -133,7 +119,7 @@ public class ComputerDao {
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(GET_ALL_COMPUTERS);) {
 			while (rs.next()) {
-				list.add(createComputerFromDatabase(rs));
+				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
 			}
 		} catch (SQLException e) {
 			logger.error("Error while getting computers from database");
@@ -156,7 +142,6 @@ public class ComputerDao {
 			int i = stmt.executeUpdate(DELETE_FROM_ID + id);
 			if (i == 1) {
 				logger.info("Computer deleted");
-				logger.info("EXIT REMOVE COMPUTER");
 				return true;
 			}
 		} catch (SQLException e) {
