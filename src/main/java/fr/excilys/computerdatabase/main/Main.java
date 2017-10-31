@@ -1,6 +1,7 @@
 package fr.excilys.computerdatabase.main;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -61,11 +62,11 @@ public class Main {
 						// Date creations
 						System.out.println("Introduction date : (dd/mm/yyyy)");
 						String introduction = s.nextLine();
-						Timestamp intro = Util.convertStringToTimestamp(introduction);
+						LocalDate intro = Util.convertStringToLocalDate(introduction);
 
 						System.out.println("Discontinuation date : (dd/mm/yyyy)");
 						String discontinuation = s.nextLine();
-						Timestamp disc = Util.convertStringToTimestamp(discontinuation);
+						LocalDate disc = Util.convertStringToLocalDate(discontinuation);
 						computerService.addComputer(new Computer(name, company, intro, disc));
 
 						break;
@@ -137,14 +138,14 @@ public class Main {
 						System.out.println("Introduction date : (dd/mm/yyyy");
 						String introduction = s.nextLine();
 						if (!introduction.isEmpty()) {
-							Timestamp intro = Util.convertStringToTimestamp(introduction);
+							LocalDate intro = Util.convertStringToLocalDate(introduction);
 							c.setIntroducedDate(intro);
 
 						}
 						System.out.println("Discontinuation date : (dd/mm/yyyy");
 						String discontinuation = s.nextLine();
 						if (!discontinuation.isEmpty()) {
-							Timestamp disc = Util.convertStringToTimestamp(discontinuation);
+							LocalDate disc = Util.convertStringToLocalDate(discontinuation);
 							c.setDiscontinuedDate(disc);
 
 						}

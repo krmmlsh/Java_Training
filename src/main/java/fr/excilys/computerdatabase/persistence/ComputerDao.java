@@ -1,10 +1,12 @@
 package fr.excilys.computerdatabase.persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +61,7 @@ public class ComputerDao {
 	 * @return A computer.
 	 */
 	public Computer getComputer(int id) {
-		logger.info("ENTER GET COMPUTER BY ID");
+		logger.trace("ENTER GET COMPUTER BY ID");
 
 		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
@@ -86,7 +88,7 @@ public class ComputerDao {
 	 * @return A computer.
 	 */
 	public List<Computer> getComputers(String name) {
-		logger.info("ENTER GET COMPUTER BY NAME");
+		logger.trace("ENTER GET COMPUTER BY NAME");
 		List<Computer> list = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.getConnection();
@@ -108,7 +110,7 @@ public class ComputerDao {
 	 * @return List of Computer.
 	 */
 	public List<Computer> getComputers() {
-		logger.info("ENTER GET ALL COMPUTERS");
+		logger.trace("ENTER GET ALL COMPUTERS");
 
 		List<Computer> list = new ArrayList<>();
 		try (Connection conn = DatabaseConnection.getConnection();
@@ -131,13 +133,12 @@ public class ComputerDao {
 	 * @return true if it worked, else false.
 	 */
 	public boolean removeComputer(int id) {
-		logger.info("ENTER REMOVE COMPUTER");
-
+		logger.trace("ENTER REMOVE COMPUTER");
 		try (Connection conn = DatabaseConnection.getConnection(); Statement stmt = conn.createStatement()) {
 
 			int i = stmt.executeUpdate(DELETE_FROM_ID + id);
 			if (i == 1) {
-				logger.info("Computer deleted");
+				logger.debug("Computer deleted");
 				return true;
 			}
 		} catch (SQLException e) {
@@ -154,19 +155,19 @@ public class ComputerDao {
 	 * @return true if it worked, else false.
 	 */
 	public boolean insertComputer(Computer computer) {
-		logger.info("ENTER INSERT COMPUTER");
+		logger.trace("ENTER INSERT COMPUTER");
 
 		try (Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement ps = conn.prepareStatement(INSERT_COMPUTER)) {
 
 			ps.setString(1, computer.getName());
-			ps.setTimestamp(2, computer.getIntroducedDate());
-			ps.setTimestamp(3, computer.getDiscontinuedDate());
-			ps.setObject(4, (computer.getCompId() >= 0) ? companyDao.getCompany(computer.getCompany()) : null);
+			ps.setDate(2, getDateOrNull(computer.getIntroducedDate()));
+			ps.setDate(3,  getDateOrNull(computer.getDiscontinuedDate()));
+			ps.setObject(4, (computer.getCompId() >= 0) ? computer.getCompId() : null);
 			int i = ps.executeUpdate();
 
 			if (i == 1) {
-				logger.info("Computer added");
+				logger.debug("Computer added");
 				return true;
 			}
 		} catch (SQLException e) {
@@ -183,14 +184,14 @@ public class ComputerDao {
 	 * @return true if it worked, else false.
 	 */
 	public boolean updateComputer(Computer computer) {
-		logger.info("ENTER UPDATE COMPUTER");
+		logger.trace("ENTER UPDATE COMPUTER");
 
 		try (Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement ps = conn.prepareStatement(UPDATE_COMPUTER + computer.getId())) {
 
 			ps.setString(1, computer.getName());
-			ps.setTimestamp(2, computer.getIntroducedDate());
-			ps.setTimestamp(3, computer.getDiscontinuedDate());
+			ps.setDate(2, getDateOrNull(computer.getIntroducedDate()));
+			ps.setDate(3, getDateOrNull(computer.getDiscontinuedDate()));
 			ps.setObject(4, computer.getCompId());
 
 			int i = ps.executeUpdate();
@@ -202,5 +203,12 @@ public class ComputerDao {
 			logger.error("Error while updating computer from database");
 		}
 		return false;
+	}
+	
+	private Date getDateOrNull(LocalDate localdate) {
+		if (localdate == null) {
+			return null;
+		}
+		return Date.valueOf(localdate);
 	}
 }

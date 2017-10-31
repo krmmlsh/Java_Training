@@ -17,27 +17,28 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.jsp"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="/JavaLevel2/computer"> Application
+				- Computer Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${computers.size()} computers found</h1>
+			<h1 id="homeTitle">${computers.size()}computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="" method="GET" class="form-inline">
-						<input type="hidden" name="ACTION_TYPE" value="getName" />
-						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> 
-						<input type="submit" id="searchsubmit" value="Filter by name"
-							class="btn btn-primary" />
+					<form id="searchForm" action="/JavaLevel2/computer" method="GET"
+						class="form-inline">
+						<input type="hidden" name="ACTION_TYPE" value="getName" /> <input
+							type="search" id="searchbox" name="search" class="form-control"
+							placeholder="Search name" /> <input type="submit"
+							id="searchsubmit" value="Filter by name" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer.html">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
+					<a class="btn btn-success" id="addComputer"
+						href="/JavaLevel2/computer?ACTION_TYPE=create">Add Computer</a> <a
+						class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
@@ -76,7 +77,9 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer.jsp" onclick="">${computer.name}</a></td>
+							<td><a
+								href="/JavaLevel2/editComputer?computerId=${computer.id}"
+								onclick="">${computer.name}</a></td>
 							<td>${computer.introducedDate}</td>
 							<td>${computer.discontinuedDate}</td>
 							<td>${computer.company}</td>

@@ -7,6 +7,8 @@ import java.sql.Timestamp;
 import org.junit.Before;
 import org.junit.Test;
 
+import fr.excilys.computerdatabase.main.Util;
+
 public class ComputerTest {
 
 	
@@ -21,14 +23,14 @@ public class ComputerTest {
 	public void completeTest() {
 		computer.setCompany("Nintendo");
 		computer.setCompId(24);
-		computer.setDiscontinuedDate(new Timestamp(1,1,1,1,1,1,1));
-		computer.setIntroducedDate(new Timestamp(0,1,1,1,1,1,1));
+		computer.setDiscontinuedDate(Util.convertStringToLocalDate("30-04-1994"));
+		computer.setIntroducedDate(Util.convertStringToLocalDate("30-04-1994"));
 		computer.setName("Karim");
 		computer.setId(10);
 		assertEquals("Nintendo", computer.getCompany());
 		assertEquals(24, computer.getCompId());
-		assertEquals(new Timestamp(1,1,1,1,1,1,1), computer.getDiscontinuedDate());
-		assertEquals(new Timestamp(0,1,1,1,1,1,1), computer.getIntroducedDate());
+		assertEquals(Util.convertStringToLocalDate("30-04-1994"), computer.getDiscontinuedDate());
+		assertEquals(Util.convertStringToLocalDate("30-04-1994"), computer.getIntroducedDate());
 		assertEquals("Karim", computer.getName());
 		assertEquals(10, computer.getId());
 

@@ -1,6 +1,7 @@
 package fr.excilys.computerdatabase.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 
 /**
@@ -16,16 +17,16 @@ public class Computer {
 	
 	private String name;
 	
-	private Timestamp introducedDate;
+	private LocalDate introducedDate;
 	
-	private Timestamp discontinuedDate;
+	private LocalDate discontinuedDate;
 	
 	private int compId;
 	
 	public Computer() {
 	}
 
-	public Computer( String name, String company, Timestamp introducedDate, Timestamp discontinuedDate) {
+	public Computer( String name, String company, LocalDate introducedDate, LocalDate discontinuedDate) {
 		this.company = company;
 		this.name = name;
 		this.introducedDate = introducedDate;
@@ -61,19 +62,19 @@ public class Computer {
 		this.name = name;
 	}
 
-	public Timestamp getIntroducedDate() {
+	public LocalDate getIntroducedDate() {
 		return introducedDate;
 	}
 
-	public void setIntroducedDate(Timestamp introducedDate) {
+	public void setIntroducedDate(LocalDate introducedDate) {
 		this.introducedDate = introducedDate;
 	}
 
-	public Timestamp getDiscontinuedDate() {
+	public LocalDate getDiscontinuedDate() {
 		return discontinuedDate;
 	}
 
-	public void setDiscontinuedDate(Timestamp discontinuedDate) {
+	public void setDiscontinuedDate(LocalDate discontinuedDate) {
 		this.discontinuedDate = discontinuedDate;
 	}
 	

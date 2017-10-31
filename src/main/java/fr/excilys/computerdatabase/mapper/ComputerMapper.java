@@ -21,10 +21,7 @@ public class ComputerMapper {
 			computerMapper = new ComputerMapper();
 		return computerMapper;
 	}
-	
-	
-	
-	
+
 	/**
 	 * Fill computer with ResultSet values.
 	 * 
@@ -38,8 +35,8 @@ public class ComputerMapper {
 		computer.setId(rs.getInt("id"));
 		computer.setName(rs.getString("name"));
 		computer.setCompany(companyDao.getCompany(rs.getInt("company_id")));
-		computer.setIntroducedDate(rs.getTimestamp("introduced"));
-		computer.setDiscontinuedDate(rs.getTimestamp("discontinued"));
+		computer.setIntroducedDate((rs.getDate("introduced") != null) ? rs.getDate("introduced").toLocalDate() : null);
+		computer.setDiscontinuedDate((rs.getDate("discontinued") != null) ? rs.getDate("discontinued").toLocalDate() : null);
 		return computer;
 
 	}

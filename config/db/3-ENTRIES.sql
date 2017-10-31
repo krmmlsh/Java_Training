@@ -1,4 +1,4 @@
-/*insert into company (id,name) values (  1,'Apple Inc.');
+insert into company (id,name) values (  1,'Apple Inc.');
 insert into company (id,name) values (  2,'Thinking Machines');
 insert into company (id,name) values (  3,'RCA');
 insert into company (id,name) values (  4,'Netronics');
@@ -40,7 +40,7 @@ insert into company (id,name) values ( 40,'Texas Instruments');
 insert into company (id,name) values ( 41,'HTC Corporation');
 insert into company (id,name) values ( 42,'Research In Motion');
 insert into company (id,name) values ( 43,'Samsung Electronics');
-*/
+
 insert into computer (id,name,introduced,discontinued,company_id) values (  1,'MacBook Pro 15.4 inch',null,null,1);
 insert into computer (id,name,introduced,discontinued,company_id) values (  2,'CM-2a',null,null,2);
 insert into computer (id,name,introduced,discontinued,company_id) values (  3,'CM-200',null,null,2);
