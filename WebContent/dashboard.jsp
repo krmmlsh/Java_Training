@@ -9,10 +9,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="font-awesome.css" rel="stylesheet" media="screen">
-<link href="main.css" rel="stylesheet" media="screen">
-<link type="text/css" rel="stylesheet" href="form.css" />
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="./css/main.css" rel="stylesheet" media="screen">
+<!-- <link type="text/css" rel="stylesheet" href="form.css" /> -->
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -113,9 +113,9 @@
 		</div>
 
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/dashboard.js"></script>
 
 </body>
 </html>
