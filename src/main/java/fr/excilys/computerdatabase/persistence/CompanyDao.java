@@ -88,7 +88,7 @@ public class CompanyDao {
 	 * @return company's name
 	 * @throws SQLException
 	 */
-	public String getCompany(int id) throws SQLException {
+	public String getCompany(int id) {
 		return companies.get(id);
 	}
 

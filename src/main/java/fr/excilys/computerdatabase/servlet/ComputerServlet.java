@@ -1,25 +1,27 @@
 package fr.excilys.computerdatabase.servlet;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.excilys.computerdatabase.main.Util;
-import fr.excilys.computerdatabase.model.Computer;
 import fr.excilys.computerdatabase.service.CompanyServices;
 import fr.excilys.computerdatabase.service.ComputerServices;
 
 public class ComputerServlet extends HttpServlet {
 
-	private static final String ID = "ID";
+	private static final String DASHBOARD = "dashboard.jsp";
 
-	private static final String NAME = "NAME";
+	private static final String COMPUTERS = "computers";
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static final String ID = "ID";
 
 	private static final String ACTION_TYPE = "ACTION_TYPE";
 
@@ -41,7 +43,6 @@ public class ComputerServlet extends HttpServlet {
 
 	private final CompanyServices companyServices = CompanyServices.getCompanyServices();
 
-	public static List<Computer> computers;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -51,45 +52,40 @@ public class ComputerServlet extends HttpServlet {
 			switch (requestType) {
 			case GET_BY_ID: {
 				Integer id = (Integer) request.getAttribute(ID);
-				request.setAttribute("computers", computerService.getComputerById(id));
-				request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+				request.setAttribute(COMPUTERS, computerService.getComputerById(id));
+				request.getRequestDispatcher(DASHBOARD).forward(request, response);
 				break;
 			}
 			case GET_BY_NAME: {
 				String name = (String) request.getParameter("search");
 				if (!name.isEmpty()) {
-					computers = computerService.getComputerByName(name);
-					request.setAttribute("computers", computers);
-					request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+					request.setAttribute(COMPUTERS, computerService.getComputerByName(name));
+					request.getRequestDispatcher(DASHBOARD).forward(request, response);
 					break;
 				}
 			}
 			case GET_ALL: {
-				computers = computerService.getAllComputers();
-				request.setAttribute("computers", computers);
-				request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+				request.setAttribute(COMPUTERS, computerService.getAllComputers());
+				request.getRequestDispatcher(DASHBOARD).forward(request, response);
 				break;
 			}
 			case CREATE: {
 				request.setAttribute("companies", companyServices.getAllCompanies());
 				request.getRequestDispatcher("addComputer.jsp").forward(request, response);
+				break;
 			}
 			case UPDATE: {
-
 				Integer id = Integer.valueOf(request.getParameter("computerId"));
-				Optional<Computer> computerOptional = ComputerServlet.computers.stream().filter(c -> c.getId() == id)
-						.findFirst();
-				Computer computer = computerOptional.get();
-				request.setAttribute("computer", computer);
+				request.setAttribute("computer", computerService.getComputerById(id));
 				request.setAttribute("companies", companyServices.getAllCompanies());
-
 				request.getRequestDispatcher("editComputer.jsp").forward(request, response);
+				break;
+
 			}
 			}
 		} else {
-			computers = computerService.getAllComputers();
-			request.setAttribute("computers", computers);
-			request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+			request.setAttribute(COMPUTERS, computerService.getAllComputers());
+			request.getRequestDispatcher(DASHBOARD).forward(request, response);
 
 		}
 	}
@@ -97,38 +93,25 @@ public class ComputerServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Computer computer = new Computer();
 		String requestType = request.getParameter(ACTION_TYPE);
 		if (requestType != null) {
 			switch (requestType) {
 			case POST: {
-				computer.setName(request.getParameter("computerName"));
-				computer.setIntroducedDate(Util.convertStringToLocalDate(request.getParameter("introduced")));
-				computer.setDiscontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued")));
-				computer.setCompId(Integer.valueOf(request.getParameter("companyId")));
-				computerService.addComputer(computer);
-				computers = computerService.getAllComputers();
-				request.setAttribute("computers", computers);
-				request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+				computerService.addComputer(request);
+				request.setAttribute(COMPUTERS, computerService.getAllComputers());
+				request.getRequestDispatcher(DASHBOARD).forward(request, response);
 				break;
 			}
 			case DELETE: {
 				String cbSelection = request.getParameter("selection");
 				computerService.removeComputer(cbSelection);
-				computers = computerService.getAllComputers();
-				request.setAttribute("computers", computers);
-				request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+				request.setAttribute(COMPUTERS, computerService.getAllComputers());
+				request.getRequestDispatcher(DASHBOARD).forward(request, response);
 				break;
 			}
 			case UPDATE: {
-				computer.setName(request.getParameter("computerName"));
-				computer.setIntroducedDate(Util.convertStringToLocalDate(request.getParameter("introduced")));
-				computer.setDiscontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued")));
-				computer.setCompId(Integer.valueOf(request.getParameter("companyId")));
-				computer.setCompany(companyServices.getAllCompanies().get(computer.getCompId()));
-				request.setAttribute("computer", computer);
+				request.setAttribute("computer", computerService.updateComputer(request));
 				request.setAttribute("companies", companyServices.getAllCompanies());
-				computerService.updateComputer(computer);
 				request.getRequestDispatcher("editComputer.jsp").forward(request, response);
 			}
 			}

@@ -19,12 +19,11 @@ public class Util{
 	 */
   public static LocalDate convertStringToLocalDate(String str_date) {
     try {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.parse(str_date, formatter);
-
       return localDate;
     } catch (DateTimeParseException e) {
-    	System.err.println("Value was not entered in the right format, it will not be stored !");
+     	System.out.println("Value was not entered in the right format, it will not be stored !");
       return null;
     }
   }

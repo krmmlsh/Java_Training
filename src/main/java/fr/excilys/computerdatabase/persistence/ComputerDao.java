@@ -200,7 +200,8 @@ public class ComputerDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Error while updating computer from database");
+			System.out.println(e.getMessage() + "Error while updating computer from database");
+			logger.error(e.getMessage() + "Error while updating computer from database");
 		}
 		return false;
 	}

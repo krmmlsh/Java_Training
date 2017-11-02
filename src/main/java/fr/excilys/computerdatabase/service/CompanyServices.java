@@ -1,5 +1,6 @@
 package fr.excilys.computerdatabase.service;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 import fr.excilys.computerdatabase.persistence.CompanyDao;
@@ -35,5 +36,9 @@ public class CompanyServices {
 		return companyDao.getCompany(name);
 	}
 	
+	
+	public String getCompany(int id) {
+		return companyDao.getCompany(id);
+	}
 	
 }

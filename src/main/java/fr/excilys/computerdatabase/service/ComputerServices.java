@@ -1,81 +1,126 @@
 package fr.excilys.computerdatabase.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
+import fr.excilys.computerdatabase.main.Util;
 import fr.excilys.computerdatabase.model.Computer;
 import fr.excilys.computerdatabase.persistence.ComputerDao;
+import fr.excilys.computerdatabase.servlet.ComputerDTO;
 
 public class ComputerServices {
 
 	private static ComputerServices cs = new ComputerServices();
+
+	private CompanyServices companyServices = CompanyServices.getCompanyServices();
 	
 	public ComputerDao computerDao;
-	public ComputerDao getComputerDao() {
-		return computerDao;
-	}
 
-	public void setComputerDao(ComputerDao computerDao) {
-		this.computerDao = computerDao;
-	}
-
-	private ComputerServices () {
+	private ComputerServices() {
 		computerDao = ComputerDao.getInstance();
 	}
-	
+
 	public static ComputerServices getComputerServices() {
 		return cs;
 	}
-	
+
 	/**
 	 * Get a computer from the database by his id.
-	 * @param id : Id of the computer.
+	 * 
+	 * @param id the {@link Computer#id} of the {@Computer}.
 	 * @return The researched computer.
 	 */
-	public Computer getComputerById(int id) {
-		return computerDao.getComputer(id);
+	public ComputerDTO getComputerById(int id) {
+		Computer computer = computerDao.getComputer(id);
+		return createComputerDTO(computer);
 	}
-	
+
 	/**
 	 * Get all the computers from the database.
+	 * 
 	 * @return a list of Computers.
 	 */
-	public List<Computer> getAllComputers() {
-		return computerDao.getComputers();
+	public List<ComputerDTO> getAllComputers() {
+		return computerDTOList(computerDao.getComputers());
 	}
-	
+
 	/**
 	 * Get a computer by his name.
-	 * @param name : Name of the computer to be found.
+	 * 
+	 * @param name Name of the computer to be found.
 	 * @return A computer
 	 */
-	public List<Computer> getComputerByName(String name) {
-		return computerDao.getComputers(name);
+	public List<ComputerDTO> getComputerByName(String name) {
+		return computerDTOList(computerDao.getComputers(name));
 	}
-	
+
 	/**
 	 * Create a new computer to add in the database.
-	 * @param c : The computer to create.
+	 * 
+	 * @param c The computer to create.
 	 */
 	public void addComputer(Computer c) {
 		computerDao.insertComputer(c);
 	}
-	
+
 	/**
 	 * Update a computer in the database.
-	 * @param c : the computer with the new informations.
+	 * 
+	 * @param c the computer with the new informations.
 	 */
 	public void updateComputer(Computer c) {
 		computerDao.updateComputer(c);
 	}
-	
+
 	/**
 	 * Remove a computer with his id.
-	 * @param id : The id of computer to remove.
+	 * 
+	 * @param id The id of computer to remove.
 	 */
 	public void removeComputer(String computerIds) {
-		for(String computerId : computerIds.split(",")) {
+		for (String computerId : computerIds.split(",")) {
 			computerDao.removeComputer(Integer.valueOf(computerId));
 		}
 	}
+
+	public Computer addComputer(HttpServletRequest request) {
+		Computer computer = buildComputer(request);
+		computerDao.insertComputer(computer);
+		return computer;
+	}
+
+	public Computer updateComputer(HttpServletRequest request) {
+		Computer computer = buildComputer(request);
+		computer.setId(Integer.valueOf(request.getParameter("id")));
+		computerDao.updateComputer(computer);
+
+		return computer;
+	}
 	
+	private Computer buildComputer(HttpServletRequest request) {
+		return new Computer.Builder().name(request.getParameter("computerName"))
+				.compId(Integer.valueOf(request.getParameter("companyId")))
+				.introducedDate(Util.convertStringToLocalDate(request.getParameter("introduced")))
+				.discontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued")))
+				.company(companyServices.getCompany(Integer.valueOf(request.getParameter("companyId"))))
+				.build();	
+	}
+	
+	private List<ComputerDTO> computerDTOList(List<Computer> computers) {
+		return computers.stream()
+				.map(computer -> createComputerDTO(computer))
+				.collect(Collectors.toList());
+	}
+	
+	private ComputerDTO createComputerDTO(Computer computer) {
+		return new ComputerDTO.Builder().id(computer.getId()).name(computer.getName())
+			.introducedDate((computer.getIntroducedDate()!= null) ? computer.getIntroducedDate().toString() : null)
+			.discontinuedDate((computer.getDiscontinuedDate()!= null) ? computer.getDiscontinuedDate().toString() : null)
+			.compId(computer.getCompId())
+			.company(computer.getCompany())
+			.build();
+	}
+
 }

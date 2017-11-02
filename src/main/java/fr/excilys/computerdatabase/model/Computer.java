@@ -3,6 +3,9 @@ package fr.excilys.computerdatabase.model;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
+import fr.excilys.computerdatabase.servlet.ComputerDTO;
+import fr.excilys.computerdatabase.servlet.ComputerDTO.Builder;
+
 
 /**
  * Computer Model
@@ -104,5 +107,64 @@ public class Computer {
 		Computer c = (Computer)o;
 		return c.name.equals(name) && c.id == id;
 	}
+	
+	public static class Builder {
+		private int id;
+		
+		private int compId;
+		
+		private String company;
+		
+		private String name;
+		
+		private LocalDate introducedDate;
+		
+		private LocalDate discontinuedDate;
+
+        public Builder id(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder company(String company) {
+            this.company = company;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+        
+        public Builder introducedDate(LocalDate introducedDate) {
+            this.introducedDate = introducedDate;
+            return this;
+        }
+        
+        public Builder discontinuedDate(LocalDate discontinuedDate) {
+            this.discontinuedDate = discontinuedDate;
+            return this;
+        }
+
+        public Builder compId(int compId) {
+            this.compId = compId;
+            return this;
+        }
+
+        public Computer build() {
+            return new Computer(this);
+        }
+
+    }
+	
+    private Computer(Builder b) {
+        this.id = b.id;
+        this.compId = b.compId;
+        this.name = b.name;
+        this.company = b.company;
+        this.introducedDate = b.introducedDate;
+        this.discontinuedDate = b.discontinuedDate;
+
+    }
 
 }
