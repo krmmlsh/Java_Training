@@ -72,8 +72,10 @@ public class ComputerServices {
 	 * Remove a computer with his id.
 	 * @param id : The id of computer to remove.
 	 */
-	public void removeComputer(int id) {
-		computerDao.removeComputer(id);
+	public void removeComputer(String computerIds) {
+		for(String computerId : computerIds.split(",")) {
+			computerDao.removeComputer(Integer.valueOf(computerId));
+		}
 	}
 	
 }

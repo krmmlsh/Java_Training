@@ -164,7 +164,7 @@ public class Main {
 						} finally {
 							s.nextLine();
 						}
-						computerService.removeComputer(id);
+						//computerService.removeComputer(id);
 						break;
 					}
 					// get all the computers from the database

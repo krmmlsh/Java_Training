@@ -24,7 +24,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${computers.size()}computers found</h1>
+			<h1 id="homeTitle">${computers.size()} computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="/JavaLevel2/computer" method="GET"
@@ -44,8 +44,9 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="/JavaLevel2/computer" method="POST">
 			<input type="hidden" name="selection" value="">
+			<input type="hidden" name="ACTION_TYPE" value="delete">
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -57,9 +58,10 @@
 
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
+							style="vertical-align: top;"> - <a
+								href="#"
+								id="deleteSelected" onclick="$.fn.deleteSelected();">    
+								   <i class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
 						<th>Computer name</th>
@@ -76,9 +78,9 @@
 					<c:forEach items="${computers}" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+								class="cb" value=${computer.id}></td>
 							<td><a
-								href="/JavaLevel2/editComputer?computerId=${computer.id}"
+								href="/JavaLevel2/computer?computerId=${computer.id}&ACTION_TYPE=update"
 								onclick="">${computer.name}</a></td>
 							<td>${computer.introducedDate}</td>
 							<td>${computer.discontinuedDate}</td>

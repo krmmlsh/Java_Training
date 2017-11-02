@@ -2,6 +2,7 @@ package fr.excilys.computerdatabase.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.servlet.ServletException;
@@ -37,7 +38,7 @@ public class ComputerServlet extends HttpServlet {
 	public static final String CREATE = "create";
 
 	private final ComputerServices computerService = ComputerServices.getComputerServices();
-	
+
 	private final CompanyServices companyServices = CompanyServices.getCompanyServices();
 
 	public static List<Computer> computers;
@@ -73,6 +74,17 @@ public class ComputerServlet extends HttpServlet {
 				request.setAttribute("companies", companyServices.getAllCompanies());
 				request.getRequestDispatcher("addComputer.jsp").forward(request, response);
 			}
+			case UPDATE: {
+
+				Integer id = Integer.valueOf(request.getParameter("computerId"));
+				Optional<Computer> computerOptional = ComputerServlet.computers.stream().filter(c -> c.getId() == id)
+						.findFirst();
+				Computer computer = computerOptional.get();
+				request.setAttribute("computer", computer);
+				request.setAttribute("companies", companyServices.getAllCompanies());
+
+				request.getRequestDispatcher("editComputer.jsp").forward(request, response);
+			}
 			}
 		} else {
 			computers = computerService.getAllComputers();
@@ -86,22 +98,41 @@ public class ComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Computer computer = new Computer();
-		String requestType = (String) request.getParameter(ACTION_TYPE);
-		switch (requestType) {
-		case POST:
-			computer.setName(request.getParameter("computerName"));
-			computer.setIntroducedDate(Util.convertStringToLocalDate(request.getParameter("introduced")));
-			computer.setDiscontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued")));
-			computer.setCompId(Integer.valueOf(request.getParameter("companyId")));
-			computerService.addComputer(computer);
-			computers = computerService.getAllComputers();
-			request.setAttribute("computers", computers);
-			request.getRequestDispatcher("dashboard.jsp").forward(request, response);
-			break;
-		case DELETE:
-			Integer id = (Integer) request.getAttribute(ID);
-			computerService.removeComputer(id);
-			break;
+		String requestType = request.getParameter(ACTION_TYPE);
+		if (requestType != null) {
+			switch (requestType) {
+			case POST: {
+				computer.setName(request.getParameter("computerName"));
+				computer.setIntroducedDate(Util.convertStringToLocalDate(request.getParameter("introduced")));
+				computer.setDiscontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued")));
+				computer.setCompId(Integer.valueOf(request.getParameter("companyId")));
+				computerService.addComputer(computer);
+				computers = computerService.getAllComputers();
+				request.setAttribute("computers", computers);
+				request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+				break;
+			}
+			case DELETE: {
+				String cbSelection = request.getParameter("selection");
+				computerService.removeComputer(cbSelection);
+				computers = computerService.getAllComputers();
+				request.setAttribute("computers", computers);
+				request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+				break;
+			}
+			case UPDATE: {
+				computer.setName(request.getParameter("computerName"));
+				computer.setIntroducedDate(Util.convertStringToLocalDate(request.getParameter("introduced")));
+				computer.setDiscontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued")));
+				computer.setCompId(Integer.valueOf(request.getParameter("companyId")));
+				computer.setCompany(companyServices.getAllCompanies().get(computer.getCompId()));
+				request.setAttribute("computer", computer);
+				request.setAttribute("companies", companyServices.getAllCompanies());
+				computerService.updateComputer(computer);
+				request.getRequestDispatcher("editComputer.jsp").forward(request, response);
+			}
+			}
+
 		}
 
 	}

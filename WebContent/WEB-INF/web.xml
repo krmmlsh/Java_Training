@@ -13,13 +13,4 @@
 		<servlet-name>Computer</servlet-name>
 		<url-pattern>/computer</url-pattern>
 	</servlet-mapping>
-	<servlet>
-		<servlet-name>EditComputer</servlet-name>
-		<servlet-class>fr.excilys.computerdatabase.servlet.EditComputerServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>EditComputer</servlet-name>
-		<url-pattern>/editComputer</url-pattern>
-	</servlet-mapping>
 </web-app>

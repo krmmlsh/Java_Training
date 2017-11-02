@@ -26,7 +26,7 @@
 					<div class="label label-default pull-right">${computer.id}</div>
 					<h1>Edit Computer</h1>
 
-					<form action="/JavaLevel2/editComputer" method="POST">
+					<form action="/JavaLevel2/computer?ACTION_TYPE=update" method="POST">
 						<input type="hidden" value="0" id="id" />
 						<!-- TODO: Change this value with the computer id -->
 						<fieldset>
