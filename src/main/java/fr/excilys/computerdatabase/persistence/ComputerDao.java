@@ -125,6 +125,24 @@ public class ComputerDao {
 		return list;
 	}
 
+	public List<Computer> getComputers(int currentPage, int i) {
+		logger.trace("ENTER GET ALL COMPUTERS");
+
+		List<Computer> list = new ArrayList<>();
+		try (Connection conn = DatabaseConnection.getConnection();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(GET_ALL_COMPUTERS + " limit 10 offset " + (currentPage + i  )*10);) {
+			while (rs.next()) {
+				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
+			}
+		} catch (SQLException e) {
+			logger.error("Error while getting computers from database");
+		}
+		return list;
+		
+	}
+	
+	
 	/**
 	 * Remove a computer from his id.
 	 * 
@@ -212,4 +230,6 @@ public class ComputerDao {
 		}
 		return Date.valueOf(localdate);
 	}
+
+
 }

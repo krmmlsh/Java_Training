@@ -45,6 +45,12 @@ public class ComputerServices {
 	public List<ComputerDTO> getAllComputers() {
 		return computerDTOList(computerDao.getComputers());
 	}
+	
+
+	public Object getAllComputers(int currentPage, int i) {
+		return computerDTOList(computerDao.getComputers(currentPage, i));
+	}
+
 
 	/**
 	 * Get a computer by his name.
@@ -102,8 +108,8 @@ public class ComputerServices {
 	private Computer buildComputer(HttpServletRequest request) {
 		return new Computer.Builder().name(request.getParameter("computerName"))
 				.compId(Integer.valueOf(request.getParameter("companyId")))
-				.introducedDate(Util.convertStringToLocalDate(request.getParameter("introduced")))
-				.discontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued")))
+				.introducedDate(Util.convertStringToLocalDate(request.getParameter("introduced"), "dd/MM/yyyy"))
+				.discontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued"), "dd/MM/yyyy"))
 				.company(companyServices.getCompany(Integer.valueOf(request.getParameter("companyId"))))
 				.build();	
 	}

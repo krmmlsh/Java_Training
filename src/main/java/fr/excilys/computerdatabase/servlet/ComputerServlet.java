@@ -84,7 +84,27 @@ public class ComputerServlet extends HttpServlet {
 			}
 			}
 		} else {
-			request.setAttribute(COMPUTERS, computerService.getAllComputers());
+			String delta = request.getParameter("plus");
+			String currentPage = request.getParameter("page");
+			if (currentPage == null ) {
+				request.setAttribute("page", 0);
+			}
+			if (delta != null) {
+				int page = Integer.valueOf(currentPage);
+				int deltaInt = Integer.valueOf(delta);
+				if (Integer.valueOf(delta) == 1) {
+					request.setAttribute(COMPUTERS, computerService.getAllComputers(page, deltaInt));
+					request.setAttribute("page", ++page);
+				} else {
+					if(page > 0) {
+						deltaInt = -1;
+					}
+					request.setAttribute(COMPUTERS, computerService.getAllComputers(page, deltaInt));
+					request.setAttribute("page", deltaInt + page);
+				}
+			} else {
+				request.setAttribute(COMPUTERS, computerService.getAllComputers(0, 0));
+			}
 			request.getRequestDispatcher(DASHBOARD).forward(request, response);
 
 		}

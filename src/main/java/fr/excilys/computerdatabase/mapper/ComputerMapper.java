@@ -3,6 +3,7 @@ package fr.excilys.computerdatabase.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import fr.excilys.computerdatabase.main.Util;
 import fr.excilys.computerdatabase.model.Computer;
 import fr.excilys.computerdatabase.persistence.CompanyDao;
 
@@ -35,8 +36,8 @@ public class ComputerMapper {
 		computer.setId(rs.getInt("id"));
 		computer.setName(rs.getString("name"));
 		computer.setCompany(companyDao.getCompany(rs.getInt("company_id")));
-		computer.setIntroducedDate((rs.getDate("introduced") != null) ? rs.getDate("introduced").toLocalDate().plusDays(1) : null);
-		computer.setDiscontinuedDate((rs.getDate("discontinued") != null) ? rs.getDate("discontinued").toLocalDate().plusDays(1) : null);
+		computer.setIntroducedDate(Util.convertStringToLocalDate(rs.getString("introduced"), "yyyy-MM-dd"));
+		computer.setDiscontinuedDate(Util.convertStringToLocalDate(rs.getString("discontinued"), "yyyy-MM-dd"));
 		return computer;
 
 	}
