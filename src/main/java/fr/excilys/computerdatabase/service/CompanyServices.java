@@ -1,6 +1,5 @@
 package fr.excilys.computerdatabase.service;
 
-import java.sql.SQLException;
 import java.util.Map;
 
 import fr.excilys.computerdatabase.persistence.CompanyDao;

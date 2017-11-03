@@ -87,7 +87,7 @@ public class ComputerDao {
 	 *            Name of the computer.
 	 * @return A computer.
 	 */
-	public List<Computer> getComputers(String name) {
+	public List<Computer> findByName(String name) {
 		logger.trace("ENTER GET COMPUTER BY NAME");
 		List<Computer> list = new ArrayList<>();
 
@@ -109,7 +109,7 @@ public class ComputerDao {
 	 * 
 	 * @return List of Computer.
 	 */
-	public List<Computer> getComputers() {
+	public List<Computer> findAll() {
 		logger.trace("ENTER GET ALL COMPUTERS");
 
 		List<Computer> list = new ArrayList<>();
@@ -125,7 +125,7 @@ public class ComputerDao {
 		return list;
 	}
 
-	public List<Computer> getComputers(int currentPage, int i) {
+	public List<Computer> findPaging(int currentPage, int i) {
 		logger.trace("ENTER GET ALL COMPUTERS");
 
 		List<Computer> list = new ArrayList<>();

@@ -43,12 +43,12 @@ public class ComputerServices {
 	 * @return a list of Computers.
 	 */
 	public List<ComputerDTO> getAllComputers() {
-		return computerDTOList(computerDao.getComputers());
+		return computerDTOList(computerDao.findAll());
 	}
 	
 
 	public Object getAllComputers(int currentPage, int i) {
-		return computerDTOList(computerDao.getComputers(currentPage, i));
+		return computerDTOList(computerDao.findPaging(currentPage, i));
 	}
 
 
@@ -59,7 +59,7 @@ public class ComputerServices {
 	 * @return A computer
 	 */
 	public List<ComputerDTO> getComputerByName(String name) {
-		return computerDTOList(computerDao.getComputers(name));
+		return computerDTOList(computerDao.findByName(name));
 	}
 
 	/**
@@ -85,10 +85,13 @@ public class ComputerServices {
 	 * 
 	 * @param id The id of computer to remove.
 	 */
-	public void removeComputer(String computerIds) {
+	public boolean removeComputer(String computerIds) {
 		for (String computerId : computerIds.split(",")) {
-			computerDao.removeComputer(Integer.valueOf(computerId));
+			if( computerDao.removeComputer(Integer.valueOf(computerId)) == false) {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	public Computer addComputer(HttpServletRequest request) {

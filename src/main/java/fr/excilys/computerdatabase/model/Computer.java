@@ -1,10 +1,6 @@
 package fr.excilys.computerdatabase.model;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
-
-import fr.excilys.computerdatabase.servlet.ComputerDTO;
-import fr.excilys.computerdatabase.servlet.ComputerDTO.Builder;
 
 
 /**

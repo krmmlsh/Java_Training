@@ -65,12 +65,12 @@ public class ComputerDaoTest {
 
 	@Test
 	public void getAllComputersTest_SUCCESS() {
-		assertEquals(computerDao.getComputers().size(), 3);
+		assertEquals(computerDao.findAll().size(), 3);
 	}
 	
 	@Test
 	public void getAllComputersTest_FAILURE() {
-		assertNotEquals(computerDao.getComputers().size(), 4);
+		assertNotEquals(computerDao.findAll().size(), 4);
 	}
 	@Test
 	public void addOne_SUCCESS() {

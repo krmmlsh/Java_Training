@@ -64,11 +64,6 @@ public class ComputerServlet extends HttpServlet {
 					break;
 				}
 			}
-			case GET_ALL: {
-				request.setAttribute(COMPUTERS, computerService.getAllComputers());
-				request.getRequestDispatcher(DASHBOARD).forward(request, response);
-				break;
-			}
 			case CREATE: {
 				request.setAttribute("companies", companyServices.getAllCompanies());
 				request.getRequestDispatcher("addComputer.jsp").forward(request, response);
@@ -117,15 +112,16 @@ public class ComputerServlet extends HttpServlet {
 		if (requestType != null) {
 			switch (requestType) {
 			case POST: {
+				if(request.getParameter("name") != null)
 				computerService.addComputer(request);
-				request.setAttribute(COMPUTERS, computerService.getAllComputers());
+				request.setAttribute(COMPUTERS, computerService.getAllComputers(0, 0));
 				request.getRequestDispatcher(DASHBOARD).forward(request, response);
 				break;
 			}
 			case DELETE: {
 				String cbSelection = request.getParameter("selection");
 				computerService.removeComputer(cbSelection);
-				request.setAttribute(COMPUTERS, computerService.getAllComputers());
+				request.setAttribute(COMPUTERS, computerService.getAllComputers(0, 0));
 				request.getRequestDispatcher(DASHBOARD).forward(request, response);
 				break;
 			}

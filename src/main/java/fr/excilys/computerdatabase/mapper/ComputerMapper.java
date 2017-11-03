@@ -31,7 +31,7 @@ public class ComputerMapper {
 	 * @return Computer newly filled.
 	 * @throws SQLException
 	 */
-	public Computer createComputerFromDatabase(ResultSet rs, CompanyDao companyDao) throws SQLException {
+	public Computer createComputerFromDatabase(ResultSet rs, CompanyDao companyDao) throws SQLException  {
 		Computer computer = new Computer();
 		computer.setId(rs.getInt("id"));
 		computer.setName(rs.getString("name"));
@@ -39,7 +39,5 @@ public class ComputerMapper {
 		computer.setIntroducedDate(Util.convertStringToLocalDate(rs.getString("introduced"), "yyyy-MM-dd"));
 		computer.setDiscontinuedDate(Util.convertStringToLocalDate(rs.getString("discontinued"), "yyyy-MM-dd"));
 		return computer;
-
 	}
-
 }
