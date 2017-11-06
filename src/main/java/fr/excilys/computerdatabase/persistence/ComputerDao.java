@@ -13,6 +13,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.mapper.ComputerMapper;
 import fr.excilys.computerdatabase.model.Computer;
 
@@ -24,7 +25,7 @@ public class ComputerDao {
 
 	private static final String DELETE_FROM_ID = "DELETE FROM computer WHERE id = ";
 
-	private static final String GET_ALL_COMPUTERS = "SELECT * FROM computer";
+	private static final String GET_ALL_COMPUTERS = "SELECT SQL_CALC_FOUND_ROWS * FROM computer";
 
 	private static final String COMPUTER_BY_NAME = "SELECT * FROM computer where name = ";
 
@@ -93,7 +94,7 @@ public class ComputerDao {
 
 		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(COMPUTER_BY_NAME + "'" +name+"'")) {
+				ResultSet rs = stmt.executeQuery(COMPUTER_BY_NAME + "'" + name + "'")) {
 
 			while (rs.next()) {
 				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
@@ -125,24 +126,28 @@ public class ComputerDao {
 		return list;
 	}
 
-	public List<Computer> findPaging(int currentPage, int i) {
+	public List<Computer> findPaging(int currentPage, int limit, NbTotal nbTotal) {
 		logger.trace("ENTER GET ALL COMPUTERS");
 
 		List<Computer> list = new ArrayList<>();
 		try (Connection conn = DatabaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(GET_ALL_COMPUTERS + " limit 10 offset " + (currentPage + i  )*10);) {
+				ResultSet rs = stmt.executeQuery(
+						GET_ALL_COMPUTERS + " limit " + limit + " offset " + (currentPage) * limit);) {
 			while (rs.next()) {
 				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
+			}
+			ResultSet resultTotal = stmt.executeQuery("SELECT FOUND_ROWS()");
+			if (resultTotal.next()) {
+				nbTotal.nomberOfComputer = resultTotal.getInt(1);
 			}
 		} catch (SQLException e) {
 			logger.error("Error while getting computers from database");
 		}
 		return list;
-		
+
 	}
-	
-	
+
 	/**
 	 * Remove a computer from his id.
 	 * 
@@ -180,7 +185,7 @@ public class ComputerDao {
 
 			ps.setString(1, computer.getName());
 			ps.setDate(2, getDateOrNull(computer.getIntroducedDate()));
-			ps.setDate(3,  getDateOrNull(computer.getDiscontinuedDate()));
+			ps.setDate(3, getDateOrNull(computer.getDiscontinuedDate()));
 			ps.setObject(4, (computer.getCompId() >= 0) ? computer.getCompId() : null);
 			int i = ps.executeUpdate();
 
@@ -223,13 +228,12 @@ public class ComputerDao {
 		}
 		return false;
 	}
-	
+
 	private Date getDateOrNull(LocalDate localdate) {
 		if (localdate == null) {
 			return null;
 		}
 		return Date.valueOf(localdate);
 	}
-
 
 }

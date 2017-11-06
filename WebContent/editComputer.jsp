@@ -15,7 +15,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/JavaLevel2/computer"> Application -
+			<a class="navbar-brand" href="/JavaLevel2/computer?page=1"> Application -
 				Computer Database </a>
 		</div>
 	</header>

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.main.Util;
 import fr.excilys.computerdatabase.model.Computer;
 import fr.excilys.computerdatabase.persistence.ComputerDao;
@@ -47,8 +48,8 @@ public class ComputerServices {
 	}
 	
 
-	public Object getAllComputers(int currentPage, int i) {
-		return computerDTOList(computerDao.findPaging(currentPage, i));
+	public Object getAllComputers(int currentPage, int limit, NbTotal nbTotal) {
+		return computerDTOList(computerDao.findPaging(currentPage, limit, nbTotal));
 	}
 
 

@@ -1,12 +1,16 @@
 package fr.excilys.computerdatabase.servlet;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.service.CompanyServices;
 import fr.excilys.computerdatabase.service.ComputerServices;
 
@@ -43,6 +47,49 @@ public class ComputerServlet extends HttpServlet {
 
 	private final CompanyServices companyServices = CompanyServices.getCompanyServices();
 
+	private NbTotal nbTotal = new NbTotal();
+
+	private int currentPage = 0;
+
+	private int limit = 10;
+
+	private List<Integer> listOfPages() {
+		
+		if (currentPage <3 ) {
+			return IntStream.range(1, 6).boxed().collect(Collectors.toList());
+		}
+		if (nbTotal.nomberOfComputer < currentPage - 2) {
+			return IntStream.range(nbTotal.nomberOfComputer - 4, nbTotal.nomberOfComputer+1).boxed().collect(Collectors.toList());
+
+		}
+		return IntStream.range(currentPage-1, currentPage+4).boxed().collect(Collectors.toList());
+	}
+	
+	private void pagination(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String delta = request.getParameter("plus");
+		String currentPage = request.getParameter("page");
+		String length = request.getParameter("length");
+
+		if (length != null) {
+			this.limit = Integer.valueOf(length);
+			this.currentPage = 0;
+		}
+		if (currentPage != null) {
+			this.currentPage = Integer.valueOf(currentPage)-1;
+		}
+		if (delta != null) {
+			int deltaInt = Integer.valueOf(delta);
+			if (!(this.currentPage == 0 && deltaInt < 0)) {
+				this.currentPage += deltaInt;
+			}
+		}
+		request.setAttribute(COMPUTERS, computerService.getAllComputers(this.currentPage, limit, nbTotal));
+		request.setAttribute("nbTotal", nbTotal.nomberOfComputer);
+		request.setAttribute("pages", listOfPages());
+		request.getRequestDispatcher(DASHBOARD).forward(request, response);
+
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -79,29 +126,7 @@ public class ComputerServlet extends HttpServlet {
 			}
 			}
 		} else {
-			String delta = request.getParameter("plus");
-			String currentPage = request.getParameter("page");
-			if (currentPage == null ) {
-				request.setAttribute("page", 0);
-			}
-			if (delta != null) {
-				int page = Integer.valueOf(currentPage);
-				int deltaInt = Integer.valueOf(delta);
-				if (Integer.valueOf(delta) == 1) {
-					request.setAttribute(COMPUTERS, computerService.getAllComputers(page, deltaInt));
-					request.setAttribute("page", ++page);
-				} else {
-					if(page > 0) {
-						deltaInt = -1;
-					}
-					request.setAttribute(COMPUTERS, computerService.getAllComputers(page, deltaInt));
-					request.setAttribute("page", deltaInt + page);
-				}
-			} else {
-				request.setAttribute(COMPUTERS, computerService.getAllComputers(0, 0));
-			}
-			request.getRequestDispatcher(DASHBOARD).forward(request, response);
-
+			pagination(request, response);
 		}
 	}
 
@@ -112,17 +137,14 @@ public class ComputerServlet extends HttpServlet {
 		if (requestType != null) {
 			switch (requestType) {
 			case POST: {
-				if(request.getParameter("name") != null)
-				computerService.addComputer(request);
-				request.setAttribute(COMPUTERS, computerService.getAllComputers(0, 0));
-				request.getRequestDispatcher(DASHBOARD).forward(request, response);
+				if (request.getParameter("name") != null)
+					computerService.addComputer(request);
 				break;
 			}
 			case DELETE: {
 				String cbSelection = request.getParameter("selection");
 				computerService.removeComputer(cbSelection);
-				request.setAttribute(COMPUTERS, computerService.getAllComputers(0, 0));
-				request.getRequestDispatcher(DASHBOARD).forward(request, response);
+
 				break;
 			}
 			case UPDATE: {
@@ -131,6 +153,7 @@ public class ComputerServlet extends HttpServlet {
 				request.getRequestDispatcher("editComputer.jsp").forward(request, response);
 			}
 			}
+			pagination(request, response);
 
 		}
 
