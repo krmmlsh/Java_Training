@@ -28,7 +28,14 @@ public class Util {
 				return localDate;
 			} catch (DateTimeParseException e) {
 				System.out.println("Value was not entered in the right format, it will not be stored !");
-				return null;
+			} 
+			try {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				LocalDate localDate = LocalDate.parse(str_date, formatter);
+				return localDate;
+			} catch (DateTimeParseException e) {
+				System.out.println("Value was not entered in the right format, it will not be stored !");
+
 			}
 		}
 		return null;

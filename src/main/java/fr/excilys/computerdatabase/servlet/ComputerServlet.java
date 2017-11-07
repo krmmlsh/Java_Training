@@ -58,8 +58,8 @@ public class ComputerServlet extends HttpServlet {
 		if (currentPage <3 ) {
 			return IntStream.range(1, 6).boxed().collect(Collectors.toList());
 		}
-		if (nbTotal.nomberOfComputer < currentPage - 2) {
-			return IntStream.range(nbTotal.nomberOfComputer - 4, nbTotal.nomberOfComputer+1).boxed().collect(Collectors.toList());
+		if (nbTotal.nomberOfComputer/limit-2 <= currentPage ) {
+			return IntStream.range(nbTotal.nomberOfComputer/limit - 4, nbTotal.nomberOfComputer/limit+1).boxed().collect(Collectors.toList());
 
 		}
 		return IntStream.range(currentPage-1, currentPage+4).boxed().collect(Collectors.toList());
@@ -105,11 +105,10 @@ public class ComputerServlet extends HttpServlet {
 			}
 			case GET_BY_NAME: {
 				String name = (String) request.getParameter("search");
-				if (!name.isEmpty()) {
-					request.setAttribute(COMPUTERS, computerService.getComputerByName(name));
-					request.getRequestDispatcher(DASHBOARD).forward(request, response);
-					break;
-				}
+				request.setAttribute(COMPUTERS, computerService.getComputerByName(name));
+				request.getRequestDispatcher(DASHBOARD).forward(request, response);
+				break;
+
 			}
 			case CREATE: {
 				request.setAttribute("companies", companyServices.getAllCompanies());
@@ -151,6 +150,7 @@ public class ComputerServlet extends HttpServlet {
 				request.setAttribute("computer", computerService.updateComputer(request));
 				request.setAttribute("companies", companyServices.getAllCompanies());
 				request.getRequestDispatcher("editComputer.jsp").forward(request, response);
+				return;
 			}
 			}
 			pagination(request, response);

@@ -6,11 +6,15 @@
 <html>
 <head>
 <title>Computer Database</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="./css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="./css/main.css" rel="stylesheet" media="screen">
+<script src="js/validate.js"></script>
+
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -26,7 +30,7 @@
 					<div class="label label-default pull-right">${computer.id}</div>
 					<h1>Edit Computer</h1>
 
-					<form action="/JavaLevel2/computer?ACTION_TYPE=update" method="POST">
+					<form action="/JavaLevel2/computer?ACTION_TYPE=update" name="computerForm" method="POST">
 					
 						<input type="hidden" value="${computer.id}" name="id" id="id" />
 						<!-- TODO: Change this value with the computer id -->
@@ -38,12 +42,12 @@
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" name="introduced" id="introduced"
+									type="date" class="form-control" name="introduced" id="introduced" placeholder="dd/MM/yyyy"
 									value="${computer.introducedDate}">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" name="discontinued" id="discontinued"
+									type="date" class="form-control" name="discontinued" id="discontinued" placeholder="dd/MM/yyyy"
 									value="${computer.discontinuedDate}">
 							</div>
 							<div class="form-group">

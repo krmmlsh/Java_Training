@@ -2,6 +2,7 @@ package fr.excilys.computerdatabase.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -87,8 +88,8 @@ public class ComputerServices {
 	 * @param id The id of computer to remove.
 	 */
 	public boolean removeComputer(String computerIds) {
-		for (String computerId : computerIds.split(",")) {
-			if( computerDao.removeComputer(Integer.valueOf(computerId)) == false) {
+		for (String stringId : computerIds.split(",")) {
+			if (computerDao.removeComputer(Integer.valueOf(stringId)) == false) {
 				return false;
 			}
 		}
