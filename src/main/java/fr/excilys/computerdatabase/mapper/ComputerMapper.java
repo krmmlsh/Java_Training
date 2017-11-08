@@ -41,7 +41,7 @@ public class ComputerMapper {
 		Computer computer = new Computer();
 		computer.setId(rs.getInt("id"));
 		computer.setName(rs.getString("name"));
-		computer.setCompany(companyDao.getCompany(rs.getInt("company_id")));
+		computer.setCompany(rs.getString("comName"));
 		computer.setIntroducedDate(Util.convertStringToLocalDate(rs.getString("introduced"), "yyyy-MM-dd"));
 		computer.setDiscontinuedDate(Util.convertStringToLocalDate(rs.getString("discontinued"), "yyyy-MM-dd"));
 		return computer;
@@ -52,7 +52,6 @@ public class ComputerMapper {
 				.compId(Integer.valueOf(request.getParameter("companyId")))
 				.introducedDate(Util.convertStringToLocalDate(request.getParameter("introduced"), "dd/MM/yyyy"))
 				.discontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued"), "dd/MM/yyyy"))
-				.company(companyServices.getCompany(Integer.valueOf(request.getParameter("companyId"))))
 				.build();	
 	}
 	

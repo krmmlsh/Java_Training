@@ -36,7 +36,7 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getString("introduced")).thenReturn("2017-04-04");
 		Mockito.when(resultSet.getString("discontinued")).thenReturn("2000-01-01");
 		assertEquals(computerMapper.createComputerFromDatabase(resultSet, CompanyDao.getInstance()), new Computer("karim"
-				, CompanyDao.getInstance().getCompany(5)
+				, 5
 				, Util.convertStringToLocalDate("2017-04-04", "yyyy-MM-dd")
 				, Util.convertStringToLocalDate("2000-01-01", "yyyy-MM-dd")));
 	}
@@ -49,7 +49,7 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getString("introduced")).thenReturn("2017-04-04");
 		Mockito.when(resultSet.getString("discontinued")).thenReturn("2000-01-01");
 		assertNotEquals(computerMapper.createComputerFromDatabase(resultSet, CompanyDao.getInstance()), new Computer("karim"
-				, CompanyDao.getInstance().getCompany(5)
+				, 5
 				, Util.convertStringToLocalDate("2017-04-04", "yyyy-MM-dd")
 				, Util.convertStringToLocalDate("2000-01-01", "yyyy-MM-dd")));
 	}

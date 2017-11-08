@@ -1,7 +1,9 @@
 package fr.excilys.computerdatabase.service;
 
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.List;
 
+import fr.excilys.computerdatabase.model.Company;
 import fr.excilys.computerdatabase.persistence.CompanyDao;
 
 public class CompanyServices {
@@ -23,7 +25,7 @@ public class CompanyServices {
 	 * List all the companies from the database.
 	 * @return a list of Company objects.
 	 */
-	public Map<Integer, String> getAllCompanies(){
+	public List<Company> getAllCompanies(){
 		return companyDao.getCompanies();
 	}
 	
@@ -31,13 +33,17 @@ public class CompanyServices {
 	 * Get a single company.
 	 * @return A company object.
 	 */
-	public int getCompany(String name) {
-		return companyDao.getCompany(name);
+	public Company getCompanyByName(String name) {
+		return companyDao.getCompanyByName(name);
 	}
 	
 	
-	public String getCompany(int id) {
+	public Company getCompany(int id) {
 		return companyDao.getCompany(id);
+	}
+
+	public void deleteCompany(int id) throws SQLException {
+		companyDao.deleteCompany(id);
 	}
 	
 }

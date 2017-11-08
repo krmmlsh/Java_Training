@@ -116,7 +116,14 @@ public class ComputerDTO {
         }
 
     }
-
+	public String toString() {
+		return "Description of your computer : \n"
+				+ "Id : " + id + "\n"
+				+ "Name : " + name + "\n"
+				+ "Brand : " + company + "\n"
+				+ "Introduction date : " + introducedDate+ "\n"
+				+  "Discontinued date : " + discontinuedDate + "\n"; 
+	}
 
     private ComputerDTO(Builder b) {
         this.id = b.id;

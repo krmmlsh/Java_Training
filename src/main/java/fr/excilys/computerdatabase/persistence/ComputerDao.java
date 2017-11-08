@@ -25,11 +25,16 @@ public class ComputerDao {
 
 	private static final String DELETE_FROM_ID = "DELETE FROM computer WHERE id = ";
 
-	private static final String GET_ALL_COMPUTERS = "SELECT SQL_CALC_FOUND_ROWS * FROM computer";
+	private static final String DELETE_FROM_COMPANY_ID = "DELETE FROM computer WHERE company_id = ";
 
-	private static final String COMPUTER_BY_NAME = "SELECT * FROM computer c INNER JOIN company com  ON  c.company_id = com.id where c.name LIKE ? OR (com.name LIKE ?)";
+	private static final String GET_ALL_COMPUTERS = "SELECT SQL_CALC_FOUND_ROWS computer.id as id, computer.name as name, computer.company_id as company_id, "
+			+ "computer.introduced, computer.discontinued , company.name AS comName FROM computer computer LEFT JOIN company company on computer.company_id = company.id";
 
-	private static final String GET_COMPUTER = "SELECT * FROM computer where id = ";
+	private static final String COMPUTER_BY_NAME = "SELECT computer.id as id, computer.name as name, computer.company_id as company_id, "
+			+ "computer.introduced, computer.discontinued , company.name AS comName FROM computer computer LEFT JOIN company company ON computer.company_id = company.id where computer.name LIKE ? OR (company.name LIKE ?)";
+
+	private static final String GET_COMPUTER = "SELECT computer.id as id, computer.name as name, computer.company_id as company_id, "
+			+ "computer.introduced, computer.discontinued , company.name AS comName FROM computer computer LEFT JOIN company company ON computer.company_id = company.id where computer.id = ";
 
 	private static final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 
@@ -105,6 +110,8 @@ public class ComputerDao {
 			}
 
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + " error in get Page");
+
 			logger.error("Error while getting computer from : " + name + " name");
 		}
 		return list;
@@ -142,7 +149,7 @@ public class ComputerDao {
 			while (rs.next()) {
 				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
 			}
-			try(ResultSet resultTotal = stmt.executeQuery("SELECT FOUND_ROWS()");){
+			try (ResultSet resultTotal = stmt.executeQuery("SELECT FOUND_ROWS()");) {
 				if (resultTotal.next()) {
 					nbTotal.nomberOfComputer = resultTotal.getInt(1);
 				}
@@ -231,6 +238,19 @@ public class ComputerDao {
 			}
 		} catch (SQLException e) {
 			logger.error(e.getMessage() + "Error while updating computer from database");
+		}
+		return false;
+	}
+
+	public boolean deleteComputerFromCompany(int id, Connection conn) {
+		try (Statement stmt = conn.createStatement()) {
+			int i = stmt.executeUpdate(DELETE_FROM_COMPANY_ID + id);
+			if (i >= 0) {
+				logger.debug("Computer deleted");
+				return true;
+			}
+		} catch (SQLException e) {
+			logger.error("Cannot remove computer : " + id + " name");
 		}
 		return false;
 	}

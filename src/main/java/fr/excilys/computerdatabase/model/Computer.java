@@ -32,6 +32,13 @@ public class Computer {
 		this.discontinuedDate = discontinuedDate;
 	}
 
+	public Computer( String name, int compId, LocalDate introducedDate, LocalDate discontinuedDate) {
+		this.compId = compId;
+		this.name = name;
+		this.introducedDate = introducedDate;
+		this.discontinuedDate = discontinuedDate;
+	}
+	
 	public Computer(String name, int i) {
 		this.name = name;
 		compId = i;

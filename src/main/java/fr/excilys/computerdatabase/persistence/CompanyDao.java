@@ -1,104 +1,154 @@
 package fr.excilys.computerdatabase.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
-
+import fr.excilys.computerdatabase.mapper.CompanyMapper;
+import fr.excilys.computerdatabase.model.Company;
 
 /**
  * Link between java code and compagny table
+ * 
  * @author krmmlsh
  *
  */
 public class CompanyDao {
 
-	private final static String getAllCompanies ="SELECT * FROM company"; 
-	
-	private static final Map<Integer, String> companies;
+	private final static String getAllCompanies = "SELECT * FROM company";
+
+	private final static String getCompany = "SELECT * FROM company where id = ?";
+
+	private final static String getCompanyByName = "SELECT * FROM company where name = ?";
+
+	private final static String DELETE_FROM_ID = "DELETE FROM company WHERE id = ";
 
 	private static CompanyDao companyDao;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(CompanyDao.class);
 
 	private static DatabaseConnection databaseConnection = DatabaseConnection.getInstance("/hikari.properties");
-	
+
+	private CompanyMapper companyMapper = CompanyMapper.getInstance();
+
 	private CompanyDao() {
-		
+
 	}
-	
+
 	public synchronized static CompanyDao getInstance() {
 		if (companyDao == null)
 			companyDao = new CompanyDao();
 		return companyDao;
 	}
-	
+
 	/**
-	 * Since we can't add anything to the company table and it is rather short.
-	 * At the first call of this class, we store the whole table locally to improve performances.
+	 * Find company id by its name.
+	 * 
+	 * @param name
+	 *            name of the company
+	 * @return id of the company or -1 if it doesn't exist.
 	 */
-	static {
-		logger.info("STORAGE OF ALL COMPANIES START");
-		companies = new HashMap<>();
+	public Company getCompanyByName(String name) {
+		try (Connection conn = databaseConnection.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(getCompanyByName);) {
+			stmt.setString(1, name);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					return companyMapper.createCompanyFromDatabase(rs);
+				}
+			}
+		} catch (SQLException e) {
+			logger.error("Error on companies storage");
+		}
+		return null;
+	}
+
+	/**
+	 * Name of a company
+	 * 
+	 * @param id
+	 *            id of a company
+	 * @return company's name
+	 * @throws SQLException
+	 */
+	public Company getCompany(int id) {
+		try (Connection conn = databaseConnection.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(getCompany);) {
+			stmt.setInt(1, id);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					return companyMapper.createCompanyFromDatabase(rs);
+				}
+			}
+		} catch (SQLException e) {
+			logger.error("Error on companies storage");
+		}
+		return null;
+	}
+
+	/**
+	 * Get all the companies
+	 * 
+	 * @return map of companies
+	 */
+	public List<Company> getCompanies() {
+		List<Company> companies = new ArrayList<>();
 		try (Connection conn = databaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(getAllCompanies);) {
 
 			while (rs.next()) {
-				companies.put(rs.getInt("id"), rs.getString("name"));
+				companies.add(companyMapper.createCompanyFromDatabase(rs));
 			}
 		} catch (SQLException e) {
 			logger.error("Error on companies storage");
 		}
-	}
-
-	/**
-	 * Find company id by its name.
-	 * @param name name of the company
-	 * @return id of the company or -1 if it doesn't exist.
-	 */
-	public int getCompany(String name) {
-		// look in all the values of the map to find a company with this name
-		Optional<Entry<Integer, String>> entryO = companies
-				.entrySet()
-				.stream()
-				.filter(e -> e.getValue().equals(name))
-				.findFirst();
-		// At least one company has this name
-		if(entryO.isPresent()) {
-			Entry<Integer, String> e = entryO.get();
-			if ( e == null) {
-				return -1;
-			}
-			return e.getKey();
-		}
-		return -1;
-	}
-
-	/**
-	 * Name of a company 
-	 * @param id id of a company
-	 * @return company's name
-	 * @throws SQLException
-	 */
-	public String getCompany(int id) {
-		return companies.get(id);
-	}
-
-	/**
-	 * Get all the companies
-	 * @return map of companies
-	 */
-	public Map<Integer, String> getCompanies() {
 		return companies;
+	}
+
+	public boolean deleteCompany(int id) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = databaseConnection.getConnection();
+			conn.setAutoCommit(false);
+			if (ComputerDao.getInstance().deleteComputerFromCompany(id, conn)) {
+
+				try (Statement stmt = conn.createStatement()) {
+					int i = stmt.executeUpdate(DELETE_FROM_ID + id);
+					if (i > 0) {
+						logger.debug("Company deleted");
+						conn.setAutoCommit(true);
+						return true;
+					}
+				}
+			} else {
+				conn.rollback();
+			}
+
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException ex) {
+				logger.error(ex.getMessage() + "Cannot remove company : " + id + " name");
+
+			}
+			logger.error(e.getMessage() +  "Cannot remove company : " + id + " name");
+
+		} finally {
+			conn.close();
+		}
+		return false;
 	}
 
 }
