@@ -26,7 +26,11 @@
 	</header>
 
 	<section id="main">
+
 		<div class="container">
+			<c:if test="${not empty error }">
+				<h3 style="color:red;"> ${error} </h3>
+			</c:if>
 			<h1 id="homeTitle">${nbTotal} computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">

@@ -8,17 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.main.Util;
+import fr.excilys.computerdatabase.mapper.ComputerMapper;
 import fr.excilys.computerdatabase.model.Computer;
 import fr.excilys.computerdatabase.persistence.ComputerDao;
 import fr.excilys.computerdatabase.servlet.ComputerDTO;
+import fr.excilys.computerdatabase.validator.Validator;
 
 public class ComputerServices {
 
 	private static ComputerServices cs = new ComputerServices();
-
-	private CompanyServices companyServices = CompanyServices.getCompanyServices();
 	
-	public ComputerDao computerDao;
+	private ComputerMapper computerMapper = ComputerMapper.getInstance();
+	
+	private ComputerDao computerDao;
 
 	private ComputerServices() {
 		computerDao = ComputerDao.getInstance();
@@ -36,7 +38,7 @@ public class ComputerServices {
 	 */
 	public ComputerDTO getComputerById(int id) {
 		Computer computer = computerDao.getComputer(id);
-		return createComputerDTO(computer);
+		return computerMapper.computerToComputerDTO(computer);
 	}
 
 	/**
@@ -97,41 +99,35 @@ public class ComputerServices {
 	}
 
 	public Computer addComputer(HttpServletRequest request) {
-		Computer computer = buildComputer(request);
-		computerDao.insertComputer(computer);
+		if (!Validator.isNameValid(request.getParameter("computerName"))) {
+			return null;
+		}
+		Computer computer = computerMapper.buildComputerFromRequest(request);
+		if (!computerDao.insertComputer(computer)) {
+			return null;
+		}
 		return computer;
 	}
 
 	public Computer updateComputer(HttpServletRequest request) {
-		Computer computer = buildComputer(request);
+		if (!Validator.isNameValid(request.getParameter("computerName"))) {
+			return null;
+		}
+		Computer computer = computerMapper.buildComputerFromRequest(request);
 		computer.setId(Integer.valueOf(request.getParameter("id")));
-		computerDao.updateComputer(computer);
-
+		if (!computerDao.updateComputer(computer)) {
+			return null;
+		}
 		return computer;
 	}
 	
-	private Computer buildComputer(HttpServletRequest request) {
-		return new Computer.Builder().name(request.getParameter("computerName"))
-				.compId(Integer.valueOf(request.getParameter("companyId")))
-				.introducedDate(Util.convertStringToLocalDate(request.getParameter("introduced"), "dd/MM/yyyy"))
-				.discontinuedDate(Util.convertStringToLocalDate(request.getParameter("discontinued"), "dd/MM/yyyy"))
-				.company(companyServices.getCompany(Integer.valueOf(request.getParameter("companyId"))))
-				.build();	
-	}
+
 	
 	private List<ComputerDTO> computerDTOList(List<Computer> computers) {
 		return computers.stream()
-				.map(computer -> createComputerDTO(computer))
+				.map(computer -> computerMapper.computerToComputerDTO(computer))
 				.collect(Collectors.toList());
 	}
-	
-	private ComputerDTO createComputerDTO(Computer computer) {
-		return new ComputerDTO.Builder().id(computer.getId()).name(computer.getName())
-			.introducedDate((computer.getIntroducedDate()!= null) ? computer.getIntroducedDate().toString() : null)
-			.discontinuedDate((computer.getDiscontinuedDate()!= null) ? computer.getDiscontinuedDate().toString() : null)
-			.compId(computer.getCompId())
-			.company(computer.getCompany())
-			.build();
-	}
+
 
 }

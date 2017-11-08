@@ -194,7 +194,7 @@ public class ComputerDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			logger.error("Computer cannot be added");
+			logger.error(e.getMessage() + " Computer cannot be added");
 		}
 		return false;
 	}
@@ -223,7 +223,6 @@ public class ComputerDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			System.out.println(e.getMessage() + "Error while updating computer from database");
 			logger.error(e.getMessage() + "Error while updating computer from database");
 		}
 		return false;

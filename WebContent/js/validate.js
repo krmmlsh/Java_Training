@@ -6,10 +6,10 @@
 					minlength : 4
 				},
 				introduced : {
-					regex : /^((\d?\d)(\/|-)\d\d(\/|-)\d\d(\d\d)?|\d\d\d\d-\d\d-\d\d)$/
+					regex : /^((0[1-9]|[12]\d|3[01])(\/|-)(0[1-9]|1[012])(\/|-)\d\d(\d\d)?|\d\d\d\d-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01]))$/
 				},
 				discontinued : {
-					regex : /^((\d?\d)(\/|-)\d\d(\/|-)\d\d(\d\d)?|\d\d\d\d-\d\d-\d\d)$/
+					regex : /^((0[1-9]|[12]\d|3[01])(\/|-)(0[1-9]|1[012])(\/|-)\d\d(\d\d)?|\d\d\d\d-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01]))$/
 				}
 			},
 			messages : {
@@ -22,7 +22,7 @@
 		        form.submit();
 		    },
 		    focusCleanup: true,
-		    onkeyup: false,
+		    onkeyup: true,
 		});
 	});
 	

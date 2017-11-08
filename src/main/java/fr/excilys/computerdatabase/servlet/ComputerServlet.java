@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.excilys.computerdatabase.main.NbTotal;
+import fr.excilys.computerdatabase.model.Computer;
 import fr.excilys.computerdatabase.service.CompanyServices;
 import fr.excilys.computerdatabase.service.ComputerServices;
 
@@ -54,17 +55,18 @@ public class ComputerServlet extends HttpServlet {
 	private int limit = 10;
 
 	private List<Integer> listOfPages() {
-		
-		if (currentPage <3 ) {
+
+		if (currentPage < 3) {
 			return IntStream.range(1, 6).boxed().collect(Collectors.toList());
 		}
-		if (nbTotal.nomberOfComputer/limit-2 <= currentPage ) {
-			return IntStream.range(nbTotal.nomberOfComputer/limit - 4, nbTotal.nomberOfComputer/limit+1).boxed().collect(Collectors.toList());
+		if (nbTotal.nomberOfComputer / limit - 2 <= currentPage) {
+			return IntStream.range(nbTotal.nomberOfComputer / limit - 4, nbTotal.nomberOfComputer / limit + 1).boxed()
+					.collect(Collectors.toList());
 
 		}
-		return IntStream.range(currentPage-1, currentPage+4).boxed().collect(Collectors.toList());
+		return IntStream.range(currentPage - 1, currentPage + 4).boxed().collect(Collectors.toList());
 	}
-	
+
 	private void pagination(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String delta = request.getParameter("plus");
@@ -76,7 +78,7 @@ public class ComputerServlet extends HttpServlet {
 			this.currentPage = 0;
 		}
 		if (currentPage != null) {
-			this.currentPage = Integer.valueOf(currentPage)-1;
+			this.currentPage = Integer.valueOf(currentPage) - 1;
 		}
 		if (delta != null) {
 			int deltaInt = Integer.valueOf(delta);
@@ -136,8 +138,9 @@ public class ComputerServlet extends HttpServlet {
 		if (requestType != null) {
 			switch (requestType) {
 			case POST: {
-				if (request.getParameter("name") != null)
-					computerService.addComputer(request);
+				if (computerService.addComputer(request) == null) {
+					request.setAttribute("error", "Something went wrong, please try again with correct inputs");
+				}
 				break;
 			}
 			case DELETE: {
@@ -147,15 +150,15 @@ public class ComputerServlet extends HttpServlet {
 				break;
 			}
 			case UPDATE: {
-				request.setAttribute("computer", computerService.updateComputer(request));
-				request.setAttribute("companies", companyServices.getAllCompanies());
-				request.getRequestDispatcher("editComputer.jsp").forward(request, response);
-				return;
+				if (computerService.updateComputer(request) == null) {
+					request.setAttribute("error", "Something went wrong, please try again with correct inputs");
+				}
+				break;
 			}
 			}
-			pagination(request, response);
 
 		}
+		pagination(request, response);
 
 	}
 
