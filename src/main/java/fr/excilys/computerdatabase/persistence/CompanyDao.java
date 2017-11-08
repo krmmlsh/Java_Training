@@ -29,6 +29,7 @@ public class CompanyDao {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CompanyDao.class);
 
+	private static DatabaseConnection databaseConnection = DatabaseConnection.getInstance("/hikari.properties");
 	
 	private CompanyDao() {
 		
@@ -47,7 +48,7 @@ public class CompanyDao {
 	static {
 		logger.info("STORAGE OF ALL COMPANIES START");
 		companies = new HashMap<>();
-		try (Connection conn = DatabaseConnection.getConnection();
+		try (Connection conn = databaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(getAllCompanies);) {
 

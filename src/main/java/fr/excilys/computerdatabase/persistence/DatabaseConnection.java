@@ -1,28 +1,33 @@
 package fr.excilys.computerdatabase.persistence;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mysql.cj.jdbc.Driver;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class DatabaseConnection {
 
-	private final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
-
 	
-	public static String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull&serverTimezone=UTC";
-	public static final String username = "admincdb";
-	public static final String password = "qwerty1234";
-
-	public static Connection getConnection() {
-		try {
-			
-			DriverManager.registerDriver(new Driver());
-			return DriverManager.getConnection(url, username, password);
+	private HikariDataSource ds;
+ 
+	public static DatabaseConnection databaseConnection;
+	
+	private DatabaseConnection(String file) {
+		HikariConfig config = new HikariConfig(file);
+		ds = new HikariDataSource(config);
+	}
+	
+	public static DatabaseConnection getInstance (String file) {
+		if (databaseConnection == null) {
+			databaseConnection = new DatabaseConnection(file);
+		}
+		return databaseConnection;
+	}
+	
+	public Connection getConnection() {
+		try{
+			return ds.getConnection();
 		} catch (SQLException e) {
 			throw new RuntimeException(e.getMessage() + " Error sql connection");
 		}

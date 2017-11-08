@@ -21,21 +21,11 @@ import fr.excilys.computerdatabase.model.Computer;
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerDaoTest {
 
-	private ComputerDao computerDao = ComputerDao.getInstance();
-	
-	private static boolean setUpIsDone = false;
+	private ComputerDao computerDao = ComputerDao.getInstance();	
 	
 	@Before
 	public void setUp() {
-	    if (setUpIsDone) {
-	    	databaseRequest("config/db/createComputers.sql");
-	        return;
-	    }
-		String s[] = DatabaseConnection.url.split("computer-database-db");
-		DatabaseConnection.url = s[0] + "computer-database-db-test" + s[1];
-    	databaseRequest("config/db/createComputers.sql");
-
-	    setUpIsDone = true;
+	    databaseRequest("config/db/createComputers.sql");
 	}
 
 	@After
@@ -44,8 +34,8 @@ public class ComputerDaoTest {
 	}
 	
 	private void databaseRequest(String file) {
-		Connection con = DatabaseConnection.getConnection();
-		try {
+		
+		try (Connection con = DatabaseConnectionTest.getConnection();){
 			// Initialize object for ScripRunner
 			ScriptRunner sr = new ScriptRunner(con, false, false);
 
@@ -103,13 +93,11 @@ public class ComputerDaoTest {
 	@Test
 	public void removeComputer_SUCCESS() {
 		assertEquals(true,	computerDao.removeComputer(1));
-
 	}
 	
 	@Test
 	public void removeComputer_FAILURE() {
 		assertEquals(false,	computerDao.removeComputer(-1));
-
 	}
 	
 	

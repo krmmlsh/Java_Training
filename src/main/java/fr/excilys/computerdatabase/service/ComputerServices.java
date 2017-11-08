@@ -2,12 +2,10 @@ package fr.excilys.computerdatabase.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
 import fr.excilys.computerdatabase.main.NbTotal;
-import fr.excilys.computerdatabase.main.Util;
 import fr.excilys.computerdatabase.mapper.ComputerMapper;
 import fr.excilys.computerdatabase.model.Computer;
 import fr.excilys.computerdatabase.persistence.ComputerDao;

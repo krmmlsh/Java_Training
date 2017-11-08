@@ -27,7 +27,7 @@ public class ComputerDao {
 
 	private static final String GET_ALL_COMPUTERS = "SELECT SQL_CALC_FOUND_ROWS * FROM computer";
 
-	private static final String COMPUTER_BY_NAME = "SELECT * FROM computer where name = ";
+	private static final String COMPUTER_BY_NAME = "SELECT * FROM computer c INNER JOIN company com  ON  c.company_id = com.id where c.name LIKE ? OR (com.name LIKE ?)";
 
 	private static final String GET_COMPUTER = "SELECT * FROM computer where id = ";
 
@@ -38,6 +38,8 @@ public class ComputerDao {
 	private CompanyDao companyDao = CompanyDao.getInstance();
 
 	private ComputerMapper computerMapper = ComputerMapper.getInstance();
+
+	private DatabaseConnection databaseConnection = DatabaseConnection.getInstance("/hikari.properties");
 
 	private ComputerDao() {
 
@@ -64,7 +66,7 @@ public class ComputerDao {
 	public Computer getComputer(int id) {
 		logger.trace("ENTER GET COMPUTER BY ID");
 
-		try (Connection conn = DatabaseConnection.getConnection();
+		try (Connection conn = databaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(GET_COMPUTER + id)) {
 
@@ -92,13 +94,16 @@ public class ComputerDao {
 		logger.trace("ENTER GET COMPUTER BY NAME");
 		List<Computer> list = new ArrayList<>();
 
-		try (Connection conn = DatabaseConnection.getConnection();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(COMPUTER_BY_NAME + "'" + name + "'")) {
-
-			while (rs.next()) {
-				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
+		try (Connection conn = databaseConnection.getConnection();
+				PreparedStatement ps = conn.prepareStatement(COMPUTER_BY_NAME);) {
+			ps.setString(1, "%" + name + "%");
+			ps.setString(2, "%" + name + "%");
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
+				}
 			}
+
 		} catch (SQLException e) {
 			logger.error("Error while getting computer from : " + name + " name");
 		}
@@ -114,7 +119,7 @@ public class ComputerDao {
 		logger.trace("ENTER GET ALL COMPUTERS");
 
 		List<Computer> list = new ArrayList<>();
-		try (Connection conn = DatabaseConnection.getConnection();
+		try (Connection conn = databaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(GET_ALL_COMPUTERS);) {
 			while (rs.next()) {
@@ -130,17 +135,19 @@ public class ComputerDao {
 		logger.trace("ENTER GET ALL COMPUTERS");
 
 		List<Computer> list = new ArrayList<>();
-		try (Connection conn = DatabaseConnection.getConnection();
+		try (Connection conn = databaseConnection.getConnection();
 				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(
-						GET_ALL_COMPUTERS + " limit " + limit + " offset " + (currentPage) * limit);) {
+				ResultSet rs = stmt
+						.executeQuery(GET_ALL_COMPUTERS + " limit " + limit + " offset " + (currentPage) * limit);) {
 			while (rs.next()) {
 				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
 			}
-			ResultSet resultTotal = stmt.executeQuery("SELECT FOUND_ROWS()");
-			if (resultTotal.next()) {
-				nbTotal.nomberOfComputer = resultTotal.getInt(1);
+			try(ResultSet resultTotal = stmt.executeQuery("SELECT FOUND_ROWS()");){
+				if (resultTotal.next()) {
+					nbTotal.nomberOfComputer = resultTotal.getInt(1);
+				}
 			}
+
 		} catch (SQLException e) {
 			logger.error("Error while getting computers from database");
 		}
@@ -157,7 +164,7 @@ public class ComputerDao {
 	 */
 	public boolean removeComputer(int id) {
 		logger.trace("ENTER REMOVE COMPUTER");
-		try (Connection conn = DatabaseConnection.getConnection(); Statement stmt = conn.createStatement()) {
+		try (Connection conn = databaseConnection.getConnection(); Statement stmt = conn.createStatement()) {
 
 			int i = stmt.executeUpdate(DELETE_FROM_ID + id);
 			if (i == 1) {
@@ -180,7 +187,7 @@ public class ComputerDao {
 	public boolean insertComputer(Computer computer) {
 		logger.trace("ENTER INSERT COMPUTER");
 
-		try (Connection conn = DatabaseConnection.getConnection();
+		try (Connection conn = databaseConnection.getConnection();
 				PreparedStatement ps = conn.prepareStatement(INSERT_COMPUTER)) {
 
 			ps.setString(1, computer.getName());
@@ -209,7 +216,7 @@ public class ComputerDao {
 	public boolean updateComputer(Computer computer) {
 		logger.trace("ENTER UPDATE COMPUTER");
 
-		try (Connection conn = DatabaseConnection.getConnection();
+		try (Connection conn = databaseConnection.getConnection();
 				PreparedStatement ps = conn.prepareStatement(UPDATE_COMPUTER + computer.getId())) {
 
 			ps.setString(1, computer.getName());
