@@ -69,7 +69,15 @@ $(function() {
     };
 }( jQuery ));
 
-
+//Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteForm
+(function ( $ ) {
+    $.fn.deleteSelectedCompany = function() {
+        if (confirm("Are you sure you want to delete this company and ALL of its computers ?")) { 
+            $('#deleteFormCompany input[name=companyIdDeleted]');
+            $('#deleteFormCompany').submit();
+        }
+    };
+}( jQuery ));
 
 //Event handling
 //Onkeydown

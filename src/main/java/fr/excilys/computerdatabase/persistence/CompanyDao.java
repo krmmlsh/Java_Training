@@ -117,7 +117,7 @@ public class CompanyDao {
 		return companies;
 	}
 
-	public boolean deleteCompany(int id) throws SQLException {
+	public boolean deleteCompany(int id) {
 		Connection conn = null;
 		try {
 			conn = databaseConnection.getConnection();
@@ -146,7 +146,12 @@ public class CompanyDao {
 			logger.error(e.getMessage() +  "Cannot remove company : " + id + " name");
 
 		} finally {
-			conn.close();
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				logger.error(e.getMessage() + " Error while closing connection");
+
+			}
 		}
 		return false;
 	}

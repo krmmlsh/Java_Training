@@ -16,12 +16,12 @@
 </head>
 <body>
 	<script>
-		var button = 0;	
+		var button = 0;
 	</script>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/JavaLevel2/computer?page=1"> Application
-				- Computer Database </a>
+			<a class="navbar-brand" href="/JavaLevel2/computer?page=1">
+				Application - Computer Database </a>
 		</div>
 	</header>
 
@@ -29,9 +29,9 @@
 
 		<div class="container">
 			<c:if test="${not empty error }">
-				<h3 style="color:red;"> ${error} </h3>
+				<h3 style="color: red;">${error}</h3>
 			</c:if>
-			<h1 id="homeTitle">${nbTotal} computers found</h1>
+			<h1 id="homeTitle">${nbTotal}computersfound</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="/JavaLevel2/computer" method="GET"
@@ -50,7 +50,24 @@
 				</div>
 			</div>
 		</div>
-
+		<div class="container">
+			<div class="editMode">
+				<div>
+					<label for="companyId">Companies</label>
+				</div>
+				<form id="deleteFormCompany" action="/JavaLevel2/computer"	style="display:inline;"method="POST">
+					<select name="companyIdDeleted">
+						<c:forEach var="company" items="${companies}">
+							<option value="${company.id}">${company.name}</option>
+						</c:forEach>
+					</select> 
+					<input type="hidden" name="ACTION_TYPE" value="deleteFormCompany" />
+				</form>
+				<a href="#" id="deleteCompany" onclick="$.fn.deleteSelectedCompany();">
+					<i style="color: red;" class="fa fa-trash-o fa-lg"></i>
+				</a>
+			</div>
+		</div>
 		<form id="deleteForm" action="/JavaLevel2/computer" method="POST">
 			<input type="hidden" name="selection" value=""> <input
 				type="hidden" name="ACTION_TYPE" value="delete">
@@ -101,27 +118,26 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="btn-group btn-group-sm pull-right" role="group">
 			<form>
-				<a href="/JavaLevel2/computer?length=10"><button type="button" class="btn btn-default">10</button></a>
-				<a href="/JavaLevel2/computer?length=50"><button type="button" class="btn btn-default">50</button></a>
-				<a href="/JavaLevel2/computer?length=100"><button type="button" class="btn btn-default">100</button></a>
+				<a href="/JavaLevel2/computer?length=10"><button type="button"
+						class="btn btn-default">10</button></a> <a
+					href="/JavaLevel2/computer?length=50"><button type="button"
+						class="btn btn-default">50</button></a> <a
+					href="/JavaLevel2/computer?length=100"><button type="button"
+						class="btn btn-default">100</button></a>
 			</form>
 		</div>
 
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a id="next"
-					href="/JavaLevel2/computer?plus=-1"
+				<li><a id="next" href="/JavaLevel2/computer?plus=-1"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<c:forEach items="${pages}" var="page" >
-					 <li><a id="${page}" 
-						href="/JavaLevel2/computer?page=${page}"
+				<c:forEach items="${pages}" var="page">
+					<li><a id="${page}" href="/JavaLevel2/computer?page=${page}"
 						aria-label="${page}"> <span aria-hidden="true">${page}</span>
-						</a>
-					</li>
+					</a></li>
 				</c:forEach>
-				<li><a id="previous" 
-					href="/JavaLevel2/computer?plus=1"
+				<li><a id="previous" href="/JavaLevel2/computer?plus=1"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
@@ -131,8 +147,8 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/dashboard.js"></script>
-	<script type="text/javascript">	
-	
+	<script type="text/javascript">
+		
 	</script>
 
 </body>

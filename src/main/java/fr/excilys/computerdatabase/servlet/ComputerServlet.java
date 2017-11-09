@@ -20,9 +20,6 @@ public class ComputerServlet extends HttpServlet {
 
 	private static final String COMPUTERS = "computers";
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private static final String ID = "ID";
@@ -96,6 +93,8 @@ public class ComputerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String requestType = (String) request.getParameter(ACTION_TYPE);
+		request.setAttribute("companies", companyServices.getAllCompanies());
+
 		if (requestType != null) {
 			switch (requestType) {
 			case GET_BY_ID: {
@@ -112,14 +111,12 @@ public class ComputerServlet extends HttpServlet {
 
 			}
 			case CREATE: {
-				request.setAttribute("companies", companyServices.getAllCompanies());
 				request.getRequestDispatcher("addComputer.jsp").forward(request, response);
 				break;
 			}
 			case UPDATE: {
 				Integer id = Integer.valueOf(request.getParameter("computerId"));
 				request.setAttribute("computer", computerService.getComputerById(id));
-				request.setAttribute("companies", companyServices.getAllCompanies());
 				request.getRequestDispatcher("editComputer.jsp").forward(request, response);
 				break;
 
@@ -134,6 +131,7 @@ public class ComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String requestType = request.getParameter(ACTION_TYPE);
+		request.setAttribute("companies", companyServices.getAllCompanies());
 		if (requestType != null) {
 			switch (requestType) {
 			case POST: {
@@ -154,6 +152,9 @@ public class ComputerServlet extends HttpServlet {
 				}
 				break;
 			}
+			case "deleteFormCompany" :
+				companyServices.deleteCompany((request.getParameter("companyIdDeleted") != null ? Integer.valueOf(request.getParameter("companyIdDeleted")) : -1));
+				break;
 			}
 
 		}

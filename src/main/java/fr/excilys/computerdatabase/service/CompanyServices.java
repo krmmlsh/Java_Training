@@ -42,7 +42,7 @@ public class CompanyServices {
 		return companyDao.getCompany(id);
 	}
 
-	public void deleteCompany(int id) throws SQLException {
+	public void deleteCompany(int id) {
 		companyDao.deleteCompany(id);
 	}
 	
