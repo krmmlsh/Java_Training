@@ -5,6 +5,9 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.mapper.ComputerMapper;
 import fr.excilys.computerdatabase.model.Computer;
@@ -12,21 +15,17 @@ import fr.excilys.computerdatabase.persistence.ComputerDao;
 import fr.excilys.computerdatabase.servlet.ComputerDTO;
 import fr.excilys.computerdatabase.validator.Validator;
 
+
+@Component
 public class ComputerServices {
 
-	private static ComputerServices cs = new ComputerServices();
+
+	@Autowired
+	private ComputerMapper computerMapper;
 	
-	private ComputerMapper computerMapper = ComputerMapper.getInstance();
-	
+	@Autowired
 	private ComputerDao computerDao;
 
-	private ComputerServices() {
-		computerDao = ComputerDao.getInstance();
-	}
-
-	public static ComputerServices getComputerServices() {
-		return cs;
-	}
 
 	/**
 	 * Get a computer from the database by his id.

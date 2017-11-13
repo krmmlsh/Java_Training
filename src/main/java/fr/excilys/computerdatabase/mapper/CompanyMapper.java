@@ -3,27 +3,15 @@ package fr.excilys.computerdatabase.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import fr.excilys.computerdatabase.main.Util;
-import fr.excilys.computerdatabase.model.Company;
-import fr.excilys.computerdatabase.model.Computer;
+import org.springframework.stereotype.Component;
 
+import fr.excilys.computerdatabase.model.Company;
+
+@Component
 public class CompanyMapper {
 
-	private static CompanyMapper computerMapper;
 	
 	
-	private CompanyMapper() {
-		
-	}
-	
-	
-	public synchronized static CompanyMapper getInstance() {
-		if (computerMapper == null)
-			computerMapper = new CompanyMapper();
-		return computerMapper;
-	}
-	
-
 	/**
 	 * Fill company with ResultSet values.
 	 * 

@@ -6,14 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import fr.excilys.computerdatabase.mapper.CompanyMapper;
 import fr.excilys.computerdatabase.model.Company;
@@ -24,6 +22,7 @@ import fr.excilys.computerdatabase.model.Company;
  * @author krmmlsh
  *
  */
+@Component
 public class CompanyDao {
 
 	private final static String getAllCompanies = "SELECT * FROM company";
@@ -34,23 +33,17 @@ public class CompanyDao {
 
 	private final static String DELETE_FROM_ID = "DELETE FROM company WHERE id = ";
 
-	private static CompanyDao companyDao;
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(CompanyDao.class);
 
 	private static DatabaseConnection databaseConnection = DatabaseConnection.getInstance("/hikari.properties");
 
-	private CompanyMapper companyMapper = CompanyMapper.getInstance();
+	@Autowired
+	private CompanyMapper companyMapper;
 
-	private CompanyDao() {
+	@Autowired
+	private ComputerDao computerDao;
 
-	}
-
-	public synchronized static CompanyDao getInstance() {
-		if (companyDao == null)
-			companyDao = new CompanyDao();
-		return companyDao;
-	}
 
 	/**
 	 * Find company id by its name.
@@ -122,7 +115,7 @@ public class CompanyDao {
 		try {
 			conn = databaseConnection.getConnection();
 			conn.setAutoCommit(false);
-			if (ComputerDao.getInstance().deleteComputerFromCompany(id, conn)) {
+			if (computerDao.deleteComputerFromCompany(id, conn)) {
 
 				try (Statement stmt = conn.createStatement()) {
 					int i = stmt.executeUpdate(DELETE_FROM_ID + id);

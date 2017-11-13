@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.service.CompanyServices;
 import fr.excilys.computerdatabase.service.ComputerServices;
@@ -40,9 +44,11 @@ public class ComputerServlet extends HttpServlet {
 
 	public static final String CREATE = "create";
 
-	private final ComputerServices computerService = ComputerServices.getComputerServices();
+	@Autowired
+	private ComputerServices computerServices;
 
-	private final CompanyServices companyServices = CompanyServices.getCompanyServices();
+	@Autowired
+	private CompanyServices companyServices;
 
 	private NbTotal nbTotal = new NbTotal();
 
@@ -62,6 +68,11 @@ public class ComputerServlet extends HttpServlet {
 		}
 		return IntStream.range(currentPage - 1, currentPage + 4).boxed().collect(Collectors.toList());
 	}
+	@Override
+	public void init() {
+        ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
+        context.getAutowireCapableBeanFactory().autowireBean(this);
+    }
 
 	private void pagination(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -82,7 +93,7 @@ public class ComputerServlet extends HttpServlet {
 				this.currentPage += deltaInt;
 			}
 		}
-		request.setAttribute(COMPUTERS, computerService.getAllComputers(this.currentPage, limit, nbTotal));
+		request.setAttribute(COMPUTERS, computerServices.getAllComputers(this.currentPage, limit, nbTotal));
 		request.setAttribute("nbTotal", nbTotal.nomberOfComputer);
 		request.setAttribute("pages", listOfPages());
 		request.getRequestDispatcher(DASHBOARD).forward(request, response);
@@ -93,19 +104,20 @@ public class ComputerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String requestType = (String) request.getParameter(ACTION_TYPE);
+
 		request.setAttribute("companies", companyServices.getAllCompanies());
 
 		if (requestType != null) {
 			switch (requestType) {
 			case GET_BY_ID: {
 				Integer id = (Integer) request.getAttribute(ID);
-				request.setAttribute(COMPUTERS, computerService.getComputerById(id));
+				request.setAttribute(COMPUTERS, computerServices.getComputerById(id));
 				request.getRequestDispatcher(DASHBOARD).forward(request, response);
 				break;
 			}
 			case GET_BY_NAME: {
 				String name = (String) request.getParameter("search");
-				request.setAttribute(COMPUTERS, computerService.getComputerByName(name));
+				request.setAttribute(COMPUTERS, computerServices.getComputerByName(name));
 				request.getRequestDispatcher(DASHBOARD).forward(request, response);
 				break;
 
@@ -116,7 +128,7 @@ public class ComputerServlet extends HttpServlet {
 			}
 			case UPDATE: {
 				Integer id = Integer.valueOf(request.getParameter("computerId"));
-				request.setAttribute("computer", computerService.getComputerById(id));
+				request.setAttribute("computer", computerServices.getComputerById(id));
 				request.getRequestDispatcher("editComputer.jsp").forward(request, response);
 				break;
 
@@ -135,25 +147,27 @@ public class ComputerServlet extends HttpServlet {
 		if (requestType != null) {
 			switch (requestType) {
 			case POST: {
-				if (computerService.addComputer(request) == null) {
+				if (computerServices.addComputer(request) == null) {
 					request.setAttribute("error", "Something went wrong, please try again with correct inputs");
 				}
 				break;
 			}
 			case DELETE: {
 				String cbSelection = request.getParameter("selection");
-				computerService.removeComputer(cbSelection);
+				computerServices.removeComputer(cbSelection);
 
 				break;
 			}
 			case UPDATE: {
-				if (computerService.updateComputer(request) == null) {
+				if (computerServices.updateComputer(request) == null) {
 					request.setAttribute("error", "Something went wrong, please try again with correct inputs");
 				}
 				break;
 			}
-			case "deleteFormCompany" :
-				companyServices.deleteCompany((request.getParameter("companyIdDeleted") != null ? Integer.valueOf(request.getParameter("companyIdDeleted")) : -1));
+			case "deleteFormCompany":
+				companyServices.deleteCompany((request.getParameter("companyIdDeleted") != null
+						? Integer.valueOf(request.getParameter("companyIdDeleted"))
+						: -1));
 				break;
 			}
 

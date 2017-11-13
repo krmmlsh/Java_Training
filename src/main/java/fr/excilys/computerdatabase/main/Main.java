@@ -2,17 +2,19 @@ package fr.excilys.computerdatabase.main;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Scanner;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import fr.excilys.computerdatabase.model.Company;
 import fr.excilys.computerdatabase.model.Computer;
 import fr.excilys.computerdatabase.service.CompanyServices;
 import fr.excilys.computerdatabase.service.ComputerServices;
 import fr.excilys.computerdatabase.servlet.ComputerDTO;
+import fr.excilys.computerdatabase.servlet.Config;
 
 /**
  * Main class to launch the application and manage the user.
@@ -22,8 +24,11 @@ import fr.excilys.computerdatabase.servlet.ComputerDTO;
  */
 public class Main {
 	public static void main(String[] args) throws SQLException {
-		ComputerServices computerService = ComputerServices.getComputerServices();
-		CompanyServices companyService = CompanyServices.getCompanyServices();
+
+		 ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
+
+		ComputerServices computerService = (ComputerServices)context.getBean("computerService");
+		CompanyServices companyService = (CompanyServices)context.getBean("companyService");
 
 		// User information
 		System.out.println("a to add a new computer" + "\n" + "c to get an existing computer by id" + "\n"

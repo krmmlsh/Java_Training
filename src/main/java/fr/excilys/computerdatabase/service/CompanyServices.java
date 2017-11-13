@@ -1,26 +1,24 @@
 package fr.excilys.computerdatabase.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
+import fr.excilys.computerdatabase.context.Context;
 import fr.excilys.computerdatabase.model.Company;
 import fr.excilys.computerdatabase.persistence.CompanyDao;
 
+@Component
 public class CompanyServices {
+	
+	@Autowired
+	private CompanyDao companyDao;
 
-	private static CompanyServices cs = new CompanyServices();
-	
-	private CompanyDao companyDao = CompanyDao.getInstance();
-
-	
-	private CompanyServices () {
-		
+	public void setCompanyDao(CompanyDao companyDao) {
+		this.companyDao = companyDao;
 	}
-	
-	public static CompanyServices getCompanyServices() {
-		return cs;
-	}
-	
 	/**
 	 * List all the companies from the database.
 	 * @return a list of Company objects.

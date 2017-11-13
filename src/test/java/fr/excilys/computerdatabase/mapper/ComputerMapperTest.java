@@ -15,12 +15,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import fr.excilys.computerdatabase.main.Util;
 import fr.excilys.computerdatabase.model.Computer;
-import fr.excilys.computerdatabase.persistence.CompanyDao;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerMapperTest {
-
-	
 
 	@InjectMocks
 	public ComputerMapper computerMapper;
@@ -35,7 +32,7 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getInt("company_id")).thenReturn(5);
 		Mockito.when(resultSet.getString("introduced")).thenReturn("2017-04-04");
 		Mockito.when(resultSet.getString("discontinued")).thenReturn("2000-01-01");
-		assertEquals(computerMapper.createComputerFromDatabase(resultSet, CompanyDao.getInstance()), new Computer("karim"
+		assertEquals(computerMapper.createComputerFromDatabase(resultSet), new Computer("karim"
 				, 5
 				, Util.convertStringToLocalDate("2017-04-04", "yyyy-MM-dd")
 				, Util.convertStringToLocalDate("2000-01-01", "yyyy-MM-dd")));
@@ -48,7 +45,7 @@ public class ComputerMapperTest {
 		Mockito.when(resultSet.getInt("company_id")).thenReturn(5);
 		Mockito.when(resultSet.getString("introduced")).thenReturn("2017-04-04");
 		Mockito.when(resultSet.getString("discontinued")).thenReturn("2000-01-01");
-		assertNotEquals(computerMapper.createComputerFromDatabase(resultSet, CompanyDao.getInstance()), new Computer("karim"
+		assertNotEquals(computerMapper.createComputerFromDatabase(resultSet), new Computer("karim"
 				, 5
 				, Util.convertStringToLocalDate("2017-04-04", "yyyy-MM-dd")
 				, Util.convertStringToLocalDate("2000-01-01", "yyyy-MM-dd")));

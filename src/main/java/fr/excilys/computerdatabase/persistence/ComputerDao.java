@@ -12,11 +12,15 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.mapper.ComputerMapper;
 import fr.excilys.computerdatabase.model.Computer;
 
+
+@Component
 public class ComputerDao {
 
 	private static final String UPDATE_COMPUTER = "UPDATE computer set name=?, introduced=?, discontinued=?, company_id=? where id=";
@@ -36,30 +40,13 @@ public class ComputerDao {
 	private static final String GET_COMPUTER = "SELECT computer.id as id, computer.name as name, computer.company_id as company_id, "
 			+ "computer.introduced, computer.discontinued , company.name AS comName FROM computer computer LEFT JOIN company company ON computer.company_id = company.id where computer.id = ";
 
-	private static final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
-
-	private static ComputerDao computerDao;
-
-	private CompanyDao companyDao = CompanyDao.getInstance();
-
-	private ComputerMapper computerMapper = ComputerMapper.getInstance();
+	private static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
+	
+	@Autowired
+	private ComputerMapper computerMapper;
 
 	private DatabaseConnection databaseConnection = DatabaseConnection.getInstance("/hikari.properties");
 
-	private ComputerDao() {
-
-	}
-
-	/**
-	 * Get the singleton of ComputerDao.
-	 * 
-	 * @return ComputerDao instance
-	 */
-	public synchronized static ComputerDao getInstance() {
-		if (computerDao == null)
-			computerDao = new ComputerDao();
-		return computerDao;
-	}
 
 	/**
 	 * Get a computer from his id.
@@ -77,7 +64,7 @@ public class ComputerDao {
 
 			if (rs.next()) {
 
-				return computerMapper.createComputerFromDatabase(rs, companyDao);
+				return computerMapper.createComputerFromDatabase(rs);
 			} else {
 				logger.error("Error while getting computer from : " + id + " id");
 			}
@@ -105,7 +92,7 @@ public class ComputerDao {
 			ps.setString(2, "%" + name + "%");
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
-					list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
+					list.add(computerMapper.createComputerFromDatabase(rs));
 				}
 			}
 
@@ -130,7 +117,7 @@ public class ComputerDao {
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(GET_ALL_COMPUTERS);) {
 			while (rs.next()) {
-				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
+				list.add(computerMapper.createComputerFromDatabase(rs));
 			}
 		} catch (SQLException e) {
 			logger.error("Error while getting computers from database");
@@ -147,7 +134,7 @@ public class ComputerDao {
 				ResultSet rs = stmt
 						.executeQuery(GET_ALL_COMPUTERS + " limit " + limit + " offset " + (currentPage) * limit);) {
 			while (rs.next()) {
-				list.add(computerMapper.createComputerFromDatabase(rs, companyDao));
+				list.add(computerMapper.createComputerFromDatabase(rs));
 			}
 			try (ResultSet resultTotal = stmt.executeQuery("SELECT FOUND_ROWS()");) {
 				if (resultTotal.next()) {

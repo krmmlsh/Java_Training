@@ -16,12 +16,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ibatis.common.jdbc.ScriptRunner;
 
+import fr.excilys.computerdatabase.context.Context;
 import fr.excilys.computerdatabase.model.Computer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerDaoTest {
 
-	private ComputerDao computerDao = ComputerDao.getInstance();	
+	private Context context = Context.getInstance();
+
+	
+	private ComputerDao computerDao = (ComputerDao)context.getApplicationContext().getBean("computerDao");
 	
 	@Before
 	public void setUp() {
