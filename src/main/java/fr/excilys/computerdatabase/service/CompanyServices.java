@@ -3,10 +3,8 @@ package fr.excilys.computerdatabase.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import fr.excilys.computerdatabase.context.Context;
 import fr.excilys.computerdatabase.model.Company;
 import fr.excilys.computerdatabase.persistence.CompanyDao;
 

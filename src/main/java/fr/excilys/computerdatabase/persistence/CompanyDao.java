@@ -36,7 +36,8 @@ public class CompanyDao {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CompanyDao.class);
 
-	private static DatabaseConnection databaseConnection = DatabaseConnection.getInstance("/hikari.properties");
+	@Autowired
+	private DatabaseConnection databaseConnection;
 
 	@Autowired
 	private CompanyMapper companyMapper;

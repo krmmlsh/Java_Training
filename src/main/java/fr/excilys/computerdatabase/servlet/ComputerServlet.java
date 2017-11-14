@@ -56,6 +56,8 @@ public class ComputerServlet extends HttpServlet {
 
 	private int limit = 10;
 
+	ApplicationContext context;
+	
 	private List<Integer> listOfPages() {
 
 		if (currentPage < 3) {
@@ -70,9 +72,10 @@ public class ComputerServlet extends HttpServlet {
 	}
 	@Override
 	public void init() {
-        ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
+        context = new AnnotationConfigApplicationContext(Config.class);
         context.getAutowireCapableBeanFactory().autowireBean(this);
     }
+
 
 	private void pagination(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

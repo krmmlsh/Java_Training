@@ -45,7 +45,8 @@ public class ComputerDao {
 	@Autowired
 	private ComputerMapper computerMapper;
 
-	private DatabaseConnection databaseConnection = DatabaseConnection.getInstance("/hikari.properties");
+	@Autowired
+	private DatabaseConnection databaseConnection;
 
 
 	/**
