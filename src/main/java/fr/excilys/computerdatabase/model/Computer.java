@@ -16,11 +16,11 @@ public class Computer {
 	
 	private String name;
 	
-	private LocalDate introducedDate;
+	private LocalDate introduced;
 	
-	private LocalDate discontinuedDate;
+	private LocalDate discontinued;
 	
-	private int compId;
+	private int companyId;
 	
 	public Computer() {
 	}
@@ -28,20 +28,20 @@ public class Computer {
 	public Computer( String name, String company, LocalDate introducedDate, LocalDate discontinuedDate) {
 		this.company = company;
 		this.name = name;
-		this.introducedDate = introducedDate;
-		this.discontinuedDate = discontinuedDate;
+		this.introduced = introducedDate;
+		this.discontinued = discontinuedDate;
 	}
 
 	public Computer( String name, int compId, LocalDate introducedDate, LocalDate discontinuedDate) {
-		this.compId = compId;
+		this.companyId = compId;
 		this.name = name;
-		this.introducedDate = introducedDate;
-		this.discontinuedDate = discontinuedDate;
+		this.introduced = introducedDate;
+		this.discontinued = discontinuedDate;
 	}
 	
 	public Computer(String name, int i) {
 		this.name = name;
-		compId = i;
+		companyId = i;
 	}
 
 	public int getId() {
@@ -69,19 +69,19 @@ public class Computer {
 	}
 
 	public LocalDate getIntroducedDate() {
-		return introducedDate;
+		return introduced;
 	}
 
 	public void setIntroducedDate(LocalDate introducedDate) {
-		this.introducedDate = introducedDate;
+		this.introduced = introducedDate;
 	}
 
 	public LocalDate getDiscontinuedDate() {
-		return discontinuedDate;
+		return discontinued;
 	}
 
 	public void setDiscontinuedDate(LocalDate discontinuedDate) {
-		this.discontinuedDate = discontinuedDate;
+		this.discontinued = discontinuedDate;
 	}
 	
 	
@@ -90,16 +90,16 @@ public class Computer {
 				+ "Id : " + id + "\n"
 				+ "Name : " + name + "\n"
 				+ "Brand : " + company + "\n"
-				+ "Introduction date : " + introducedDate+ "\n"
-				+  "Discontinued date : " + discontinuedDate + "\n"; 
+				+ "Introduction date : " + introduced+ "\n"
+				+  "Discontinued date : " + discontinued + "\n"; 
 	}
 
 	public int getCompId() {
-		return compId;
+		return companyId;
 	}
 
 	public void setCompId(int comp_id) {
-		this.compId = comp_id;
+		this.companyId = comp_id;
 	}
 	
 	@Override
@@ -162,11 +162,11 @@ public class Computer {
 	
     private Computer(Builder b) {
         this.id = b.id;
-        this.compId = b.compId;
+        this.companyId = b.compId;
         this.name = b.name;
         this.company = b.company;
-        this.introducedDate = b.introducedDate;
-        this.discontinuedDate = b.discontinuedDate;
+        this.introduced = b.introducedDate;
+        this.discontinued = b.discontinuedDate;
 
     }
 

@@ -171,6 +171,8 @@ public class ComputerServlet extends HttpServlet {
 				companyServices.deleteCompany((request.getParameter("companyIdDeleted") != null
 						? Integer.valueOf(request.getParameter("companyIdDeleted"))
 						: -1));
+				request.setAttribute("companies", companyServices.getAllCompanies());
+
 				break;
 			}
 

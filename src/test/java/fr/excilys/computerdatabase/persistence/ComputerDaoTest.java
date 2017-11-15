@@ -13,19 +13,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ibatis.common.jdbc.ScriptRunner;
 
-import fr.excilys.computerdatabase.context.Context;
 import fr.excilys.computerdatabase.model.Computer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerDaoTest {
 
-	private Context context = Context.getInstance();
 
-	
-	private ComputerDao computerDao = (ComputerDao)context.getApplicationContext().getBean("computerDao");
+	@Autowired
+	private ComputerDao computerDao;
 	
 	@Before
 	public void setUp() {

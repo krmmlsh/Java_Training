@@ -2,23 +2,26 @@ package fr.excilys.computerdatabase.persistence;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 import fr.excilys.computerdatabase.main.NbTotal;
+import fr.excilys.computerdatabase.main.Util;
 import fr.excilys.computerdatabase.mapper.ComputerMapper;
 import fr.excilys.computerdatabase.model.Computer;
-
 
 @Component
 public class ComputerDao {
@@ -41,13 +44,15 @@ public class ComputerDao {
 			+ "computer.introduced, computer.discontinued , company.name AS comName FROM computer computer LEFT JOIN company company ON computer.company_id = company.id where computer.id = ";
 
 	private static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
-	
+
 	@Autowired
 	private ComputerMapper computerMapper;
 
 	@Autowired
-	private DatabaseConnection databaseConnection;
+	private HikariDataSource databaseConnection;
 
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
 	/**
 	 * Get a computer from his id.
@@ -58,22 +63,7 @@ public class ComputerDao {
 	 */
 	public Computer getComputer(int id) {
 		logger.trace("ENTER GET COMPUTER BY ID");
-
-		try (Connection conn = databaseConnection.getConnection();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(GET_COMPUTER + id)) {
-
-			if (rs.next()) {
-
-				return computerMapper.createComputerFromDatabase(rs);
-			} else {
-				logger.error("Error while getting computer from : " + id + " id");
-			}
-		} catch (SQLException e) {
-			logger.error("Error while getting computer from : " + id + " id");
-		}
-
-		return null;
+		return (Computer) jdbcTemplate.queryForObject(GET_COMPUTER + id, new ComputerRowMapper());
 	}
 
 	/**
@@ -85,24 +75,9 @@ public class ComputerDao {
 	 */
 	public List<Computer> findByName(String name) {
 		logger.trace("ENTER GET COMPUTER BY NAME");
-		List<Computer> list = new ArrayList<>();
-
-		try (Connection conn = databaseConnection.getConnection();
-				PreparedStatement ps = conn.prepareStatement(COMPUTER_BY_NAME);) {
-			ps.setString(1, "%" + name + "%");
-			ps.setString(2, "%" + name + "%");
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					list.add(computerMapper.createComputerFromDatabase(rs));
-				}
-			}
-
-		} catch (SQLException e) {
-			System.out.println(e.getMessage() + " error in get Page");
-
-			logger.error("Error while getting computer from : " + name + " name");
-		}
-		return list;
+		List<Computer> computers = jdbcTemplate.query(COMPUTER_BY_NAME,
+				new Object[] { "%" + name + "%", "%" + name + "%" },  new ComputerRowMapper());
+		return computers;
 	}
 
 	/**
@@ -112,42 +87,18 @@ public class ComputerDao {
 	 */
 	public List<Computer> findAll() {
 		logger.trace("ENTER GET ALL COMPUTERS");
+		List<Computer> computers = jdbcTemplate.query(GET_ALL_COMPUTERS,  new ComputerRowMapper());
 
-		List<Computer> list = new ArrayList<>();
-		try (Connection conn = databaseConnection.getConnection();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(GET_ALL_COMPUTERS);) {
-			while (rs.next()) {
-				list.add(computerMapper.createComputerFromDatabase(rs));
-			}
-		} catch (SQLException e) {
-			logger.error("Error while getting computers from database");
-		}
-		return list;
+		return computers;
 	}
 
 	public List<Computer> findPaging(int currentPage, int limit, NbTotal nbTotal) {
 		logger.trace("ENTER GET ALL COMPUTERS");
-
-		List<Computer> list = new ArrayList<>();
-		try (Connection conn = databaseConnection.getConnection();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt
-						.executeQuery(GET_ALL_COMPUTERS + " limit " + limit + " offset " + (currentPage) * limit);) {
-			while (rs.next()) {
-				list.add(computerMapper.createComputerFromDatabase(rs));
-			}
-			try (ResultSet resultTotal = stmt.executeQuery("SELECT FOUND_ROWS()");) {
-				if (resultTotal.next()) {
-					nbTotal.nomberOfComputer = resultTotal.getInt(1);
-				}
-			}
-
-		} catch (SQLException e) {
-			logger.error("Error while getting computers from database");
-		}
+		List<Computer> list = jdbcTemplate.query(
+				GET_ALL_COMPUTERS + " limit " + limit + " offset " + (currentPage) * limit,
+				 new ComputerRowMapper());
+		nbTotal.nomberOfComputer = jdbcTemplate.queryForObject("SELECT FOUND_ROWS()", Integer.class);
 		return list;
-
 	}
 
 	/**
@@ -159,17 +110,8 @@ public class ComputerDao {
 	 */
 	public boolean removeComputer(int id) {
 		logger.trace("ENTER REMOVE COMPUTER");
-		try (Connection conn = databaseConnection.getConnection(); Statement stmt = conn.createStatement()) {
-
-			int i = stmt.executeUpdate(DELETE_FROM_ID + id);
-			if (i == 1) {
-				logger.debug("Computer deleted");
-				return true;
-			}
-		} catch (SQLException e) {
-			logger.error("Cannot remove computer : " + id + " name");
-		}
-		return false;
+		jdbcTemplate.update(DELETE_FROM_ID + id);
+		return true;
 	}
 
 	/**
@@ -182,23 +124,10 @@ public class ComputerDao {
 	public boolean insertComputer(Computer computer) {
 		logger.trace("ENTER INSERT COMPUTER");
 
-		try (Connection conn = databaseConnection.getConnection();
-				PreparedStatement ps = conn.prepareStatement(INSERT_COMPUTER)) {
-
-			ps.setString(1, computer.getName());
-			ps.setDate(2, getDateOrNull(computer.getIntroducedDate()));
-			ps.setDate(3, getDateOrNull(computer.getDiscontinuedDate()));
-			ps.setObject(4, (computer.getCompId() >= 0) ? computer.getCompId() : null);
-			int i = ps.executeUpdate();
-
-			if (i == 1) {
-				logger.debug("Computer added");
-				return true;
-			}
-		} catch (SQLException e) {
-			logger.error(e.getMessage() + " Computer cannot be added");
-		}
-		return false;
+		jdbcTemplate.update(INSERT_COMPUTER, computer.getName(), getDateOrNull(computer.getIntroducedDate()),
+				getDateOrNull(computer.getDiscontinuedDate()),
+				(computer.getCompId() >= 0) ? computer.getCompId() : null);
+		return true;
 	}
 
 	/**
@@ -211,36 +140,18 @@ public class ComputerDao {
 	public boolean updateComputer(Computer computer) {
 		logger.trace("ENTER UPDATE COMPUTER");
 
-		try (Connection conn = databaseConnection.getConnection();
-				PreparedStatement ps = conn.prepareStatement(UPDATE_COMPUTER + computer.getId())) {
-
-			ps.setString(1, computer.getName());
-			ps.setDate(2, getDateOrNull(computer.getIntroducedDate()));
-			ps.setDate(3, getDateOrNull(computer.getDiscontinuedDate()));
-			ps.setObject(4, computer.getCompId());
-
-			int i = ps.executeUpdate();
-
-			if (i == 1) {
-				return true;
-			}
-		} catch (SQLException e) {
-			logger.error(e.getMessage() + "Error while updating computer from database");
-		}
-		return false;
+		jdbcTemplate.update(UPDATE_COMPUTER, computer.getName(), getDateOrNull(computer.getIntroducedDate()),
+				getDateOrNull(computer.getDiscontinuedDate()), computer.getCompId());
+		return true;
 	}
 
-	public boolean deleteComputerFromCompany(int id, Connection conn) {
-		try (Statement stmt = conn.createStatement()) {
-			int i = stmt.executeUpdate(DELETE_FROM_COMPANY_ID + id);
-			if (i >= 0) {
-				logger.debug("Computer deleted");
-				return true;
-			}
-		} catch (SQLException e) {
-			logger.error("Cannot remove computer : " + id + " name");
+	public boolean deleteComputerFromCompany(int id) {
+		try {
+			jdbcTemplate.update(DELETE_FROM_COMPANY_ID + id);
+		} catch (DataAccessException e) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	private Date getDateOrNull(LocalDate localdate) {
@@ -248,6 +159,18 @@ public class ComputerDao {
 			return null;
 		}
 		return Date.valueOf(localdate);
+	}
+
+	class ComputerRowMapper implements RowMapper<Computer> {
+		public Computer mapRow(ResultSet rs, int nbRow) throws SQLException {
+			Computer computer = new Computer();
+			computer.setId(rs.getInt("id"));
+			computer.setName(rs.getString("name"));
+			computer.setCompany(rs.getString("comName"));
+			computer.setIntroducedDate(Util.convertStringToLocalDate(rs.getString("introduced"), "yyyy-MM-dd"));
+			computer.setDiscontinuedDate(Util.convertStringToLocalDate(rs.getString("discontinued"), "yyyy-MM-dd"));
+			return computer;
+		}
 	}
 
 }
