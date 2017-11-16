@@ -104,8 +104,8 @@
 								class="cb" value=${computer.id}></td>
 							<td><a
 								href="/JavaLevel2/computer?computerId=${computer.id}&ACTION_TYPE=update">${computer.name}</a></td>
-							<td>${computer.introducedDate}</td>
-							<td>${computer.discontinuedDate}</td>
+							<td>${computer.introduced}</td>
+							<td>${computer.discontinued}</td>
 							<td>${computer.company}</td>
 						</tr>
 					</c:forEach>

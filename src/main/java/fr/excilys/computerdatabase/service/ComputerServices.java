@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,22 +16,20 @@ import fr.excilys.computerdatabase.persistence.ComputerDao;
 import fr.excilys.computerdatabase.servlet.ComputerDTO;
 import fr.excilys.computerdatabase.validator.Validator;
 
-
 @Component
 public class ComputerServices {
 
-
 	@Autowired
 	private ComputerMapper computerMapper;
-	
+
 	@Autowired
 	private ComputerDao computerDao;
-
 
 	/**
 	 * Get a computer from the database by his id.
 	 * 
-	 * @param id the {@link Computer#id} of the {@Computer}.
+	 * @param id
+	 *            the {@link Computer#id} of the {@Computer}.
 	 * @return The researched computer.
 	 */
 	public ComputerDTO getComputerById(int id) {
@@ -46,17 +45,16 @@ public class ComputerServices {
 	public List<ComputerDTO> getAllComputers() {
 		return computerDTOList(computerDao.findAll());
 	}
-	
 
 	public List<ComputerDTO> getAllComputers(int currentPage, int limit, NbTotal nbTotal) {
 		return computerDTOList(computerDao.findPaging(currentPage, limit, nbTotal));
 	}
 
-
 	/**
 	 * Get a computer by his name.
 	 * 
-	 * @param name Name of the computer to be found.
+	 * @param name
+	 *            Name of the computer to be found.
 	 * @return A computer
 	 */
 	public List<ComputerDTO> getComputerByName(String name) {
@@ -66,7 +64,8 @@ public class ComputerServices {
 	/**
 	 * Create a new computer to add in the database.
 	 * 
-	 * @param c The computer to create.
+	 * @param c
+	 *            The computer to create.
 	 */
 	public void addComputer(Computer c) {
 		computerDao.insertComputer(c);
@@ -75,7 +74,8 @@ public class ComputerServices {
 	/**
 	 * Update a computer in the database.
 	 * 
-	 * @param c the computer with the new informations.
+	 * @param c
+	 *            the computer with the new informations.
 	 */
 	public void updateComputer(Computer c) {
 		computerDao.updateComputer(c);
@@ -84,7 +84,8 @@ public class ComputerServices {
 	/**
 	 * Remove a computer with his id.
 	 * 
-	 * @param id The id of computer to remove.
+	 * @param id
+	 *            The id of computer to remove.
 	 */
 	public boolean removeComputer(String computerIds) {
 		for (String stringId : computerIds.split(",")) {
@@ -118,16 +119,17 @@ public class ComputerServices {
 		return computer;
 	}
 
-
-	
-
-	
 	private List<ComputerDTO> computerDTOList(List<Computer> computers) {
-		return computers.stream()
-				.map(computer -> computerMapper.computerToComputerDTO(computer))
+		return computers.stream().map(computer -> computerMapper.computerToComputerDTO(computer))
 				.collect(Collectors.toList());
 	}
 
+	public boolean addComputer(ComputerDTO computerDTO) {
+		return  computerDao.insertComputer(computerMapper.computerDTOtoComputer(computerDTO));
+	}
 
+	public boolean updateComputer(@Valid ComputerDTO computerDTO) {
+		return computerDao.updateComputer(computerMapper.computerDTOtoComputer(computerDTO));
+	}
 
 }

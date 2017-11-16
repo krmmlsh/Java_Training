@@ -18,7 +18,7 @@
 		<logback.version>1.2.3</logback.version>
 		<springframework-version>5.0.0.RELEASE</springframework-version>
 		<javax-validation-version>2.0.0.Final</javax-validation-version>
-		
+
 	</properties>
 
 
@@ -80,16 +80,21 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${springframework-version}</version>
 		</dependency>
-				<dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>${springframework-version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.4.1.Final</version>
 		</dependency>
 
 	</dependencies>

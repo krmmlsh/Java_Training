@@ -1,6 +1,7 @@
 package fr.excilys.computerdatabase.servlet;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class ComputerDTO {
@@ -11,15 +12,19 @@ public class ComputerDTO {
 	private String company;
 	
 	@NotNull
-	@Size(min = 4, max = 14, message = "Wrong size")
+	@Size(min = 4, max = 14, message = "Please enter a valid name, size between 4 and 14 characters")
 	private String name;
 	
-	private String introducedDate;
-	
-	private String discontinuedDate;
-	
-	private int compId;
 
+	@Pattern(regexp="^(((0[1-9]|[12]\\d|3[01])(\\/|-)(0[1-9]|1[012])(\\/|-)\\d\\d(\\d\\d)?|\\d\\d\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01])))?$", message="WRONG DATE FORMAT")
+	private String discontinued;
+	
+	@Pattern(regexp="^(((0[1-9]|[12]\\d|3[01])(\\/|-)(0[1-9]|1[012])(\\/|-)\\d\\d(\\d\\d)?|\\d\\d\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01])))?$", message="WRONG DATE FORMAT")
+	private String introduced;
+	
+	private int companyId;
+
+	
 	
 	public int getId() {
 		return id;
@@ -45,28 +50,29 @@ public class ComputerDTO {
 		this.name = name;
 	}
 
-	public String getIntroducedDate() {
-		return introducedDate;
+
+	public String getIntroduced() {
+		return introduced;
 	}
 
-	public void setIntroducedDate(String introducedDate) {
-		this.introducedDate = introducedDate;
+	public void setIntroduced(String introduced) {
+		this.introduced = introduced;
 	}
 
-	public String getDiscontinuedDate() {
-		return discontinuedDate;
+	public String getDiscontinued() {
+		return discontinued;
 	}
 
-	public void setDiscontinuedDate(String discontinuedDate) {
-		this.discontinuedDate = discontinuedDate;
+	public void setDiscontinued(String discontinued) {
+		this.discontinued = discontinued;
 	}
 
-	public int getCompId() {
-		return compId;
+	public int getCompanyId() {
+		return companyId;
 	}
 
-	public void setCompId(int compId) {
-		this.compId = compId;
+	public void setCompanyId(int compId) {
+		this.companyId = compId;
 	}
 
 	
@@ -127,18 +133,22 @@ public class ComputerDTO {
 				+ "Id : " + id + "\n"
 				+ "Name : " + name + "\n"
 				+ "Brand : " + company + "\n"
-				+ "Introduction date : " + introducedDate+ "\n"
-				+  "Discontinued date : " + discontinuedDate + "\n"; 
+				+ "Introduction date : " + introduced+ "\n"
+				+  "Discontinued date : " + discontinued + "\n"; 
 	}
 
     private ComputerDTO(Builder b) {
         this.id = b.id;
-        this.compId = b.compId;
+        this.companyId = b.compId;
         this.name = b.name;
         this.company = b.company;
-        this.introducedDate = b.introducedDate;
-        this.discontinuedDate = b.discontinuedDate;
+        this.introduced = b.introducedDate;
+        this.discontinued = b.discontinuedDate;
 
     }
+
+	public ComputerDTO() {
+	}
+    
 	
 }

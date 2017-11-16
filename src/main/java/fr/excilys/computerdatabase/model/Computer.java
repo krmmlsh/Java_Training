@@ -2,6 +2,9 @@ package fr.excilys.computerdatabase.model;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Computer Model
  * 
@@ -13,7 +16,8 @@ public class Computer {
 	private int id;
 
 	private String company;
-
+	
+	@Size(min = 4, max = 14, message = "Wrong size")
 	private String name;
 
 	private LocalDate introduced;

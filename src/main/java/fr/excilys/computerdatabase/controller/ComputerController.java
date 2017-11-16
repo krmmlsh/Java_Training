@@ -5,15 +5,16 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.service.CompanyServices;
@@ -69,7 +70,6 @@ public class ComputerController {
 		}
 		if (page != null) {
 			this.currentPage = Integer.valueOf(page) - 1;
-			System.out.println(page);
 		}
 		if (plus != null) {
 			int deltaInt = Integer.valueOf(plus);
@@ -103,7 +103,7 @@ public class ComputerController {
 		System.out.println("Ca va mal ma jeule");
 		model.addAttribute("computers", pagination(plus, page, length, model));
 		model.addAttribute("companies", companyServices.getAllCompanies());
-		return "dashboard";
+		return DASHBOARD;
 	}
 	
 	
@@ -115,24 +115,40 @@ public class ComputerController {
 	}
 
 	@RequestMapping(params = ACTION_TYPE + "=" + CREATE, method = RequestMethod.GET)
-	public ModelAndView createPage() {
-		return new ModelAndView("addComputer", "companies", companyServices.getAllCompanies());
+	public String createPage(Model model) {
+		model.addAttribute("computerDTO", new ComputerDTO());
+		model.addAttribute("companies", companyServices.getAllCompanies());
+		return "addComputer";
 	}
 
 	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.GET)
 	public String updatePage(@RequestParam int computerId, Model model) {
+		model.addAttribute("computerDTO", new ComputerDTO());
 		model.addAttribute("computer", computerServices.getComputerById(computerId));
 		model.addAttribute("companies", companyServices.getAllCompanies());
 		return "editComputer";
 	}
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + POST, method = RequestMethod.POST)
-	public String createComputer(HttpServletRequest request, Model model) {
-		if (computerServices.addComputer(request) == null) {
-			request.setAttribute("error", "Something went wrong, please try again with correct inputs");
-		}
+	public String createComputer(@Valid ComputerDTO computerDTO, BindingResult result, Model model) {
 		model.addAttribute("computers", pagination(null, null, null, model));
 		model.addAttribute("companies", companyServices.getAllCompanies());
+		if (result.hasErrors()) {
+			return "addComputer";
+		}
+		if(!computerServices.addComputer(computerDTO)) {
+			model.addAttribute("error", "An error has occured please, try again !");
+		}
+		return DASHBOARD;
+	}
+	
+	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.POST)
+	public String updateComputer(@Valid ComputerDTO computerDTO, BindingResult result, Model model) {
+		model.addAttribute("computers", pagination(null, null, null, model));
+		model.addAttribute("companies", companyServices.getAllCompanies());
+		if (result.hasErrors()) {
+			return "editComputer";
+		}
 		return DASHBOARD;
 	}
 	
@@ -145,16 +161,7 @@ public class ComputerController {
 		return DASHBOARD;
 	}
 
-	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.POST)
-	public String updateComputer(HttpServletRequest request, Model model) {
-		if (computerServices.updateComputer(request) == null) {
-			model.addAttribute("error", "Something went wrong, please try again with correct inputs");
-		}
 
-		model.addAttribute("computers", pagination(null, null, null, model));
-		model.addAttribute("companies", companyServices.getAllCompanies());
-		return DASHBOARD;
-	}
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + "deleteFormCompany", method = RequestMethod.POST)
 	public String deleteCompany(@RequestParam int companyIdDeleted, Model model) {
@@ -163,23 +170,4 @@ public class ComputerController {
 		model.addAttribute("companies", companyServices.getAllCompanies());
 		return DASHBOARD;
 	}
-/*
-	@Override
-	public void init() {
-		context = new AnnotationConfigApplicationContext(Config.class);
-		context.getAutowireCapableBeanFactory().autowireBean(this);
-	}
-*//*
-
-
-	
-
-
-
-
-
-
-/*	
-	
-*/
 }

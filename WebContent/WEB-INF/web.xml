@@ -4,17 +4,28 @@
 	version="3.0">
 
 	<display-name>ComputerDatabase</display-name>
-  <servlet>
-  	<servlet-name>computer</servlet-name>
-        <servlet-class>
-             org.springframework.web.servlet.DispatcherServlet
-        </servlet-class>
-        <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
- 	<servlet-name>computer</servlet-name>
-        <url-pattern>/computer</url-pattern>
-  </servlet-mapping>
-
+	<servlet>
+		<servlet-name>computer</servlet-name>
+	      <servlet-class>
+	           org.springframework.web.servlet.DispatcherServlet
+	      </servlet-class>
+	      <load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+	<servlet-name>computer</servlet-name>
+	      <url-pattern>/computer</url-pattern>
+	</servlet-mapping>
+	<error-page>
+	    <error-code>404</error-code>
+	    <location>/404.jsp</location>
+	</error-page>
+	<error-page>
+	    <error-code>500</error-code>
+	    <location>/500.jsp</location>
+	</error-page>
+		<error-page>
+	    <error-code>403</error-code>
+	    <location>/403.jsp</location>
+	</error-page>
 </web-app>

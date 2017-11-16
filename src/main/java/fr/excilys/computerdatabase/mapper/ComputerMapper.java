@@ -49,4 +49,12 @@ public class ComputerMapper {
 						(computer.getDiscontinuedDate() != null) ? computer.getDiscontinuedDate().toString() : null)
 				.compId(computer.getCompId()).company(computer.getCompany()).build();
 	}
+	
+	public Computer computerDTOtoComputer(ComputerDTO computerDTO) {
+		return new Computer.Builder().id(computerDTO.getId()).name(computerDTO.getName())
+				.introducedDate((computerDTO.getIntroduced() != null) ? Util.convertStringToLocalDate(computerDTO.getIntroduced().toString(), "dd/MM/yyyy") : null)
+				.discontinuedDate(
+						(computerDTO.getDiscontinued() != null) ? Util.convertStringToLocalDate(computerDTO.getDiscontinued().toString(), "dd/MM/yyyy") : null)
+				.compId(computerDTO.getCompanyId()).company(computerDTO.getCompany()).build();
+	}
 }

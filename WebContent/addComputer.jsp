@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +14,11 @@
 <link href="./css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="./css/main.css" rel="stylesheet" media="screen">
 <script src="js/validate.js"></script>
-
+<style>
+    .error {
+        color: red; font-weight: bold;
+    }
+</style>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -27,27 +32,32 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="/JavaLevel2/computer?ACTION_TYPE=post" name="computerForm" method="POST">
+                    <form:form action="/JavaLevel2/computer?ACTION_TYPE=post" name="computerForm" modelAttribute="computerDTO" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name">
+                                <form:input type="text" class="form-control" id="name" name="name"  path="name" placeholder="Computer name"/>
+                            	<form:errors path="name" cssClass="error"></form:errors>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="dd/MM/yyyy">
+                                <form:input type="date" class="form-control" id="introduced" name="introduced" path="introduced" placeholder="dd/MM/yyyy"/>
+                                <form:errors path="introduced" cssClass="error"></form:errors>
+                            
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="dd/MM/yyyy">
+                                <form:input type="date" class="form-control" id="discontinued" name="discontinued" path="discontinued" placeholder="dd/MM/yyyy"/>
+                                <form:errors path="discontinued" cssClass="error"></form:errors>
+                            
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
-                                <select class="form-control" name="companyId" id="companyId" >
+                                <form:select class="form-control" name="companyId" path="companyId" id="companyId">
 									<c:forEach var="company" items="${companies}">
 										<option value="${company.id}">${company.name}</option>
 									</c:forEach>
-								</select>
+								</form:select>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
@@ -55,7 +65,7 @@
                             or
                             <a href="dashboard.html" class="btn btn-default">Cancel</a>
                         </div>
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>
