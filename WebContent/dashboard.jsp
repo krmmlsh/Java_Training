@@ -1,4 +1,4 @@
-
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -31,7 +31,7 @@
 			<c:if test="${not empty error }">
 				<h3 style="color: red;">${error}</h3>
 			</c:if>
-			<h1 id="homeTitle">${nbTotal} computers found</h1>
+			<h1 id="homeTitle">${nbTotal} <spring:message code="label.found"/></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="/JavaLevel2/computer" method="GET"
@@ -39,12 +39,12 @@
 						<input type="hidden" name="ACTION_TYPE" value="getName" /> <input
 							type="search" id="searchbox" name="search" class="form-control"
 							placeholder="Search name" /> <input type="submit"
-							id="searchsubmit" value="Filter by name" class="btn btn-primary" />
+							id="searchsubmit" value=<spring:message code="label.filter"/>class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="/JavaLevel2/computer?ACTION_TYPE=create">Add Computer</a> <a
+						href="/JavaLevel2/computer?ACTION_TYPE=create"><spring:message code="label.add"/></a> <a
 						class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -53,7 +53,7 @@
 		<div class="container">
 			<div class="editMode">
 				<div>
-					<label for="companyId">Companies</label>
+					<label for="companyId"><spring:message code="label.companies"/></label>
 				</div>
 				<form id="deleteFormCompany" action="/JavaLevel2/computer"	style="display:inline;"method="POST">
 					<select name="companyIdDeleted">
@@ -87,12 +87,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced</th>
+						<th><spring:message code="label.name"/></th>
+						<th><spring:message code="label.introduced"/></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued</th>
+						<th><spring:message code="label.discontinued"/></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><spring:message code="label.name"/></th>
 
 					</tr>
 				</thead>

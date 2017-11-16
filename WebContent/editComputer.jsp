@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
-
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,41 +33,37 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">${computer.id}</div>
-					<h1>Edit Computer</h1>
+					<h1><spring:message code="label.edit"/></h1>
 
 					<form:form action="/JavaLevel2/computer?ACTION_TYPE=update" name="computerForm" modelAttribute="computerDTO" method="POST">
 					
 						<input type="hidden" value="${computer.id}" name="id" id="id" />
 						<fieldset>
-							<div class="form-group">
-								<label for="computerName">Computer name</label> 
-								<form:input type="text" class="form-control" path="name" name="computerName" id="computerName"
-									value="${computer.name}"/>
-								<form:errors path="name" cssClass="error"></form:errors>
-									
-							</div>
-							<div class="form-group">
-								<label for="introduced">Introduced date</label> <form:input
-									type="date" class="form-control" name="introduced" path="introduced" id="introduced" placeholder="dd/MM/yyyy"
-									value="${computer.introduced}"/>
-                            	<form:errors path="introduced"></form:errors>
-							</div>
-							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <form:input
-									type="date" class="form-control" name="discontinued" path="discontinued" id="discontinued" placeholder="dd/MM/yyyy"
-									value="${computer.discontinued}"/>
-                            	<form:errors path="discontinued"></form:errors>
-							</div>
-							<div class="form-group">
-								<label for="companyId">Company</label> 
-								<form:select class="form-control" name="companyId" path="companyId" id="companyId">
+                            <div class="form-group">
+                                <label for="computerName"><spring:message code="label.name"/></label>
+                                <form:input type="text" class="form-control" id="name" name="name"  path="name" placeholder="Computer name"/>
+                            	<form:errors path="name" cssClass="error"></form:errors>
+                            </div>
+                            <div class="form-group">
+                                <label for="introduced"><spring:message code="label.introduced"/></label>
+                                <form:input type="date" class="form-control" id="introduced" name="introduced" path="introduced" placeholder="dd/MM/yyyy"/>
+                                <form:errors path="introduced" cssClass="error"></form:errors>
+                            </div>
+                            <div class="form-group">
+                                <label for="discontinued"><spring:message code="label.discontinued"/></label>
+                                <form:input type="date" class="form-control" id="discontinued" name="discontinued" path="discontinued" placeholder="dd/MM/yyyy"/>
+                                <form:errors path="discontinued" cssClass="error"></form:errors>
+                            
+                            </div>
+                            <div class="form-group">
+                                <label for="companyId"><spring:message code="label.company"/></label>
+                                <form:select class="form-control" name="companyId" path="companyId" id="companyId">
 									<c:forEach var="company" items="${companies}">
-										<option value="${company.id}" ${company.name == computer.company ? 'selected="selected"' : ''}>${company.name}</option>
+										<option value="${company.id}">${company.name}</option>
 									</c:forEach>
 								</form:select>
-                            	<form:errors path="companyId"></form:errors>
-							</div>
-						</fieldset>
+                            </div>                  
+                        </fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="Edit" class="btn btn-primary">
 							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
