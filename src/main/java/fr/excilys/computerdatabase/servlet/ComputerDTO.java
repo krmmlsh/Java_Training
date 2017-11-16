@@ -1,11 +1,17 @@
 package fr.excilys.computerdatabase.servlet;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class ComputerDTO {
 
 	private int id;
 	
+	
 	private String company;
 	
+	@NotNull
+	@Size(min = 4, max = 14, message = "Wrong size")
 	private String name;
 	
 	private String introducedDate;

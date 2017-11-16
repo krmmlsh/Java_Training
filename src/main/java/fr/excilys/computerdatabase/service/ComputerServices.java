@@ -48,7 +48,7 @@ public class ComputerServices {
 	}
 	
 
-	public Object getAllComputers(int currentPage, int limit, NbTotal nbTotal) {
+	public List<ComputerDTO> getAllComputers(int currentPage, int limit, NbTotal nbTotal) {
 		return computerDTOList(computerDao.findPaging(currentPage, limit, nbTotal));
 	}
 
