@@ -1,7 +1,7 @@
 	$(function() {
-		$("form[name='computerForm']").validate({
+		$("#computerForm").validate({
 			rules : {
-				computerName : {
+				name : {
 					required : true,
 					minlength : 4
 				},
@@ -13,7 +13,7 @@
 				}
 			},
 			messages : {
-				computerName : "Please enter a valid name",
+				name : "Please enter a valid name sized between 4 and 14 characters",
 				introduced : "Please enter a valid date",
 				discontinued : "Please enter a valid date"
 				

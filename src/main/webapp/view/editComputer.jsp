@@ -32,15 +32,15 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<div class="label label-default pull-right">${computer.id}</div>
+					<div class="label label-default pull-right">${computerDTO.id}</div>
 					<h1><spring:message code="label.edit"/></h1>
 
-					<form:form action="/JavaLevel2/computer?ACTION_TYPE=update" name="computerForm" modelAttribute="computerDTO" method="POST">
+					<form:form action="/JavaLevel2/computer?ACTION_TYPE=update" id="computerForm" name="computerForm" modelAttribute="computerDTO" method="POST">
 					
-						<input type="hidden" value="${computer.id}" name="id" id="id" />
+						<input type="hidden" value="${computerDTO.id}" name="id" id="id" />
 						<fieldset>
                             <div class="form-group">
-                                <label for="computerName"><spring:message code="label.name"/></label>
+                                <label for="name"><spring:message code="label.name"/></label>
                                 <form:input type="text" class="form-control" id="name" name="name"  path="name" placeholder="Computer name"/>
                             	<form:errors path="name" cssClass="error"></form:errors>
                             </div>

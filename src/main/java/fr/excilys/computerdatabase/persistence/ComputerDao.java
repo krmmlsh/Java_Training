@@ -24,13 +24,13 @@ import fr.excilys.computerdatabase.model.Computer;
 @Component
 public class ComputerDao {
 
-	private static final String UPDATE_COMPUTER = "UPDATE computer set name=?, introduced=?, discontinued=?, company_id=? where id=";
+	private static final String UPDATE_COMPUTER = "UPDATE computer set name=?, introduced=?, discontinued=?, company_id=? where id = ?";
 
 	private static final String INSERT_COMPUTER = "INSERT INTO computer values (NULL, ?, ?, ?, ?)";
 
-	private static final String DELETE_FROM_ID = "DELETE FROM computer WHERE id = ";
+	private static final String DELETE_FROM_ID = "DELETE FROM computer WHERE id = ?";
 
-	private static final String DELETE_FROM_COMPANY_ID = "DELETE FROM computer WHERE company_id = ";
+	private static final String DELETE_FROM_COMPANY_ID = "DELETE FROM computer WHERE company_id = ?";
 
 	private static final String GET_ALL_COMPUTERS = "SELECT SQL_CALC_FOUND_ROWS computer.id as id, computer.name as name, computer.company_id as company_id, "
 			+ "computer.introduced, computer.discontinued , company.name AS comName FROM computer computer LEFT JOIN company company on computer.company_id = company.id";
@@ -108,7 +108,7 @@ public class ComputerDao {
 	 */
 	public boolean removeComputer(int id) {
 		logger.trace("ENTER REMOVE COMPUTER");
-		jdbcTemplate.update(DELETE_FROM_ID + id);
+		jdbcTemplate.update(DELETE_FROM_ID, id);
 		return true;
 	}
 
@@ -139,13 +139,13 @@ public class ComputerDao {
 		logger.trace("ENTER UPDATE COMPUTER");
 
 		jdbcTemplate.update(UPDATE_COMPUTER, computer.getName(), getDateOrNull(computer.getIntroducedDate()),
-				getDateOrNull(computer.getDiscontinuedDate()), computer.getCompId());
+				getDateOrNull(computer.getDiscontinuedDate()), computer.getCompId(), computer.getId());
 		return true;
 	}
 
 	public boolean deleteComputerFromCompany(int id) {
 		try {
-			jdbcTemplate.update(DELETE_FROM_COMPANY_ID + id);
+			jdbcTemplate.update(DELETE_FROM_COMPANY_ID, id);
 		} catch (DataAccessException e) {
 			return false;
 		}

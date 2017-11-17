@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>JavaLevel2</groupId>
 	<artifactId>JavaLevel2</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-RELEASE</version>
 	<packaging>war</packaging>
 	<properties>
 		<mysql-version>6.0.6</mysql-version>
@@ -18,10 +18,8 @@
 		<logback.version>1.2.3</logback.version>
 		<springframework-version>5.0.0.RELEASE</springframework-version>
 		<javax-validation-version>2.0.0.Final</javax-validation-version>
-
+		<hibernate-validator-version>5.4.1.Final</hibernate-validator-version>
 	</properties>
-
-
 	<dependencies>
 
 		<dependency>
@@ -94,7 +92,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>5.4.1.Final</version>
+			<version>${hibernate-validator-version}</version>
 		</dependency>
 
 	</dependencies>

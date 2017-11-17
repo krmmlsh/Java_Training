@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-	
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
@@ -34,7 +33,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1><spring:message code="label.add"/></h1>
-                    <form:form action="/JavaLevel2/computer?ACTION_TYPE=post" name="computerForm" modelAttribute="computerDTO" method="POST">
+                    <form:form action="/JavaLevel2/computer?ACTION_TYPE=post" id="computerForm" name="computerForm" modelAttribute="computerDTO" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="label.name"/></label>

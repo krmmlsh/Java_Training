@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,13 +24,17 @@ import fr.excilys.computerdatabase.servlet.ComputerDTO;
 @RequestMapping("/computer")
 @Controller
 public class ComputerController {
-	private static final String DASHBOARD = "dashboard";
+	private static final String COMPANIES = "companies";
+
+	private static final String DASHBOARD = "view/dashboard";
+	
+	private static final String EDITCOMPUTER = "view/editComputer";
+	
+	private static final String ADDCOMPUTER = "view/addComputer";
 
 	private static final String COMPUTERS = "computers";
 
 	private static final long serialVersionUID = 1L;
-
-	private static final String ID = "ID";
 
 	private static final String ACTION_TYPE = "ACTION_TYPE";
 
@@ -99,65 +103,62 @@ public class ComputerController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String getComputerByPaging(@RequestParam( required = false) String plus, @RequestParam( required = false) String page,
 			@RequestParam( required = false) String length, Model model) {
-		
-		System.out.println("Ca va mal ma jeule");
-		model.addAttribute("computers", pagination(plus, page, length, model));
-		model.addAttribute("companies", companyServices.getAllCompanies());
+		model.addAttribute(COMPUTERS, pagination(plus, page, length, model));
+		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return DASHBOARD;
 	}
 	
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + GET_BY_NAME, method = RequestMethod.GET)
 	public String getComputerByName(@RequestParam String search, Model model) {
-		model.addAttribute("computers", computerServices.getComputerByName(search));
-		model.addAttribute("companies", companyServices.getAllCompanies());
+		model.addAttribute(COMPUTERS, computerServices.getComputerByName(search));
+		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return DASHBOARD;
 	}
 
 	@RequestMapping(params = ACTION_TYPE + "=" + CREATE, method = RequestMethod.GET)
 	public String createPage(Model model) {
 		model.addAttribute("computerDTO", new ComputerDTO());
-		model.addAttribute("companies", companyServices.getAllCompanies());
-		return "addComputer";
+		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
+		return ADDCOMPUTER;
 	}
 
 	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.GET)
 	public String updatePage(@RequestParam int computerId, Model model) {
-		model.addAttribute("computerDTO", new ComputerDTO());
-		model.addAttribute("computer", computerServices.getComputerById(computerId));
-		model.addAttribute("companies", companyServices.getAllCompanies());
-		return "editComputer";
+		model.addAttribute("computerDTO", computerServices.getComputerById(computerId));
+		//model.addAttribute("computer", computerServices.getComputerById(computerId));
+		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
+		return EDITCOMPUTER;
 	}
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + POST, method = RequestMethod.POST)
 	public String createComputer(@Valid ComputerDTO computerDTO, BindingResult result, Model model) {
-		model.addAttribute("computers", pagination(null, null, null, model));
-		model.addAttribute("companies", companyServices.getAllCompanies());
 		if (result.hasErrors()) {
-			return "addComputer";
+			return ADDCOMPUTER;
 		}
 		if(!computerServices.addComputer(computerDTO)) {
 			model.addAttribute("error", "An error has occured please, try again !");
 		}
+		homePageReinitialisation(model);
 		return DASHBOARD;
 	}
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.POST)
 	public String updateComputer(@Valid ComputerDTO computerDTO, BindingResult result, Model model) {
-		model.addAttribute("computers", pagination(null, null, null, model));
-		model.addAttribute("companies", companyServices.getAllCompanies());
 		if (result.hasErrors()) {
-			return "editComputer";
+			return EDITCOMPUTER;
 		}
+		if(!computerServices.updateComputer(computerDTO)) {
+			model.addAttribute("error", "An error has occured please, try again !");
+		}
+		homePageReinitialisation(model);
 		return DASHBOARD;
 	}
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + DELETE, method = RequestMethod.POST)
 	public String deleteComputer(@RequestParam String selection, Model model) {
 		computerServices.removeComputer(selection);
-
-		model.addAttribute("computers", pagination(null, null, null, model));
-		model.addAttribute("companies", companyServices.getAllCompanies());
+		homePageReinitialisation(model);
 		return DASHBOARD;
 	}
 
@@ -166,8 +167,13 @@ public class ComputerController {
 	@RequestMapping(params = ACTION_TYPE + "=" + "deleteFormCompany", method = RequestMethod.POST)
 	public String deleteCompany(@RequestParam int companyIdDeleted, Model model) {
 		companyServices.deleteCompany(companyIdDeleted);
-		model.addAttribute("computers", pagination(null, null, null, model));
-		model.addAttribute("companies", companyServices.getAllCompanies());
+		homePageReinitialisation(model);
 		return DASHBOARD;
 	}
+	
+	private void homePageReinitialisation(Model model) {
+		model.addAttribute(COMPUTERS, pagination(null, null, null, model));
+		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
+	}
+	
 }
