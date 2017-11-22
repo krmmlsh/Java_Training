@@ -20,11 +20,11 @@ import com.ibatis.common.jdbc.ScriptRunner;
 import fr.excilys.computerdatabase.model.Computer;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ComputerDaoTest {
+public class ComputerDaoImplTest {
 
 
 	@Autowired
-	private ComputerDao computerDao;
+	private ComputerDaoImpl computerDao;
 	
 	@Before
 	public void setUp() {
@@ -54,7 +54,7 @@ public class ComputerDaoTest {
 					+ " The error is " + e.getMessage());
 		}
 	}
-	
+	/*
 
 	@Test
 	public void getAllComputersTest_SUCCESS() {
@@ -103,5 +103,5 @@ public class ComputerDaoTest {
 		assertEquals(false,	computerDao.removeComputer(-1));
 	}
 	
-	
+	*/
 }

@@ -11,7 +11,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class DatabaseConnectionTest {
 
-	private final Logger logger = LoggerFactory.getLogger(ComputerDao.class);
+	private final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
 	private static HikariConfig config = new HikariConfig("src/test/resources/hikari.properties");
 	private static HikariDataSource ds = new HikariDataSource(config);

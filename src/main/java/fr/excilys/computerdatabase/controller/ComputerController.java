@@ -11,12 +11,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.excilys.computerdatabase.main.NbTotal;
+import fr.excilys.computerdatabase.model.Company;
 import fr.excilys.computerdatabase.service.CompanyServices;
 import fr.excilys.computerdatabase.service.ComputerServices;
 import fr.excilys.computerdatabase.servlet.ComputerDTO;
@@ -132,11 +132,14 @@ public class ComputerController {
 	}
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + POST, method = RequestMethod.POST)
-	public String createComputer(@Valid ComputerDTO computerDTO, BindingResult result, Model model) {
+	public String createComputer(@Valid ComputerDTO computerDTO, BindingResult result, Model model){
+		List<Company> companies = companyServices.getAllCompanies();
+		model.addAttribute(COMPANIES, companies);
+
 		if (result.hasErrors()) {
 			return ADDCOMPUTER;
 		}
-		if(!computerServices.addComputer(computerDTO)) {
+		if(!computerServices.addComputer(computerDTO, companies)) {
 			model.addAttribute("error", "An error has occured please, try again !");
 		}
 		homePageReinitialisation(model);
@@ -145,10 +148,13 @@ public class ComputerController {
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.POST)
 	public String updateComputer(@Valid ComputerDTO computerDTO, BindingResult result, Model model) {
+		List<Company> companies = companyServices.getAllCompanies();
+		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
+
 		if (result.hasErrors()) {
 			return EDITCOMPUTER;
 		}
-		if(!computerServices.updateComputer(computerDTO)) {
+		if(!computerServices.updateComputer(computerDTO, companies)) {
 			model.addAttribute("error", "An error has occured please, try again !");
 		}
 		homePageReinitialisation(model);
@@ -167,13 +173,14 @@ public class ComputerController {
 	@RequestMapping(params = ACTION_TYPE + "=" + "deleteFormCompany", method = RequestMethod.POST)
 	public String deleteCompany(@RequestParam int companyIdDeleted, Model model) {
 		companyServices.deleteCompany(companyIdDeleted);
+		List<Company> companies = companyServices.getAllCompanies();
+		model.addAttribute(COMPANIES, companies);
 		homePageReinitialisation(model);
 		return DASHBOARD;
 	}
 	
 	private void homePageReinitialisation(Model model) {
 		model.addAttribute(COMPUTERS, pagination(null, null, null, model));
-		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 	}
 	
 }

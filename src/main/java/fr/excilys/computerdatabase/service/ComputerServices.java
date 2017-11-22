@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
 
 import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.mapper.ComputerMapper;
+import fr.excilys.computerdatabase.model.Company;
 import fr.excilys.computerdatabase.model.Computer;
-import fr.excilys.computerdatabase.persistence.ComputerDao;
+import fr.excilys.computerdatabase.persistence.ComputerDaoImpl;
 import fr.excilys.computerdatabase.servlet.ComputerDTO;
 import fr.excilys.computerdatabase.validator.Validator;
 
@@ -23,7 +24,7 @@ public class ComputerServices {
 	private ComputerMapper computerMapper;
 
 	@Autowired
-	private ComputerDao computerDao;
+	private ComputerDaoImpl computerDao;
 
 	/**
 	 * Get a computer from the database by his id.
@@ -35,15 +36,6 @@ public class ComputerServices {
 	public ComputerDTO getComputerById(int id) {
 		Computer computer = computerDao.getComputer(id);
 		return computerMapper.computerToComputerDTO(computer);
-	}
-
-	/**
-	 * Get all the computers from the database.
-	 * 
-	 * @return a list of Computers.
-	 */
-	public List<ComputerDTO> getAllComputers() {
-		return computerDTOList(computerDao.findAll());
 	}
 
 	public List<ComputerDTO> getAllComputers(int currentPage, int limit, NbTotal nbTotal) {
@@ -96,40 +88,17 @@ public class ComputerServices {
 		return true;
 	}
 
-	public Computer addComputer(HttpServletRequest request) {
-		if (!Validator.isNameValid(request.getParameter("computerName"))) {
-			return null;
-		}
-		Computer computer = computerMapper.buildComputerFromRequest(request);
-		if (!computerDao.insertComputer(computer)) {
-			return null;
-		}
-		return computer;
-	}
-
-	public Computer updateComputer(HttpServletRequest request) {
-		if (!Validator.isNameValid(request.getParameter("computerName"))) {
-			return null;
-		}
-		Computer computer = computerMapper.buildComputerFromRequest(request);
-		computer.setId(Integer.valueOf(request.getParameter("id")));
-		if (!computerDao.updateComputer(computer)) {
-			return null;
-		}
-		return computer;
-	}
-
 	private List<ComputerDTO> computerDTOList(List<Computer> computers) {
 		return computers.stream().map(computer -> computerMapper.computerToComputerDTO(computer))
 				.collect(Collectors.toList());
 	}
 
-	public boolean addComputer(ComputerDTO computerDTO) {
-		return  computerDao.insertComputer(computerMapper.computerDTOtoComputer(computerDTO));
+	public boolean addComputer(ComputerDTO computerDTO, List<Company> companies) {
+		return  computerDao.insertComputer(computerMapper.computerDTOtoComputer(computerDTO, companies));
 	}
 
-	public boolean updateComputer(@Valid ComputerDTO computerDTO) {
-		return computerDao.updateComputer(computerMapper.computerDTOtoComputer(computerDTO));
+	public boolean updateComputer(@Valid ComputerDTO computerDTO, List<Company> companies) {
+		return computerDao.updateComputer(computerMapper.computerDTOtoComputer(computerDTO, companies));
 	}
 
 }

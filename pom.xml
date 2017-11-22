@@ -19,8 +19,25 @@
 		<springframework-version>5.0.0.RELEASE</springframework-version>
 		<javax-validation-version>2.0.0.Final</javax-validation-version>
 		<hibernate-validator-version>5.4.1.Final</hibernate-validator-version>
+		<hibernate.version>5.2.10.Final</hibernate.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>javax.transaction-api</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${springframework-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.validation</groupId>

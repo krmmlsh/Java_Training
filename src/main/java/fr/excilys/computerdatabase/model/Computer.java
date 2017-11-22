@@ -2,8 +2,16 @@ package fr.excilys.computerdatabase.model;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import fr.excilys.computerdatabase.main.LocalDateConverter;
 
 /**
  * Computer Model
@@ -11,41 +19,48 @@ import javax.validation.constraints.Size;
  * @author krmmlsh
  *
  */
+
+@Entity
+@Table(name = "computer")
 public class Computer {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
 
-	private String company;
-	
-	@Size(min = 4, max = 14, message = "Wrong size")
+	@ManyToOne
+	private Company company;
+
+	@Column(name = "name")
 	private String name;
 
+	@Convert(converter = LocalDateConverter.class)
+	@Column(name = "introduced")
 	private LocalDate introduced;
 
+	@Convert(converter = LocalDateConverter.class)
+	@Column(name = "discontinued")
 	private LocalDate discontinued;
-
-	private int companyId;
 
 	public Computer() {
 	}
 
-	public Computer(String name, String company, LocalDate introducedDate, LocalDate discontinuedDate) {
+	public Computer(String name, Company company, LocalDate introducedDate, LocalDate discontinuedDate) {
 		this.company = company;
 		this.name = name;
 		this.introduced = introducedDate;
 		this.discontinued = discontinuedDate;
 	}
 
-	public Computer(String name, int compId, LocalDate introducedDate, LocalDate discontinuedDate) {
-		this.companyId = compId;
+	public Computer(String name, LocalDate introducedDate, LocalDate discontinuedDate) {
 		this.name = name;
 		this.introduced = introducedDate;
 		this.discontinued = discontinuedDate;
 	}
 
-	public Computer(String name, int i) {
+	public Computer(String name) {
 		this.name = name;
-		companyId = i;
 	}
 
 	public int getId() {
@@ -56,11 +71,11 @@ public class Computer {
 		this.id = id;
 	}
 
-	public String getCompany() {
+	public Company getCompany() {
 		return company;
 	}
 
-	public void setCompany(String company) {
+	public void setCompany(Company company) {
 		this.company = company;
 	}
 
@@ -94,14 +109,6 @@ public class Computer {
 				+ "\n";
 	}
 
-	public int getCompId() {
-		return companyId;
-	}
-
-	public void setCompId(int comp_id) {
-		this.companyId = comp_id;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (o.getClass() != this.getClass()) {
@@ -114,9 +121,7 @@ public class Computer {
 	public static class Builder {
 		private int id;
 
-		private int compId;
-
-		private String company;
+		private Company company;
 
 		private String name;
 
@@ -129,7 +134,7 @@ public class Computer {
 			return this;
 		}
 
-		public Builder company(String company) {
+		public Builder company(Company company) {
 			this.company = company;
 			return this;
 		}
@@ -149,11 +154,6 @@ public class Computer {
 			return this;
 		}
 
-		public Builder compId(int compId) {
-			this.compId = compId;
-			return this;
-		}
-
 		public Computer build() {
 			return new Computer(this);
 		}
@@ -162,7 +162,6 @@ public class Computer {
 
 	private Computer(Builder b) {
 		this.id = b.id;
-		this.companyId = b.compId;
 		this.name = b.name;
 		this.company = b.company;
 		this.introduced = b.introducedDate;

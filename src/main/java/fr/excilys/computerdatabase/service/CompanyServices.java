@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fr.excilys.computerdatabase.model.Company;
-import fr.excilys.computerdatabase.persistence.CompanyDao;
+import fr.excilys.computerdatabase.persistence.CompanyDaoImpl;
 
 @Component
 public class CompanyServices {
 	
 	@Autowired
-	private CompanyDao companyDao;
+	private CompanyDaoImpl companyDao;
 
-	public void setCompanyDao(CompanyDao companyDao) {
+	public void setCompanyDao(CompanyDaoImpl companyDao) {
 		this.companyDao = companyDao;
 	}
 	/**

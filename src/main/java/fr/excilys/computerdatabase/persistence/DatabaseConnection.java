@@ -2,61 +2,60 @@ package fr.excilys.computerdatabase.persistence;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.sql.DataSource;
+
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.core.env.Environment;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@PropertySource("/application.properties")
+@PropertySource(value = { "classpath:application.properties" })
 public class DatabaseConnection {
-	@Value("${jdbc.driverClassName}")
-	private String driverClassName;
-	@Value("${jdbc.url}")
-	private String jdbcURL;
-	@Value("${jdbc.username}")
-	private String username;
-	@Value("${jdbc.password}")
-	private String password;
 
-	private HikariDataSource ds;
+    @Autowired
+    private Environment environment;
 	
 	@Bean
-	public HikariDataSource dataSource() {
+	public SessionFactory sessionFactory() {
+		LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(restDataSource());
+		sessionBuilder.scanPackages("fr.excilys.computerdatabase.model");
+		return sessionBuilder.buildSessionFactory();
+	}
+
+	@Bean
+	public DataSource restDataSource() {
 		HikariConfig config = new HikariConfig();
-		config.setJdbcUrl(jdbcURL);
-		config.setDriverClassName(driverClassName);
-		config.setUsername(username);
-		config.setPassword(password);
-		
+		config.setDriverClassName( environment.getRequiredProperty("jdbc.driverClassName"));
+		config.setJdbcUrl(environment.getRequiredProperty("jdbc.url"));
+		config.setUsername(environment.getRequiredProperty("jdbc.username"));
+		config.setPassword(environment.getRequiredProperty("jdbc.password"));
 		ds = new HikariDataSource(config);
 		return ds;
 	}
 
 
+	@Bean
+	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+		return new PersistenceExceptionTranslationPostProcessor();
+	}
+
+	private HikariDataSource ds;
+
 	public Connection getConnection() throws SQLException {
-			return ds.getConnection();
+		return ds.getConnection();
 	}
 	
-    @Bean
-    public JdbcTemplate jdbcTemplate(HikariDataSource dataSource) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.setResultsMapCaseInsensitive(true);
-        return jdbcTemplate;
-    }
-    
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-        transactionManager.setDataSource(ds);
-        return transactionManager;
-    }
+	
 
 }

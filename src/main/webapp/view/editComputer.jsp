@@ -37,7 +37,7 @@
 
 					<form:form action="/JavaLevel2/computer?ACTION_TYPE=update" id="computerForm" name="computerForm" modelAttribute="computerDTO" method="POST">
 					
-						<input type="hidden" value="${computerDTO.id}" name="id" id="id" />
+						<form:input type="hidden" value="${computerDTO.id}" path="id" name="id" id="id" />
 						<fieldset>
                             <div class="form-group">
                                 <label for="name"><spring:message code="label.name"/></label>
