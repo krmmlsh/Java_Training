@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>JavaLevel2</groupId>
-	<artifactId>JavaLevel2</artifactId>
-	<version>1.0.0-RELEASE</version>
-	<packaging>war</packaging>
+	<groupId>fr.excilys</groupId>
+	<artifactId>computer-database</artifactId>
+	<version>1.1.0</version>
+	<packaging>pom</packaging>
 	<properties>
 		<mysql-version>6.0.6</mysql-version>
 		<junit-version>4.12</junit-version>
@@ -21,98 +22,109 @@
 		<hibernate-validator-version>5.4.1.Final</hibernate-validator-version>
 		<hibernate.version>5.2.10.Final</hibernate.version>
 	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>javax.transaction</groupId>
-			<artifactId>javax.transaction-api</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${springframework-version}</version>
-		</dependency>
 
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>fr.excilys</groupId>
+				<artifactId>utils</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.excilys</groupId>
+				<artifactId>core</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.excilys</groupId>
+				<artifactId>persistence</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.excilys</groupId>
+				<artifactId>webapp</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.excilys</groupId>
+				<artifactId>service</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.excilys</groupId>
+				<artifactId>binding</artifactId>
+				<version>1.1.0</version>
+			</dependency>
 
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>${javax-validation-version}</version>
-		</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql-version}</version>
+			</dependency>
 
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-version}</version>
-		</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit-version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>${mockito-all-version}</version>
+				<scope>test</scope>
+			</dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>${mockito-all-version}</version>
-			<scope>test</scope>
-		</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j-api-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.ibatis</groupId>
+				<artifactId>ibatis-sqlmap</artifactId>
+				<version>${ibatis-sqlmap-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${javax.servlet-api-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${jstl-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.zaxxer</groupId>
+				<artifactId>HikariCP</artifactId>
+				<version>${hikari-version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${springframework-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${springframework-version}</version>
+			</dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j-api-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ibatis</groupId>
-			<artifactId>ibatis-sqlmap</artifactId>
-			<version>${ibatis-sqlmap-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${javax.servlet-api-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstl-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>${hikari-version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${springframework-version}</version>
-		</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>${hibernate-validator-version}</version>
+			</dependency>
 
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate-validator-version}</version>
-		</dependency>
-
-	</dependencies>
+		</dependencies>
+	</dependencyManagement>
 	<build>
 		<plugins>
 			<plugin>
@@ -136,13 +148,8 @@
 				<version>2.17</version>
 				<configuration>
 					<configLocation>config/checkstyle/checkstyle.xml</configLocation>
+					<argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
 				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.0</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -162,4 +169,12 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	<modules>
+		<module>utils</module>
+		<module>core</module>
+		<module>binding</module>
+		<module>persistence</module>
+		<module>service</module>
+		<module>webapp</module>
+	</modules>
 </project>
