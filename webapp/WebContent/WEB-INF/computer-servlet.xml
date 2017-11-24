@@ -17,6 +17,9 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
+	<mvc:resources mapping="/css/**" location="/css/"/>
+	<mvc:resources mapping="/js/**" location="/js/"/>
+	<mvc:resources mapping="/fonts/**" location="/fonts/"/>
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="/messages/messages" />
@@ -34,4 +37,5 @@
 			<property name="paramName" value="locale" />
 		</bean>
 	</mvc:interceptors>
+	
 </beans>

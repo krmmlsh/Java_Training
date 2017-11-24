@@ -19,7 +19,7 @@ import fr.excilys.computerdatabase.main.LocalDateConverter;
  * @author krmmlsh
  *
  */
-
+ 
 @Entity
 @Table(name = "computer")
 public class Computer {

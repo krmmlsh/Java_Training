@@ -125,7 +125,6 @@ public class ComputerController {
 	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.GET)
 	public String updatePage(@RequestParam int computerId, Model model) {
 		model.addAttribute("computerDTO", computerServices.getComputerById(computerId));
-		//model.addAttribute("computer", computerServices.getComputerById(computerId));
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return EDITCOMPUTER;
 	}
@@ -168,7 +167,7 @@ public class ComputerController {
 	}
 
 
-	
+	 
 	@RequestMapping(params = ACTION_TYPE + "=" + "deleteFormCompany", method = RequestMethod.POST)
 	public String deleteCompany(@RequestParam int companyIdDeleted, Model model) {
 		companyServices.deleteCompany(companyIdDeleted);

@@ -11,6 +11,8 @@
 	<groupId>fr.excilys</groupId>
 	<artifactId>core</artifactId>
 	<name>core</name>
+	<packaging>jar</packaging>
+
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -12,7 +12,7 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/webapp/computer?page=1"> Application - Computer Database </a>
-        </div>
+        </div> 
     </header>
 
     <section id="main">

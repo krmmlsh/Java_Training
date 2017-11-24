@@ -9,12 +9,11 @@
 	      <servlet-class>
 	           org.springframework.web.servlet.DispatcherServlet
 	      </servlet-class>
-	      <load-on-startup>1</load-on-startup>
+	     <load-on-startup>1</load-on-startup>
 	</servlet>
-	
 	<servlet-mapping>
 	<servlet-name>computer</servlet-name>
-	      <url-pattern>/computer</url-pattern>
+	      <url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<error-page>
 	    <error-code>404</error-code>
@@ -28,4 +27,19 @@
 	    <error-code>403</error-code>
 	    <location>/view/403.jsp</location>
 	</error-page>
+	<listener>
+   		 <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<context-param>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>WEB-INF/computer-servlet.xml, WEB-INF/applicationContext.xml</param-value>
+	</context-param>
 </web-app>

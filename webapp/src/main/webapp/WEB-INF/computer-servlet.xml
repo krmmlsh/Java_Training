@@ -34,4 +34,5 @@
 			<property name="paramName" value="locale" />
 		</bean>
 	</mvc:interceptors>
+	
 </beans>

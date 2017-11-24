@@ -31,7 +31,10 @@ public class ComputerServices {
 	 */
 	public ComputerDTO getComputerById(int id) {
 		Computer computer = computerDao.getComputer(id);
-		return computerMapper.computerToComputerDTO(computer);
+		if (computer != null) {
+			return computerMapper.computerToComputerDTO(computer);
+		}
+		return new ComputerDTO();
 	}
 
 	public List<ComputerDTO> getAllComputers(int currentPage, int limit, NbTotal nbTotal) {
@@ -90,7 +93,7 @@ public class ComputerServices {
 	}
 
 	public boolean addComputer(ComputerDTO computerDTO, List<Company> companies) {
-		return  computerDao.insertComputer(computerMapper.computerDTOtoComputer(computerDTO, companies));
+		return computerDao.insertComputer(computerMapper.computerDTOtoComputer(computerDTO, companies));
 	}
 
 	public boolean updateComputer(ComputerDTO computerDTO, List<Company> companies) {
