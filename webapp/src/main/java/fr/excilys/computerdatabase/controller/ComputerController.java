@@ -86,6 +86,17 @@ public class ComputerController {
 		return list;
 	}	
 	
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login(@RequestParam(value = "error", required = false) String error, Model model) {
+		if (error != null) {
+			model.addAttribute("error", "Username or Password false");
+		}
+		
+		System.out.println("SALUT LA COMPANIE");
+		return "view/login";
+	}
+	
 	private List<Integer> listOfPages() {
 
 		if (currentPage < 3) {

@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import fr.excilys.computerdatabase.model.Role;
 import fr.excilys.computerdatabase.model.User;
 import fr.excilys.computerdatabase.persistence.UserDao;
 
@@ -27,12 +28,12 @@ public class UserServices implements UserDetailsService {
 			throw new UsernameNotFoundException(" Username not found ! ");
 		}
 		
-		List<String> roles = userDao.findRolesForUser(username);
+		List<Role> roles = userDao.findRolesForUser(username);
 		
 		List<GrantedAuthority> grantList = new ArrayList<>();
 		if (roles != null) {
-			for (String role : roles) {
-				GrantedAuthority authority = new SimpleGrantedAuthority(role);
+			for (Role role : roles) {
+				GrantedAuthority authority = new SimpleGrantedAuthority(role.getRole());
 				grantList.add(authority);
 			}
 		}

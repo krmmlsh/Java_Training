@@ -7,20 +7,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 @Entity
-@Table(name = "user")
-public class User {
-	
+@Table(name="user_roles")
+public class Role {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="user_role_id")
 	private int id;
 	
-	@Column(nullable = false, unique = true)
-	private String username;
 	
 	@Column
-	private String password;
-
+	private String username;
+	
 	public int getId() {
 		return id;
 	}
@@ -37,11 +37,14 @@ public class User {
 		this.username = username;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getRole() {
+		return role;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setRole(String role) {
+		this.role = role;
 	}
+
+	@Column
+	private String role;
 }

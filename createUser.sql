@@ -1,11 +1,9 @@
 CREATE TABLE user_roles (
   user_role_id int(11) NOT NULL AUTO_INCREMENT,
-  user_id bigint(20) NOT NULL,
+  username VARCHAR(45) NOT NULL ,
   role varchar(45) NOT NULL,
-  PRIMARY KEY (user_role_id),
-  UNIQUE KEY uni_username_role (role,user_id),
-  KEY fk_username_idx (user_id),
-  CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user (id));
+  PRIMARY KEY (user_role_id)
+);
 
 
 CREATE  TABLE user (
@@ -17,7 +15,7 @@ CREATE  TABLE user (
 
 
 
-INSERT INTO user_roles (user_id, role)
-VALUES (1, 'ROLE_USER');
-INSERT INTO user_roles (user_id, role)
-VALUES (2, 'ROLE_USER');
+INSERT INTO user_roles (username, role)
+VALUES ("karim", 'ROLE_USER');
+INSERT INTO user_roles (username, role)
+VALUES ("user", 'ROLE_USER');

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import fr.excilys.computerdatabase.model.Role;
 import fr.excilys.computerdatabase.model.User;
 
 @Component
@@ -36,13 +37,15 @@ public class UserDao {
 		return null;
 	}
 
-	public List<String> findRolesForUser(String username) {
+	public List<Role> findRolesForUser(String username) {
 
 		Session session = sessionFactory.openSession();
 		try {
-			session.createQuery("select * from user_roles where username =" + username);
+			Criteria cr = session.createCriteria(Role.class);
+			cr.add(Restrictions.eq("username", username));
+			return cr.list();
 		} catch (HibernateException e) {
-			logger.error("Error while getting a user");
+			logger.error("Error while getting a role");
 
 		}
 		return new ArrayList<>();
