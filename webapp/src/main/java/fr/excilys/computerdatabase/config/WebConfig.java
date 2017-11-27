@@ -1,4 +1,4 @@
-package fr.excilys.computerdatabase.persistence;
+package fr.excilys.computerdatabase.config;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,21 +8,32 @@ import javax.sql.DataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+
+@EnableWebSecurity
 @Configuration
+@ComponentScan("fr.excilys.computerdatabase.*")
 @PropertySource(value = { "classpath:application.properties" })
-public class DatabaseConnection {
+//@Import({ SecurityConfig.class })
+public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private Environment environment;
+    
+	private HikariDataSource ds;
+
 	
 	@Bean
 	public SessionFactory sessionFactory() {
@@ -41,19 +52,29 @@ public class DatabaseConnection {
 		ds = new HikariDataSource(config);
 		return ds;
 	}
-
-
-	@Bean
-	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-		return new PersistenceExceptionTranslationPostProcessor();
-	}
-
-	private HikariDataSource ds;
-
+	
 	public Connection getConnection() throws SQLException {
 		return ds.getConnection();
 	}
 	
+	@Override
+	public void addResourceHandlers (ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+	}
 	
-
+	@Bean
+	public InternalResourceViewResolver viewResolver(){
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setPrefix("/");
+		viewResolver.setSuffix(".jsp");
+		return viewResolver;
+	}
+	
 }
+
+
+
+
+
+
+
