@@ -8,11 +8,9 @@
 		<artifactId>computer-database</artifactId>
 		<version>1.1.0</version>
 	</parent>
-	<groupId>fr.excilys</groupId>
 	<artifactId>core</artifactId>
 	<name>core</name>
 	<packaging>jar</packaging>
-
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,12 +29,6 @@
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>utils</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

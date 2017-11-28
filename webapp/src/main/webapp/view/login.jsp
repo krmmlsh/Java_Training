@@ -9,7 +9,8 @@
 </head>
 <body>
 
-	<form name="loginForm" action="<c:url value='SALUT'/>" method="POST">
+	<form name="loginForm" action="<c:url value='spring_security'/>"
+		method="POST">
 
 		<table>
 			<tr>
@@ -19,7 +20,7 @@
 
 			<tr>
 				<td>Password</td>
-				<td><input type="text" name="password"></td>
+				<td><input type="password" name="password"></td>
 			</tr>
 			<tr>
 				<td></td>

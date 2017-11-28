@@ -13,9 +13,6 @@ import fr.excilys.computerdatabase.model.Computer;
 @Component
 public class ComputerMapper {
 
-
-
-
 	public ComputerDTO computerToComputerDTO(Computer computer) {
 		return new ComputerDTO.Builder().id(computer.getId()).name(computer.getName())
 				.introducedDate((computer.getIntroducedDate() != null) ? computer.getIntroducedDate().toString() : null)
@@ -23,12 +20,16 @@ public class ComputerMapper {
 						(computer.getDiscontinuedDate() != null) ? computer.getDiscontinuedDate().toString() : null)
 				.company((computer.getCompany() != null) ? computer.getCompany().getName() : null).build();
 	}
-	
+
 	public Computer computerDTOtoComputer(ComputerDTO computerDTO, List<Company> companies) {
 		Optional<Company> comp = companies.stream().filter(c -> c.getId() == computerDTO.getCompanyId()).findFirst();
 		return new Computer.Builder().id(computerDTO.getId()).name(computerDTO.getName())
-				.introducedDate((computerDTO.getIntroduced() != null) ? Util.convertStringToLocalDate(computerDTO.getIntroduced().toString(), "dd/MM/yyyy") : null)
-				.discontinuedDate((computerDTO.getDiscontinued() != null) ? Util.convertStringToLocalDate(computerDTO.getDiscontinued().toString(), "dd/MM/yyyy") : null)
+				.introducedDate((computerDTO.getIntroduced() != null)
+						? Util.convertStringToLocalDate(computerDTO.getIntroduced().toString(), "dd/MM/yyyy")
+						: null)
+				.discontinuedDate((computerDTO.getDiscontinued() != null)
+						? Util.convertStringToLocalDate(computerDTO.getDiscontinued().toString(), "dd/MM/yyyy")
+						: null)
 				.company((comp.isPresent()) ? comp.get() : null).build();
 	}
 }
