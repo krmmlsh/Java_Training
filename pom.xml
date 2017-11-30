@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.excilys</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>${projet-version}</version>
+	<version>2.0.0</version>
 	<packaging>pom</packaging>
 	<properties>
 		<mysql-version>6.0.6</mysql-version>
@@ -22,13 +22,23 @@
 		<hibernate-validator-version>5.4.1.Final</hibernate-validator-version>
 		<hibernate.version>5.2.10.Final</hibernate.version>
 		<projet-version>2.0.0</projet-version>
+		<jackson-version>2.9.0</jackson-version>
+		<spring-security-version>4.2.3.RELEASE</spring-security-version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson-version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>fr.excilys</groupId>
-				<artifactId>utils</artifactId>
+				<artifactId>utils
+				</artifactId>
 				<version>${projet-version}</version>
 			</dependency>
 			<dependency>
@@ -128,6 +138,21 @@
 				<version>${hibernate-validator-version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring-security-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring-security-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring-security-version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -181,5 +206,6 @@
 		<module>persistence</module>
 		<module>service</module>
 		<module>webapp</module>
+		<module>rest</module>
 	</modules>
 </project>

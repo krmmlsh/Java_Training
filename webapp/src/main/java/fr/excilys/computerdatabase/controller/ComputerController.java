@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.model.Company;
+import fr.excilys.computerdatabase.model.ComputerDTO;
 import fr.excilys.computerdatabase.service.CompanyServices;
 import fr.excilys.computerdatabase.service.ComputerServices;
-import fr.excilys.computerdatabase.model.ComputerDTO;
 @RequestMapping("/computer")
 @Controller
 public class ComputerController {
@@ -85,18 +85,7 @@ public class ComputerController {
 		model.addAttribute("nbTotal", nbTotal.nomberOfComputer);
 		return list;
 	}	
-	
-	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(@RequestParam(value = "error", required = false) String error, Model model) {
-		if (error != null) {
-			model.addAttribute("error", "Username or Password false");
-		}
-		
-		System.out.println("SALUT LA COMPANIE");
-		return "view/login";
-	}
-	
+
 	private List<Integer> listOfPages() {
 
 		if (currentPage < 3) {

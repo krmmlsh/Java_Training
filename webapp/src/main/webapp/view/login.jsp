@@ -14,6 +14,9 @@
 
 		<table>
 			<tr>
+				<td colspan="2" style="color:red;"><c:if test="${not empty error}"> ${error}</c:if></td>
+			</tr>
+			<tr>
 				<td>Login</td>
 				<td><input type="text" name="username"></td>
 			</tr>
