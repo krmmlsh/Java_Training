@@ -5,8 +5,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,50 +74,62 @@ public class ComputerWebService {
 	}
 
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	public @ResponseBody ComputerPaging getComputerByPaging(@RequestParam(required = false, defaultValue="1") String plus,
-			@RequestParam(required = false, defaultValue="0") String page, @RequestParam(required = false, defaultValue="10") String length) {
-		return pagination(plus, page, length);
+	public @ResponseBody ResponseEntity<ComputerPaging> getComputerByPaging(
+			@RequestParam(required = false, defaultValue = "1") String plus,
+			@RequestParam(required = false, defaultValue = "0") String page,
+			@RequestParam(required = false, defaultValue = "10") String length) {
+		return ResponseEntity.ok(pagination(plus, page, length));
 	}
 
-	@RequestMapping(value = "/search",  method = RequestMethod.GET)
-	public @ResponseBody List<ComputerDTO> getComputerByName(@RequestParam String search) {
-		return computerServices.getComputerByName(search);
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<List<ComputerDTO>> getComputerByName(@RequestParam String search) {
+		return ResponseEntity.ok(computerServices.getComputerByName(search));
 	}
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.GET)
-	public @ResponseBody ComputerDTO createPage(Model model) {
-		return new ComputerDTO();
+	public @ResponseBody ResponseEntity<ComputerDTO> createPage(Model model) {
+		return ResponseEntity.ok(new ComputerDTO());
 	}
 
 	@RequestMapping(value = "/editComputer", method = RequestMethod.GET)
-	public @ResponseBody ComputerDTO updatePage(@RequestParam int computerId) {
-		return computerServices.getComputerById(computerId);
+	public @ResponseBody ResponseEntity<ComputerDTO> updatePage(@RequestParam int computerId) {
+		ComputerDTO cDTO = computerServices.getComputerById(computerId);
+		if (cDTO == null) {
+			return ResponseEntity.badRequest().body(null);
+		}
+		return ResponseEntity.ok(cDTO);
 	}
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
-	public @ResponseBody ComputerDTO createComputer(@Valid ComputerDTO computerDTO, BindingResult result) {
+	public @ResponseBody ResponseEntity<ComputerDTO> createComputer(@Valid ComputerDTO computerDTO, BindingResult result) {
 		List<Company> companies = companyServices.getAllCompanies();
 
-		if (!computerServices.addComputer(computerDTO, companies)) {
+		if (result.hasErrors() || !computerServices.addComputer(computerDTO, companies)) {
+			return ResponseEntity.badRequest().body(null);
+
 		}
-		return computerDTO;
+		return ResponseEntity.ok(computerDTO);
 	}
 
 	@RequestMapping(value = "/editComputer", method = RequestMethod.POST)
-	public @ResponseBody ComputerDTO updateComputer(@Valid ComputerDTO computerDTO, BindingResult result) {
+	public @ResponseBody ResponseEntity<ComputerDTO> updateComputer(@Valid ComputerDTO computerDTO, BindingResult result) {
 		List<Company> companies = companyServices.getAllCompanies();
 
-		if (!computerServices.updateComputer(computerDTO, companies)) {
+		if (result.hasErrors() || !computerServices.updateComputer(computerDTO, companies)) {
+
+			return ResponseEntity.badRequest().body(null);
 		}
-		return computerDTO;
+		return ResponseEntity.ok(computerDTO);
 	}
-	
+
 	@RequestMapping(value = "/deleteComputer", method = RequestMethod.POST)
-	public @ResponseBody boolean deleteComputer(@RequestParam String selection) {
-		computerServices.removeComputer(selection);
-		return 	computerServices.removeComputer(selection);
+	public @ResponseBody BodyBuilder deleteComputer(@RequestParam String selection) {
+		if (!computerServices.removeComputer(selection)) {
+			ResponseEntity.badRequest();
+		}
+		return  ResponseEntity.ok();
 	}
-	
+
 	@RequestMapping(value = "/deleteCompany", method = RequestMethod.POST)
 	public @ResponseBody void deleteCompany(@RequestParam int companyIdDeleted) {
 		companyServices.deleteCompany(companyIdDeleted);

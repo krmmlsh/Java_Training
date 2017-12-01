@@ -34,7 +34,7 @@ public class ComputerServices {
 		if (computer != null) {
 			return computerMapper.computerToComputerDTO(computer);
 		}
-		return new ComputerDTO();
+		return null;
 	}
 
 	public List<ComputerDTO> getAllComputers(int currentPage, int limit, NbTotal nbTotal) {
