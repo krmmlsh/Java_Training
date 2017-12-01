@@ -29,7 +29,7 @@ public class CompanyServices {
 	 * Get a single company.
 	 * @return A company object.
 	 */
-	public Company gtCompanyByName(String name) {
+	public Company getCompanyByName(String name) {
 		return companyDao.getCompanyByName(name);
 	}
 	

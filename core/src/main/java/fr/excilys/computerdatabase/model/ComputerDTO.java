@@ -137,7 +137,23 @@ public class ComputerDTO {
 				+  "Discontinued date : " + discontinued + "\n"; 
 	}
 
-    private ComputerDTO(Builder b) {
+    public ComputerDTO( String name, int companyId) {
+		this.name = name;
+		this.companyId = companyId;
+	}
+    
+    public ComputerDTO() {
+    	
+    }
+
+	public ComputerDTO( String name, String discontinued, String introduced,int companyId) {
+		this.name = name;
+		this.discontinued = discontinued;
+		this.introduced = introduced;
+		this.companyId = companyId;
+	}
+
+	private ComputerDTO(Builder b) {
         this.id = b.id;
         this.companyId = b.compId;
         this.name = b.name;
@@ -147,8 +163,5 @@ public class ComputerDTO {
 
     }
 
-	public ComputerDTO() {
-	}
-    
-	
+
 }

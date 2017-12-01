@@ -45,7 +45,9 @@ public class ComputerPaging {
 		this.computerNumber = computerNumber;
 	}
 
-
+	public ComputerPaging ()
+	{}
+	
 
 	public ComputerPaging(List<ComputerDTO> computerList, int computerNumber, List<Integer> currentPage) {
 		this.computerList = computerList;

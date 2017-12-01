@@ -25,7 +25,16 @@
 		<jackson-version>2.9.0</jackson-version>
 		<spring-security-version>4.2.3.RELEASE</spring-security-version>
 	</properties>
-
+	<modules>
+		<module>utils</module>
+		<module>core</module>
+		<module>binding</module>
+		<module>persistence</module>
+		<module>service</module>
+		<module>webapp</module>
+		<module>rest</module>
+		<module>cliClient</module>
+	</modules>
 	<dependencyManagement>
 		<dependencies>
 
@@ -199,13 +208,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	<modules>
-		<module>utils</module>
-		<module>core</module>
-		<module>binding</module>
-		<module>persistence</module>
-		<module>service</module>
-		<module>webapp</module>
-		<module>rest</module>
-	</modules>
+
 </project>

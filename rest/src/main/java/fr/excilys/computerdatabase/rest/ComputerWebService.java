@@ -85,12 +85,26 @@ public class ComputerWebService {
 	public @ResponseBody ResponseEntity<List<ComputerDTO>> getComputerByName(@RequestParam String search) {
 		return ResponseEntity.ok(computerServices.getComputerByName(search));
 	}
+	
+	@RequestMapping(value = "/computer", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<ComputerDTO> getComputerById(int id) {
+		return ResponseEntity.ok(computerServices.getComputerById(id));
+	}
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<ComputerDTO> createPage(Model model) {
+	public @ResponseBody ResponseEntity<ComputerDTO> createPage() {
 		return ResponseEntity.ok(new ComputerDTO());
 	}
 
+	@RequestMapping(value = "/company", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Company> findCompany(String name) {
+		return ResponseEntity.ok(companyServices.getCompanyByName(name));
+	}
+	@RequestMapping(value = "/companies", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<List<Company>> getAllCompanies() {
+		return ResponseEntity.ok(companyServices.getAllCompanies());
+	}
+	
 	@RequestMapping(value = "/editComputer", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<ComputerDTO> updatePage(@RequestParam int computerId) {
 		ComputerDTO cDTO = computerServices.getComputerById(computerId);
