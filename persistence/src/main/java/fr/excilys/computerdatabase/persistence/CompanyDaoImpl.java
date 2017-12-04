@@ -59,9 +59,9 @@ public class CompanyDaoImpl {
 		Session session = sessionFactory.openSession();
 		try {
 			Criteria cr = session.createCriteria(Company.class);
-			Criterion companyName = Restrictions.like("name", "%name%");
+			Criterion companyName = Restrictions.like("name", "%"+name+"%");
 			cr.add(companyName);
-			Company company = (Company) cr.uniqueResult();
+			Company company = (Company)cr.uniqueResult();
 			return company;
 		} catch (HibernateException he) {
 			logger.error("Error while getting a computer");

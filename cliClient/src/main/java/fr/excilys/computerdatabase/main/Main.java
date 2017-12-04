@@ -7,6 +7,7 @@ import java.util.Scanner;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import fr.excilys.computerdatabase.model.Company;
@@ -32,7 +33,7 @@ public class Main {
 
 	private static final String GET_ALL_COMPUTERS = "http://localhost:8080/rest/webservice/dashboard";
 	private static final String GET_COMPUTER = "http://localhost:8080/rest/webservice/computer?id=";
-	private static final String SEARCH = "http://localhost:8080/rest/webservice/dashboard?search=";
+	private static final String SEARCH = "http://localhost:8080/rest/webservice/search?search=";
 
 	public static void main(String[] args) {
 
@@ -83,7 +84,7 @@ public class Main {
 						String discontinuation = s.nextLine();
 						ComputerDTO c = new ComputerDTO(name, introduction, discontinuation, comp.getId());
 						client.target(ADD_COMPUTER).request(MediaType.APPLICATION_JSON)
-								.post(Entity.entity(c, MediaType.APPLICATION_JSON));
+								.post(Entity.json(c), ComputerDTO.class);
 						break;
 					}
 					// get a computer by id
@@ -114,7 +115,7 @@ public class Main {
 						System.out.println("Enter the name of the computer :");
 						String name = s.nextLine();
 						List<ComputerDTO> computerDTOList = (List<ComputerDTO>) client.target(SEARCH + name)
-								.request(MediaType.APPLICATION_JSON).get(List.class);
+								.request(MediaType.APPLICATION_JSON).get(new GenericType<List<ComputerDTO>>() {});
 						for (ComputerDTO computer : computerDTOList) {
 							System.out.println(computer);
 						}
@@ -177,7 +178,7 @@ public class Main {
 						try {
 							int id = s.nextInt();
 							client.target(DELETE_COMPUTER).request(MediaType.APPLICATION_JSON)
-									.post(Entity.entity(id, MediaType.APPLICATION_JSON));
+									.post(Entity.json(id)); 
 						} catch (InputMismatchException e) {
 							System.out.println("You must enter a valid id !");
 							break;
@@ -197,28 +198,34 @@ public class Main {
 						}
 						break;
 					}
-					 // get all the companies 
+					// get all the companies
 					case 'C': {
-					  System.out.println("Get all the companies from the database"); 
-					  List<Company> list = client.target(GET_ALL_COMPANIES).request(MediaType.APPLICATION_JSON)
+						System.out.println("Get all the companies from the database");
+						List<Company> list = client.target(GET_ALL_COMPANIES).request(MediaType.APPLICATION_JSON)
 								.get(List.class);
-					  for (Company c : list){ 
-						  System.out.println("Id : " + c.getId() + "\nCompany : " + c.getName() + "\n");
-					  } 
-					  break; 
-					  }
-//					case 'd' :{
-//						  System.out.println("Remove a company named :"); String company =
-//						  s.nextLine(); Company companyObject =
-//						  companyService.getCompanyByName(company); if (companyObject == null) {
-//						  System.out.println("Company does not exist"); break; }
-//						  companyService.deleteCompany(companyObject.getId()); break; } default:
-//						  System.out.println("Command invalid\n"); } } System.out.println("" +
-//						  "a to add a new computer" + "\n" + "c to get an existing computer by id" +
-//						  "\n" + "p to get an existing computer by name " + "r to remove a computer" +
-//						  "\n" + "s to get all computers from the database" + "\n" +
-//						  "C to list all the companies" + "\n");
-//					}
+						for (Company c : list) {
+							System.out.println("Id : " + c.getId() + "\nCompany : " + c.getName() + "\n");
+						}
+						break;
+					}
+					// case 'd' :{
+					// System.out.println("Remove a company named :"); String company =
+					// s.nextLine(); Company companyObject =
+					// companyService.getCompanyByName(company); if (companyObject == null) {
+					// System.out.println("Company does not exist"); break; }
+					// companyService.deleteCompany(companyObject.getId()); break; } default:
+					// System.out.println("Command invalid\n"); } } System.out.println("" +
+					// "a to add a new computer" + "\n" + "c to get an existing computer by id" +
+					// "\n" + "p to get an existing computer by name " + "r to remove a computer" +
+					// "\n" + "s to get all computers from the database" + "\n" +
+					// "C to list all the companies" + "\n");
+					// }
+
+					}
+					System.out.println("a to add a new computer" + "\n" + "c to get an existing computer by id" + "\n"
+							+ "p to get an existing computer by name " + "\n" + "r to remove a computer" + "\n"
+							+ "s to get all computers from the database" + "\n" + "C to list all the companies" + "\n"
+							+ "d to delete a company and all its computer\n");
 				}
 			}
 		}

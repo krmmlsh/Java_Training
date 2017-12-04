@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -115,7 +116,7 @@ public class ComputerWebService {
 	}
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<ComputerDTO> createComputer(@Valid ComputerDTO computerDTO, BindingResult result) {
+	public @ResponseBody ResponseEntity<ComputerDTO> createComputer(@Valid  @RequestBody ComputerDTO computerDTO, BindingResult result) {
 		List<Company> companies = companyServices.getAllCompanies();
 
 		if (result.hasErrors() || !computerServices.addComputer(computerDTO, companies)) {
@@ -126,18 +127,18 @@ public class ComputerWebService {
 	}
 
 	@RequestMapping(value = "/editComputer", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<ComputerDTO> updateComputer(@Valid ComputerDTO computerDTO, BindingResult result) {
+	public @ResponseBody ResponseEntity<ComputerDTO> updateComputer(@Valid  @RequestBody ComputerDTO computerDTO, BindingResult result) {
 		List<Company> companies = companyServices.getAllCompanies();
 
 		if (result.hasErrors() || !computerServices.updateComputer(computerDTO, companies)) {
-
+			
 			return ResponseEntity.badRequest().body(null);
 		}
 		return ResponseEntity.ok(computerDTO);
 	}
 
 	@RequestMapping(value = "/deleteComputer", method = RequestMethod.POST)
-	public @ResponseBody BodyBuilder deleteComputer(@RequestParam String selection) {
+	public @ResponseBody BodyBuilder deleteComputer( String selection) {
 		if (!computerServices.removeComputer(selection)) {
 			ResponseEntity.badRequest();
 		}

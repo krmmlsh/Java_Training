@@ -23,6 +23,9 @@ public class MyWebAppInitialyzer implements WebApplicationInitializer{
 	    		"/webservice/deleteComputer",
 	    		"/webservice/deleteCompany",
 	    		"/webservice/search",
+	    		"/webservice/companies",
+	    		"/webservice/company",
+	    		"/webservice/computer",
 	    		"/login");
 	  }
 }
