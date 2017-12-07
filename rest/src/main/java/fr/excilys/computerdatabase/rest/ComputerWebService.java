@@ -86,10 +86,14 @@ public class ComputerWebService {
 	public @ResponseBody ResponseEntity<List<ComputerDTO>> getComputerByName(@RequestParam String search) {
 		return ResponseEntity.ok(computerServices.getComputerByName(search));
 	}
-	
+
 	@RequestMapping(value = "/computer", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<ComputerDTO> getComputerById(int id) {
-		return ResponseEntity.ok(computerServices.getComputerById(id));
+	public @ResponseBody ResponseEntity<ComputerDTO> getComputerById(Integer id) {
+		ComputerDTO computerDTO;
+		if (id == null || (computerDTO = computerServices.getComputerById(id)) == null) {
+			return ResponseEntity.badRequest().body(null);
+		}
+		return ResponseEntity.ok(computerDTO);
 	}
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.GET)
@@ -101,13 +105,14 @@ public class ComputerWebService {
 	public @ResponseBody ResponseEntity<Company> findCompany(String name) {
 		return ResponseEntity.ok(companyServices.getCompanyByName(name));
 	}
+
 	@RequestMapping(value = "/companies", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<Company>> getAllCompanies() {
 		return ResponseEntity.ok(companyServices.getAllCompanies());
 	}
-	
+
 	@RequestMapping(value = "/editComputer", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<ComputerDTO> updatePage(@RequestParam int computerId) {
+	public @ResponseBody ResponseEntity<ComputerDTO> updatePage(@RequestParam Integer computerId) {
 		ComputerDTO cDTO = computerServices.getComputerById(computerId);
 		if (cDTO == null) {
 			return ResponseEntity.badRequest().body(null);
@@ -116,7 +121,8 @@ public class ComputerWebService {
 	}
 
 	@RequestMapping(value = "/addComputer", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<ComputerDTO> createComputer(@Valid  @RequestBody ComputerDTO computerDTO, BindingResult result) {
+	public @ResponseBody ResponseEntity<ComputerDTO> createComputer(@Valid @RequestBody ComputerDTO computerDTO,
+			BindingResult result) {
 		List<Company> companies = companyServices.getAllCompanies();
 
 		if (result.hasErrors() || !computerServices.addComputer(computerDTO, companies)) {
@@ -127,26 +133,29 @@ public class ComputerWebService {
 	}
 
 	@RequestMapping(value = "/editComputer", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<ComputerDTO> updateComputer(@Valid  @RequestBody ComputerDTO computerDTO, BindingResult result) {
+	public @ResponseBody ResponseEntity<ComputerDTO> updateComputer(@Valid @RequestBody ComputerDTO computerDTO,
+			BindingResult result) {
 		List<Company> companies = companyServices.getAllCompanies();
 
 		if (result.hasErrors() || !computerServices.updateComputer(computerDTO, companies)) {
-			
+
 			return ResponseEntity.badRequest().body(null);
 		}
 		return ResponseEntity.ok(computerDTO);
 	}
 
 	@RequestMapping(value = "/deleteComputer", method = RequestMethod.POST)
-	public @ResponseBody BodyBuilder deleteComputer( String selection) {
+	public @ResponseBody BodyBuilder deleteComputer(String selection) {
 		if (!computerServices.removeComputer(selection)) {
 			ResponseEntity.badRequest();
 		}
-		return  ResponseEntity.ok();
+		return ResponseEntity.ok();
 	}
 
 	@RequestMapping(value = "/deleteCompany", method = RequestMethod.POST)
-	public @ResponseBody void deleteCompany(@RequestParam int companyIdDeleted) {
-		companyServices.deleteCompany(companyIdDeleted);
+	public @ResponseBody void deleteCompany(@RequestParam Integer companyIdDeleted) {
+		if (companyIdDeleted != null) {
+			companyServices.deleteCompany(companyIdDeleted);
+		}
 	}
 }

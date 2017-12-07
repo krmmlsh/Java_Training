@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+ mysql:
+   image : 
+     "mysql"
+   environment : 
+    MYSQL_USER: 
+     "admincdb"
+    MYSQL_PASSWORD:
+     "qwerty1234"
+    MYSQL_ROOT_PASSWORD:
+     "0000"
+    MYSQL_DATABASE: 
+     "computer-database-db"
+   ports : 
+    - "3306:3306"
+   volumes:
+    - ./db/entries.sql:/docker-entrypoint-initdb.d/3-entries.sql
+    - ./db/privilege.sql:/docker-entrypoint-initdb.d/2-privilege.sql
+    - ./db/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+
+
+ rest2:
+  build: .
+  volumes:
+    - ./rest/target/rest-2.0.0.war:/usr/local/tomcat/webapps/app.war
+  ports:
+    - 8080:8080
+  depends_on :
+    - mysql
