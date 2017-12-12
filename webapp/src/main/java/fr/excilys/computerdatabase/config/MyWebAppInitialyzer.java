@@ -16,13 +16,6 @@ public class MyWebAppInitialyzer implements WebApplicationInitializer{
 	    ctx.setServletContext(container);
 	    final ServletRegistration.Dynamic servlet = container.addServlet("dispatcher", new DispatcherServlet(ctx));
 	    servlet.setLoadOnStartup(1);
-	    servlet.addMapping("/computer",
-	    		"/webservice/addComputer",
-	    		"/webservice/dashboard",
-	    		"/webservice/editComputer",
-	    		"/webservice/deleteComputer",
-	    		"/webservice/deleteCompany",
-	    		"/webservice/search",
-	    		"/login");
+	    servlet.addMapping("/computer", "/login");
 	  }
 }
