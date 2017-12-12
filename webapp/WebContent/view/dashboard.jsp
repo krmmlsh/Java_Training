@@ -21,6 +21,9 @@
 		<div class="container">
 			<a class="navbar-brand" href="/webapp/computer?page=1">
 				Application - Computer Database </a>
+			<div class="pull-right">
+				<a class="btn btn-danger" href="/webapp/spring_logout" role="button" style="margin-top: 7px">Log out</a>
+			</div>
 		</div>
 	</header>
 
@@ -100,7 +103,7 @@
 					<c:forEach items="${computers}" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value=${computer.id}></td>
+								class="cb" value="${computer.id}"></td>
 							<td><a
 								href="/webapp/computer?computerId=${computer.id}&ACTION_TYPE=update">${computer.name}</a></td>
 							<td>${computer.introduced}</td>

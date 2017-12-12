@@ -25,31 +25,25 @@ public class UserDao {
 	private SessionFactory sessionFactory;
 
 	public User findUserByUsername(String username) {
-		Session session = sessionFactory.openSession();
-		try {
+		try (Session session = sessionFactory.openSession();) {
 			Criteria cr = session.createCriteria(User.class);
 			cr.add(Restrictions.eq("username", username));
 			return (User) cr.list().get(0);
 		} catch (HibernateException | IndexOutOfBoundsException e) {
 			logger.error("Error while getting a user");
-
 		}
 		return null;
 	}
 
 	public List<Role> findRolesForUser(String username) {
-
-		Session session = sessionFactory.openSession();
-		try {
+		try (Session session = sessionFactory.openSession();) {
 			Criteria cr = session.createCriteria(Role.class);
 			cr.add(Restrictions.eq("username", username));
 			return cr.list();
 		} catch (HibernateException e) {
 			logger.error("Error while getting a role");
-
 		}
 		return new ArrayList<>();
-
 	}
 
 }

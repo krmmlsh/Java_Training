@@ -27,15 +27,7 @@ import fr.excilys.computerdatabase.model.Company;
  */
 @Component
 public class CompanyDaoImpl {
-
-	private final static String getAllCompanies = "SELECT * FROM company";
-
-	private final static String getCompany = "SELECT * FROM company where id = ?";
-
-	private final static String getCompanyByName = "SELECT * FROM company where name = ?";
-
-	private final static String DELETE_FROM_ID = "DELETE FROM company WHERE id = ";
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
 	@Autowired
@@ -43,10 +35,6 @@ public class CompanyDaoImpl {
 
 	@Autowired
 	SessionFactory sessionFactory;
-
-	private Session getCurrentSession() {
-		return sessionFactory.getCurrentSession();
-	}
 	
 	/**
 	 * Find company id by its name.
