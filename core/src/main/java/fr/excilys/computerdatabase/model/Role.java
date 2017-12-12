@@ -21,6 +21,15 @@ public class Role {
 	@Column
 	private String username;
 	
+	public Role(String string, String string2) {
+		username = string;
+		role = string2;
+	}
+	
+	public Role() {
+		
+	}
+
 	public int getId() {
 		return id;
 	}

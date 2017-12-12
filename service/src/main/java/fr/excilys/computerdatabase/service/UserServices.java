@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import fr.excilys.computerdatabase.model.Role;
 import fr.excilys.computerdatabase.model.User;
 import fr.excilys.computerdatabase.persistence.UserDao;
+import fr.excilys.computerdatabase.validator.UserDTO;
 
 @Service
 public class UserServices implements UserDetailsService {
@@ -41,6 +42,17 @@ public class UserServices implements UserDetailsService {
 		UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), grantList);
 		
 		return userDetails;
+	}
+
+	public boolean createUser(UserDTO user) {
+		User userToInsert = new User(user.getUsername(), user.getPassword());
+		userDao.createUser(userToInsert);
+		return true;
+	}
+
+	public boolean userNotExist(String username) {
+		return userDao.usernameNotExist(username);
+		
 	}
 
 }

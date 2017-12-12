@@ -1,0 +1,33 @@
+package fr.excilys.computerdatabase.validator;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+
+public class UserDTO {
+
+	
+	@NotNull
+	@Size(min = 4, max = 14, message = "Please enter a valid name, size between 4 and 14 characters")
+	@UniqueUsername(message = "Username already in use, please choose another one")
+	private String username;
+	
+	@Size(min=6, max=20, message = "Please enter a password of size between 6 and 20")
+	private String password;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+}

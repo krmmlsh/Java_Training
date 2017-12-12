@@ -1,36 +1,71 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="./css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="./css/main.css" rel="stylesheet" media="screen">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login page</title>
+<title>Computer Database</title>
+<style>
+.error {
+	color: red;
+	font-weight: bold;
+}
+</style>
 </head>
 <body>
+	<header class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="/webapp/computer?page=1">
+				Application - Computer Database </a>
+		</div>
+	</header>
+	<table>
+		<tr>
+			<td colspan="2" style="color: red;"><c:if
+					test="${not empty error}"> ${error}</c:if></td>
+		</tr>
+	</table>
+	<section id="main">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-8 col-xs-offset-2 box">
+					<h1>Connexion</h1>
 
-	<form name="loginForm" action="<c:url value='spring_security'/>"
-		method="POST">
+					<form name="loginForm" action="<c:url value='spring_security'/>"
+						method="POST">
+						<fieldset>
+							<div class="form-group">
+								<label for="username">Username</label> <input type="text"
+									class="form-control" id="username" name="username" />
+							</div>
+							<div class="form-group">
+								<label for="password">Password</label> <input type="password"
+									class="form-control" id="password" name="password"
+									placeholder="********" />
+							</div>
+						</fieldset>
 
-		<table>
-			<tr>
-				<td colspan="2" style="color:red;"><c:if test="${not empty error}"> ${error}</c:if></td>
-			</tr>
-			<tr>
-				<td>Login</td>
-				<td><input type="text" name="username"></td>
-			</tr>
+						<div style="margin-left: 10px;" class="actions pull-right">
+							<input type="submit" value="Connexion" class="btn btn-primary">
+						</div>
+						<div class="actions pull-right">
+						<a href="/webapp/signup"  type="button" class="btn btn-danger" role="button">Sign up</a>
 
-			<tr>
-				<td>Password</td>
-				<td><input type="password" name="password"></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><input type="submit" value="login">
-			</tr>
-		</table>
-	</form>
-
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
 </body>
 </html>

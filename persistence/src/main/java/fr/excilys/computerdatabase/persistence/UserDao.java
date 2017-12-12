@@ -7,6 +7,7 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,32 @@ public class UserDao {
 		}
 		return new ArrayList<>();
 
+	}
+
+	public void createUser(User userToInsert) {
+		logger.trace("ENTER INSERT COMPUTER");
+		try (Session session = sessionFactory.openSession();){
+			Transaction tx = session.beginTransaction();
+			session.persist(userToInsert);
+			Role role = new Role(userToInsert.getUsername(), "ROLE_USER");
+			session.persist(role);
+			tx.commit();
+		} catch (HibernateException he) {
+			logger.error("Error while getting a computer");
+		}
+	}
+	
+	public boolean usernameNotExist(String username) {
+		
+		try (Session session = sessionFactory.openSession();){
+			Criteria cr = session.createCriteria(User.class);
+			cr.add(Restrictions.eq("username", username));
+			return cr.list().isEmpty();
+		} catch (HibernateException e) {
+			logger.error("Error while getting a role");
+
+		}
+		return false;
 	}
 
 }

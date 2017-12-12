@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
+<title>Computer Database</title>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script
@@ -13,8 +16,7 @@
 <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="./css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="./css/main.css" rel="stylesheet" media="screen">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Computer Database</title>
+<script src="js/validate.js"></script>
 <style>
 .error {
 	color: red;
@@ -29,40 +31,32 @@
 				Application - Computer Database </a>
 		</div>
 	</header>
-	<table>
-		<tr>
-			<td colspan="2" style="color: red;"><c:if
-					test="${not empty error}"> ${error}</c:if></td>
-		</tr>
-	</table>
 	<section id="main">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1>Connexion</h1>
-
-					<form name="loginForm" action="<c:url value='spring_security'/>"
-						method="POST">
+					<h1>Inscription</h1>
+					<form:form action="/webapp/signup" id="signUpForm"
+						name="signUpForm" modelAttribute="userDTO" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="username">Username</label> <input type="text"
-									class="form-control" id="username" name="username" />
+								<label for="username">Nom d'utilisateur</label>
+								<form:input type="text" class="form-control" id="username"
+									name="username" path="username" placeholder="username" />
+								<form:errors path="username" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
-								<label for="password">Password</label> <input type="password"
-									class="form-control" id="password" name="password"
-									placeholder="********" />
+								<label for="password">Mot de passe</label>
+								<form:input type="password" class="form-control" id="password"
+									name="password" path="password" placeholder="********" />
+								<form:errors path="password" cssClass="error"></form:errors>
 							</div>
 						</fieldset>
-
-						<div style="margin-left: 10px;" class="actions pull-right">
-							<input type="submit" value="Connexion" class="btn btn-primary">
-						</div>
 						<div class="actions pull-right">
-						<a href="/webapp/signup"  type="button" class="btn btn-danger" role="button">Sign up</a>
-
+							<input type="submit" value="SignUp" class="btn btn-primary">
+							or <a href="/webapp/login" class="btn btn-default">Cancel</a>
 						</div>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>
