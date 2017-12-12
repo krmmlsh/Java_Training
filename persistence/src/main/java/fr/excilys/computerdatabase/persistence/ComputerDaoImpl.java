@@ -1,7 +1,5 @@
 package fr.excilys.computerdatabase.persistence;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -38,10 +36,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	
 	@Autowired
 	ComputerMapper computerMapper;
-
-	private Session getCurrentSession() {
-		return sessionFactory.getCurrentSession();
-	}
 
 	/**
 	 * Get a computer from his id.
@@ -204,10 +198,4 @@ public class ComputerDaoImpl implements ComputerDao {
 		}
 	}
 
-	private Date getDateOrNull(LocalDate localdate) {
-		if (localdate == null) {
-			return null;
-		}
-		return Date.valueOf(localdate);
-	}
 }

@@ -7,10 +7,10 @@ CREATE TABLE user_roles (
 
 
 CREATE  TABLE user (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
   username VARCHAR(45) NOT NULL ,
   password VARCHAR(45) NOT NULL ,
-  enabled TINYINT NOT NULL DEFAULT 1 ,
-  PRIMARY KEY (username)
+  PRIMARY KEY (id)
 );
 
 
