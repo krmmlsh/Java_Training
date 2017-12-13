@@ -52,7 +52,7 @@ public class ComputerController {
 	public static final String UPDATE = "update";
 
 	public static final String CREATE = "create";
-
+	
 	@Autowired
 	private ComputerServices computerServices;
 
@@ -104,7 +104,8 @@ public class ComputerController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String getComputerByPaging(@RequestParam( required = false) String plus, @RequestParam( required = false) String page,
 			@RequestParam( required = false) String length, Model model) {
-
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		model.addAttribute(COMPUTERS, pagination(plus, page, length, model));
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return DASHBOARD;
@@ -113,6 +114,8 @@ public class ComputerController {
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + GET_BY_NAME, method = RequestMethod.GET)
 	public String getComputerByName(@RequestParam String search, Model model) {
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		model.addAttribute(COMPUTERS, computerServices.getComputerByName(search));
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return DASHBOARD;
@@ -120,6 +123,8 @@ public class ComputerController {
 
 	@RequestMapping(params = ACTION_TYPE + "=" + CREATE, method = RequestMethod.GET)
 	public String createPage(Model model) {
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		model.addAttribute("computerDTO", new ComputerDTO());
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return ADDCOMPUTER;
@@ -127,6 +132,8 @@ public class ComputerController {
 
 	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.GET)
 	public String updatePage(@RequestParam int computerId, Model model) {
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		model.addAttribute("computerDTO", computerServices.getComputerById(computerId));
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return EDITCOMPUTER;
@@ -134,6 +141,8 @@ public class ComputerController {
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + POST, method = RequestMethod.POST)
 	public String createComputer(@Valid ComputerDTO computerDTO, BindingResult result, Model model){
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		List<Company> companies = companyServices.getAllCompanies();
 		model.addAttribute(COMPANIES, companies);
 
@@ -149,6 +158,8 @@ public class ComputerController {
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.POST)
 	public String updateComputer(@Valid ComputerDTO computerDTO, BindingResult result, Model model) {
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		List<Company> companies = companyServices.getAllCompanies();
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 
@@ -164,6 +175,8 @@ public class ComputerController {
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + DELETE, method = RequestMethod.POST)
 	public String deleteComputer(@RequestParam String selection, Model model) {
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		computerServices.removeComputer(selection);
 		homePageReinitialisation(model);
 		return DASHBOARD;
@@ -173,6 +186,8 @@ public class ComputerController {
 	 
 	@RequestMapping(params = ACTION_TYPE + "=" + "deleteFormCompany", method = RequestMethod.POST)
 	public String deleteCompany(@RequestParam int companyIdDeleted, Model model) {
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		companyServices.deleteCompany(companyIdDeleted);
 		List<Company> companies = companyServices.getAllCompanies();
 		model.addAttribute(COMPANIES, companies);
@@ -181,6 +196,8 @@ public class ComputerController {
 	}
 	
 	private void homePageReinitialisation(Model model) {
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		model.addAttribute(COMPUTERS, pagination(null, null, null, model));
 	}
 	

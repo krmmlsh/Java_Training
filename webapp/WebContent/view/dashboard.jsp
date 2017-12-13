@@ -21,8 +21,9 @@
 		<div class="container">
 			<a class="navbar-brand" href="/webapp/computer?page=1">
 				Application - Computer Database </a>
-			<div class="pull-right">
-				<a class="btn btn-danger" href="/webapp/spring_logout" role="button" style="margin-top: 7px">Log out</a>
+            <div class="pull-right" style="margin-top: 7px">
+				<a style="color:white;font-size:25px;margin-right:10px;" href="/webapp/computer/description">${username}</a>
+				<a class="btn btn-danger" href="/webapp/spring_logout" role="button" >Log out</a>
 			</div>
 		</div>
 	</header>

@@ -31,6 +31,8 @@ public class UserController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(@RequestParam(value = "error", required = false) String error, Model model) {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", user.getUsername());
 		if (error != null) {
 			model.addAttribute("error", "Username or Password false");
 		}
@@ -40,13 +42,16 @@ public class UserController {
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String signUpPage(Model model) {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", user.getUsername());
 		model.addAttribute("userDTO", new UserDTO());
 		return VIEW_SIGN_UP;
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public String signUp(@Valid UserDTO user, BindingResult result, Model model) {
-
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", userDetails.getUsername());
 		if (result.hasErrors()) {
 			return VIEW_SIGN_UP;
 		}
@@ -58,13 +63,15 @@ public class UserController {
 	@RequestMapping(value = "/computer/description", method = RequestMethod.GET)
 	public String profilPage(Model model) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", user.getUsername());
 		model.addAttribute("descriptionDTO", userServices.getDescription(user.getUsername()));
 		return VIEW_DESCRIPTION;
 	}
 
 	@RequestMapping(value = "/computer/description", method = RequestMethod.POST)
 	public String profil(@Valid DescriptionDTO descriptionDTO, BindingResult result, Model model) {
-
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", user.getUsername());
 		if (result.hasErrors()) {
 			return VIEW_DESCRIPTION;
 		}
