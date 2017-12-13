@@ -23,8 +23,6 @@ import fr.excilys.computerdatabase.model.Computer;
 @Component
 public class ComputerDaoImpl implements ComputerDao {
 
-
-
 	private static final String DELETE_FROM_ID = "DELETE FROM Computer WHERE id = :id";
 
 	private static final String DELETE_FROM_COMPANY_ID = "DELETE FROM Computer WHERE company_id = :id";
@@ -92,7 +90,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	public List<Computer> findPaging(int currentPage, int limit, NbTotal nbTotal) {
 		logger.trace("ENTER GET ALL COMPUTERS");
 		Session session = sessionFactory.openSession();
-
 		try {
 			Criteria criteria = session.createCriteria(Computer.class);
 			criteria.setFirstResult(currentPage*limit);

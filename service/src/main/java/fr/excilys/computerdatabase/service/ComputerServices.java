@@ -6,11 +6,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import fr.excilys.computerdatabase.model.ComputerDTO;
 import fr.excilys.computerdatabase.main.NbTotal;
 import fr.excilys.computerdatabase.mapper.ComputerMapper;
 import fr.excilys.computerdatabase.model.Company;
 import fr.excilys.computerdatabase.model.Computer;
+import fr.excilys.computerdatabase.model.ComputerDTO;
+import fr.excilys.computerdatabase.model.User;
 import fr.excilys.computerdatabase.persistence.ComputerDaoImpl;
 
 @Component
@@ -92,12 +93,16 @@ public class ComputerServices {
 				.collect(Collectors.toList());
 	}
 
-	public boolean addComputer(ComputerDTO computerDTO, List<Company> companies) {
-		return computerDao.insertComputer(computerMapper.computerDTOtoComputer(computerDTO, companies));
+//	public boolean addComputer(ComputerDTO computerDTO, List<Company> companies) {
+//		return computerDao.insertComputer(computerMapper.computerDTOtoComputer(computerDTO, companies));
+//	}
+	
+	public boolean addComputer(ComputerDTO computerDTO, List<Company> companies, User user) {
+		return computerDao.insertComputer(computerMapper.computerDTOtoComputer(computerDTO, companies, user));
 	}
 
-	public boolean updateComputer(ComputerDTO computerDTO, List<Company> companies) {
-		return computerDao.updateComputer(computerMapper.computerDTOtoComputer(computerDTO, companies));
+	public boolean updateComputer(ComputerDTO computerDTO, List<Company> companies, User user) {
+		return computerDao.updateComputer(computerMapper.computerDTOtoComputer(computerDTO, companies, user));
 	}
 
 }

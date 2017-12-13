@@ -42,6 +42,9 @@ public class Computer {
 	@Convert(converter = LocalDateConverter.class)
 	@Column(name = "discontinued")
 	private LocalDate discontinued;
+	
+	@ManyToOne
+	private User user;
 
 	public Computer() {
 	}
@@ -57,6 +60,14 @@ public class Computer {
 		this.name = name;
 		this.introduced = introducedDate;
 		this.discontinued = discontinuedDate;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Computer(String name) {
@@ -128,6 +139,8 @@ public class Computer {
 		private LocalDate introducedDate;
 
 		private LocalDate discontinuedDate;
+		
+		private User user;
 
 		public Builder id(int id) {
 			this.id = id;
@@ -153,6 +166,11 @@ public class Computer {
 			this.discontinuedDate = discontinuedDate;
 			return this;
 		}
+		
+		public Builder user(User user) {
+			this.user = user;
+			return this;
+		}
 
 		public Computer build() {
 			return new Computer(this);
@@ -166,7 +184,7 @@ public class Computer {
 		this.company = b.company;
 		this.introduced = b.introducedDate;
 		this.discontinued = b.discontinuedDate;
-
+		this.user = b.user;
 	}
 
 }

@@ -22,6 +22,8 @@ import fr.excilys.computerdatabase.model.Company;
 import fr.excilys.computerdatabase.model.ComputerDTO;
 import fr.excilys.computerdatabase.service.CompanyServices;
 import fr.excilys.computerdatabase.service.ComputerServices;
+import fr.excilys.computerdatabase.service.UserServices;
+
 @RequestMapping("/computer")
 @Controller
 public class ComputerController {
@@ -58,6 +60,9 @@ public class ComputerController {
 
 	@Autowired
 	private CompanyServices companyServices;
+	
+	@Autowired
+	private UserServices userServices;
 
 	private NbTotal nbTotal = new NbTotal();
 
@@ -149,7 +154,11 @@ public class ComputerController {
 		if (result.hasErrors()) {
 			return ADDCOMPUTER;
 		}
-		if(!computerServices.addComputer(computerDTO, companies)) {
+		
+		User userDet = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		fr.excilys.computerdatabase.model.User user = userServices.findUserByUsername(userDet.getUsername());
+		
+		if(!computerServices.addComputer(computerDTO, companies, user)) {
 			model.addAttribute("error", "An error has occured please, try again !");
 		}
 		homePageReinitialisation(model);
@@ -166,7 +175,11 @@ public class ComputerController {
 		if (result.hasErrors()) {
 			return EDITCOMPUTER;
 		}
-		if(!computerServices.updateComputer(computerDTO, companies)) {
+		
+		User userDet = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		fr.excilys.computerdatabase.model.User user = userServices.findUserByUsername(userDet.getUsername());
+		
+		if(!computerServices.updateComputer(computerDTO, companies, user)) {
 			model.addAttribute("error", "An error has occured please, try again !");
 		}
 		homePageReinitialisation(model);
