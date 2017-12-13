@@ -1,5 +1,7 @@
 package fr.excilys.computerdatabase.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import fr.excilys.computerdatabase.model.ComputerDTO;
+import fr.excilys.computerdatabase.service.ComputerServices;
 import fr.excilys.computerdatabase.service.UserServices;
 import fr.excilys.computerdatabase.validator.DescriptionDTO;
 import fr.excilys.computerdatabase.validator.UserDTO;
@@ -29,10 +33,12 @@ public class UserController {
 	@Autowired
 	UserServices userServices;
 
+	@Autowired
+	ComputerServices computerServices;
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(@RequestParam(value = "error", required = false) String error, Model model) {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute("username", user.getUsername());
+
 		if (error != null) {
 			model.addAttribute("error", "Username or Password false");
 		}
@@ -42,16 +48,12 @@ public class UserController {
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String signUpPage(Model model) {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute("username", user.getUsername());
 		model.addAttribute("userDTO", new UserDTO());
 		return VIEW_SIGN_UP;
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public String signUp(@Valid UserDTO user, BindingResult result, Model model) {
-		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute("username", userDetails.getUsername());
 		if (result.hasErrors()) {
 			return VIEW_SIGN_UP;
 		}
@@ -64,7 +66,11 @@ public class UserController {
 	public String profilPage(Model model) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("username", user.getUsername());
-		model.addAttribute("descriptionDTO", userServices.getDescription(user.getUsername()));
+		DescriptionDTO description = userServices.getDescription(user.getUsername());
+		model.addAttribute("descriptionDTO", description);
+		List<ComputerDTO> computersDTO = computerServices.getComputerByUserId(description.getUser_id());
+		model.addAttribute("computers", computersDTO);
+
 		return VIEW_DESCRIPTION;
 	}
 

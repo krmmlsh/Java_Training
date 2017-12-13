@@ -31,7 +31,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Autowired
 	SessionFactory sessionFactory;
-	
+
 	@Autowired
 	ComputerMapper computerMapper;
 
@@ -68,12 +68,12 @@ public class ComputerDaoImpl implements ComputerDao {
 	public List<Computer> findByName(String name) {
 		logger.trace("ENTER GET COMPUTER BY ID");
 		Session session = sessionFactory.openSession();
-		
+
 		try {
 			Criteria cr = session.createCriteria(Computer.class, "computer");
 			cr.createAlias("computer.company", "company");
-			Criterion computerName = Restrictions.like("name", "%"+name+"%");
-			Criterion companyName = Restrictions.like("company.name", "%"+name+"%");
+			Criterion computerName = Restrictions.like("name", "%" + name + "%");
+			Criterion companyName = Restrictions.like("company.name", "%" + name + "%");
 			LogicalExpression le = Restrictions.or(computerName, companyName);
 			cr.add(le);
 			List<Computer> computers = cr.list();
@@ -87,17 +87,32 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	}
 
+	public List<Computer> getComputerByUserId(int user_id) {
+		Session session = sessionFactory.openSession();
+		try {
+			Criteria cr = session.createCriteria(Computer.class, "computer").createCriteria("computer.user", "user")
+					.add(Restrictions.eq("user.id", user_id));
+			List<Computer> computers = cr.list();
+			return computers;
+		} catch (HibernateException he) {
+			logger.error("Error while getting a computer");
+		} finally {
+			session.close();
+		}
+		return null;
+	}
+
 	public List<Computer> findPaging(int currentPage, int limit, NbTotal nbTotal) {
 		logger.trace("ENTER GET ALL COMPUTERS");
 		Session session = sessionFactory.openSession();
 		try {
 			Criteria criteria = session.createCriteria(Computer.class);
-			criteria.setFirstResult(currentPage*limit);
+			criteria.setFirstResult(currentPage * limit);
 			criteria.setMaxResults(limit);
 			List<Computer> firstPage = criteria.list();
 			Criteria criteriaCount = session.createCriteria(Computer.class);
 			criteriaCount.setProjection(Projections.rowCount());
-			nbTotal.nomberOfComputer = ((Long)criteriaCount.uniqueResult()).intValue();
+			nbTotal.nomberOfComputer = ((Long) criteriaCount.uniqueResult()).intValue();
 			return firstPage;
 		} catch (HibernateException he) {
 			logger.error("Error while getting a computer");
@@ -153,7 +168,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		}
 		return true;
 	}
-
 
 	/**
 	 * Update an existing computer.

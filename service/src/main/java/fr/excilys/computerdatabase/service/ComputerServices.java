@@ -52,6 +52,10 @@ public class ComputerServices {
 	public List<ComputerDTO> getComputerByName(String name) {
 		return computerDTOList(computerDao.findByName(name));
 	}
+	
+	public List<ComputerDTO> getComputerByUserId(int user_id) {
+		return computerDTOList(computerDao.getComputerByUserId(user_id));
+	}
 
 	/**
 	 * Create a new computer to add in the database.
@@ -104,5 +108,7 @@ public class ComputerServices {
 	public boolean updateComputer(ComputerDTO computerDTO, List<Company> companies, User user) {
 		return computerDao.updateComputer(computerMapper.computerDTOtoComputer(computerDTO, companies, user));
 	}
+
+
 
 }

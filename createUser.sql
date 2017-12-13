@@ -13,9 +13,3 @@ CREATE  TABLE user (
   PRIMARY KEY (id)
 );
 
-
-
-INSERT INTO user_roles (username, role)
-VALUES ("karim", 'ROLE_USER');
-INSERT INTO user_roles (username, role)
-VALUES ("user", 'ROLE_USER');
