@@ -17,6 +17,7 @@ drop schema if exists `computer-database-db`;
     introduced                date NULL,
     discontinued              date NULL,
     company_id                bigint default NULL,
+    user_id		      bigint default NULL,
     constraint pk_computer primary key (id))
   ;
 

@@ -123,10 +123,10 @@ public class ComputerWebService {
 			BindingResult result) {
 		List<Company> companies = companyServices.getAllCompanies();
 
-		if (result.hasErrors() || !computerServices.addComputer(computerDTO, companies)) {
-			return ResponseEntity.badRequest().body(null);
-
-		}
+//		if (result.hasErrors() || !computerServices.addComputer(computerDTO, companies)) {
+//			return ResponseEntity.badRequest().body(null);
+//
+//		}
 		return ResponseEntity.ok(computerDTO);
 	}
 
@@ -135,10 +135,10 @@ public class ComputerWebService {
 			BindingResult result) {
 		List<Company> companies = companyServices.getAllCompanies();
 
-		if (result.hasErrors() || !computerServices.updateComputer(computerDTO, companies)) {
-
-			return ResponseEntity.badRequest().body(null);
-		}
+//		if (result.hasErrors() || !computerServices.updateComputer(computerDTO, companies)) {
+//
+//			return ResponseEntity.badRequest().body(null);
+//		}
 		return ResponseEntity.ok(computerDTO);
 	}
 

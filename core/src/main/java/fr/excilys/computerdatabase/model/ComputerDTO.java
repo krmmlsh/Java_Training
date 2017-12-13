@@ -24,8 +24,16 @@ public class ComputerDTO {
 	
 	private int companyId;
 
+	private int userId;
 	
-	
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -88,6 +96,8 @@ public class ComputerDTO {
 		private String introducedDate;
 		
 		private String discontinuedDate;
+		
+		private int userId;
 
         public Builder id(int id) {
             this.id = id;
@@ -121,6 +131,11 @@ public class ComputerDTO {
         public Builder compId(int compId) {
             this.compId = compId;
             return this;
+        }
+        
+        public Builder userId(int userId) {
+        	this.userId = userId;
+        	return this;
         }
 
         public ComputerDTO build() {
@@ -160,7 +175,7 @@ public class ComputerDTO {
         this.company = b.company;
         this.introduced = b.introducedDate;
         this.discontinued = b.discontinuedDate;
-
+        this.userId = b.userId;
     }
 
 

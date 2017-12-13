@@ -22,6 +22,10 @@ public class UserServices implements UserDetailsService {
 	@Autowired
 	UserDao userDao;
 	
+	public User findUserByUsername(String username) {
+		return userDao.findUserByUsername(username);
+	}
+	
 	public UserDetails loadUserByUsername (String username) throws 	UsernameNotFoundException {
 		User user = userDao.findUserByUsername(username);
 		
