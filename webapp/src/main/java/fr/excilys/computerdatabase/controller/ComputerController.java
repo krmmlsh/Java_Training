@@ -8,6 +8,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -102,6 +104,7 @@ public class ComputerController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String getComputerByPaging(@RequestParam( required = false) String plus, @RequestParam( required = false) String page,
 			@RequestParam( required = false) String length, Model model) {
+
 		model.addAttribute(COMPUTERS, pagination(plus, page, length, model));
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return DASHBOARD;

@@ -38,7 +38,7 @@
 	<section id="main">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-8 col-xs-offset-2 box">
+				<div class="col-xs-6 col-xs-offset-3 box">
 					<h1>Connexion</h1>
 
 					<form name="loginForm" action="<c:url value='spring_security'/>"
@@ -46,7 +46,7 @@
 						<fieldset>
 							<div class="form-group">
 								<label for="username">Username</label> <input type="text"
-									class="form-control" id="username" name="username" />
+									class="form-control" id="username" name="username" placeholder="ex : xXxERIC_LE_DESTRUCTEUR666xXx"/>
 							</div>
 							<div class="form-group">
 								<label for="password">Password</label> <input type="password"
@@ -54,13 +54,10 @@
 									placeholder="********" />
 							</div>
 						</fieldset>
-
-						<div style="margin-left: 10px;" class="actions pull-right">
-							<input type="submit" value="Connexion" class="btn btn-primary">
-						</div>
 						<div class="actions pull-right">
-						<a href="/webapp/signup"  type="button" class="btn btn-danger" role="button">Sign up</a>
-
+						<input type="submit" value="Connexion" class="btn btn-primary"> or 
+							<a href="/webapp/signup" type="button" class="btn btn-default"
+								role="button">Sign up</a>
 						</div>
 					</form>
 				</div>

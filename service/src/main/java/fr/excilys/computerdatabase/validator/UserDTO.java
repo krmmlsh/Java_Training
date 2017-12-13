@@ -6,7 +6,8 @@ import javax.validation.constraints.Size;
 
 public class UserDTO {
 
-	
+	private int id;
+
 	@NotNull
 	@Size(min = 4, max = 14, message = "Please enter a valid name, size between 4 and 14 characters")
 	@UniqueUsername(message = "Username already in use, please choose another one")
@@ -29,5 +30,12 @@ public class UserDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

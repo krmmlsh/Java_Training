@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import fr.excilys.computerdatabase.model.Description;
 import fr.excilys.computerdatabase.model.Role;
 import fr.excilys.computerdatabase.model.User;
 
@@ -21,6 +22,8 @@ import fr.excilys.computerdatabase.model.User;
 public class UserDao {
 
 	private static Logger logger = LoggerFactory.getLogger(UserDao.class);
+
+	private final String DESCRIPTION = "SELECT d.id, d.firstname FROM description d LEFT JOIN  user u ON d.user_id = u.id LEFT JOIN  company c ON d.company_id = c.id WHERE u.username= :username";
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -35,6 +38,19 @@ public class UserDao {
 		}
 		return null;
 	}
+	
+
+	public User findUserById(int user_id) {
+		try (Session session = sessionFactory.openSession();) {
+			Criteria cr = session.createCriteria(User.class);
+			cr.add(Restrictions.eq("id", user_id));
+			return (User) cr.uniqueResult();
+		} catch (HibernateException | IndexOutOfBoundsException e) {
+			logger.error("Error while getting a user");
+		}
+		return null;
+	}
+
 
 	public List<Role> findRolesForUser(String username) {
 		try (Session session = sessionFactory.openSession();) {
@@ -48,21 +64,23 @@ public class UserDao {
 	}
 
 	public void createUser(User userToInsert) {
-		logger.trace("ENTER INSERT COMPUTER");
-		try (Session session = sessionFactory.openSession();){
+		try (Session session = sessionFactory.openSession();) {
 			Transaction tx = session.beginTransaction();
 			session.persist(userToInsert);
 			Role role = new Role(userToInsert.getUsername(), "ROLE_USER");
 			session.persist(role);
+			Description description = new Description();
+			description.setUser(userToInsert);
+			session.persist(description);
 			tx.commit();
 		} catch (HibernateException he) {
 			logger.error("Error while getting a computer");
 		}
 	}
-	
+
 	public boolean usernameNotExist(String username) {
-		
-		try (Session session = sessionFactory.openSession();){
+
+		try (Session session = sessionFactory.openSession();) {
 			Criteria cr = session.createCriteria(User.class);
 			cr.add(Restrictions.eq("username", username));
 			return cr.list().isEmpty();
@@ -71,6 +89,29 @@ public class UserDao {
 
 		}
 		return false;
+	}
+
+	public void modifyDescription(Description description) {
+		try (Session session = sessionFactory.openSession();) {
+			Transaction tx = session.beginTransaction();
+			session.merge(description);
+			tx.commit();
+		} catch (HibernateException e) {
+			logger.error("Error while getting a role");
+
+		}
+	}
+
+	public Description findDescription(String username) {
+		try (Session session = sessionFactory.openSession();) {
+			Description desc =  (Description) session.createCriteria(Description.class, "desc")
+					.createCriteria("desc.user", "user").add(Restrictions.eq("user.username", username))
+					.uniqueResult();
+			return desc;
+		} catch (HibernateException e) {
+			logger.error("Error while getting a role");
+			return new Description();
+		}
 	}
 
 }

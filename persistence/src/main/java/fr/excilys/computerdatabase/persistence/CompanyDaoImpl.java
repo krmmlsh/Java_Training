@@ -58,6 +58,25 @@ public class CompanyDaoImpl {
 		}
 		return null;
 	}
+	
+	
+
+	public Company createCompany(String companyName) {
+		Session session = sessionFactory.openSession();
+		try {
+			Transaction tx = session.beginTransaction();
+			Company company = new Company();
+			company.setName(companyName);
+			session.persist(company);
+			tx.commit();
+			return company;
+		} catch (HibernateException he) {
+			logger.error("Error while getting a computer");
+		} finally {
+			session.close();
+		}
+		return new Company();
+	}
 
 	/**
 	 * Name of a company
@@ -130,5 +149,6 @@ public class CompanyDaoImpl {
 			return company;
 		}
 	}
+
 
 }

@@ -41,5 +41,12 @@ public class CompanyServices {
 	public void deleteCompany(int id) {
 		companyDao.deleteCompany(id);
 	}
+	public Company getOrCreateCompany(String companyName) {
+		Company company = getCompanyByName(companyName);
+		if (company == null) {
+			company = companyDao.createCompany(companyName);
+		}
+		return company;
+	}
 	
 }
