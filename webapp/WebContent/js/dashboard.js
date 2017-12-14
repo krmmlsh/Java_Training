@@ -15,6 +15,7 @@ $(function() {
         } else {
             $("#selectall").prop("checked", false);
         }
+        console.log($(".cb:checked"));
         if ($(".cb:checked").length != 0) {
             $("#deleteSelected").enable();
         } else {

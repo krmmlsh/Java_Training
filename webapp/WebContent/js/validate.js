@@ -21,7 +21,7 @@
 		    submitHandler: function(form) {
 		        form.submit();
 		    },
-		    focusCleanup: true,
+		    focusCleanup: false,
 		    onkeyup: true,
 		});
 	});

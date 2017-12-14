@@ -113,10 +113,18 @@
 				</div>
 			</div>
 		</div>
+		<form id="deleteForm" action="/webapp/computer?profil=user" method="POST">
+			<input type="hidden" name="selection" value=""> <input
+				type="hidden" name="ACTION_TYPE" value="delete">
+		</form>
 		<div class="container" style="margin-top: 50px;">
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
+						<th><a href="#"
+								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
+									class="fa fa-trash-o fa-lg"></i>
+							</a></th>
 						<th><spring:message code="label.name" /></th>
 						<th><spring:message code="label.introduced" /></th>
 						<!-- Table header for Discontinued Date -->
@@ -130,6 +138,7 @@
 				<tbody id="results">
 					<c:forEach items="${computers}" var="computer">
 						<tr>
+							<td><input type="checkbox" name="cb" class="cb" value="${computer.id}"></td>
 							<td><a href="/webapp/computer?computerId=${computer.id}&ACTION_TYPE=update">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>

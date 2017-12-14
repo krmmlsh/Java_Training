@@ -112,6 +112,8 @@ public class ComputerController {
 			@RequestParam( required = false) String length, Model model) {
 		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<? extends GrantedAuthority> authorities = (List<? extends GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		fr.excilys.computerdatabase.model.User user = userServices.findUserByUsername(userDetails.getUsername());
+		model.addAttribute("userId", user.getId());
 		model.addAttribute("authority", authorities.get(0).toString());
 		model.addAttribute("username", userDetails.getUsername());
 		model.addAttribute(COMPUTERS, pagination(plus, page, length, model));
@@ -123,6 +125,10 @@ public class ComputerController {
 	@RequestMapping(params = ACTION_TYPE + "=" + GET_BY_NAME, method = RequestMethod.GET)
 	public String getComputerByName(@RequestParam String search, Model model) {
 		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<? extends GrantedAuthority> authorities = (List<? extends GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		fr.excilys.computerdatabase.model.User user = userServices.findUserByUsername(userDetails.getUsername());
+		model.addAttribute("userId", user.getId());
+		model.addAttribute("authority", authorities.get(0).toString());
 		model.addAttribute("username", userDetails.getUsername());
 		model.addAttribute(COMPUTERS, computerServices.getComputerByName(search));
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
@@ -152,7 +158,6 @@ public class ComputerController {
 		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("username", userDetails.getUsername());
 		List<Company> companies = companyServices.getAllCompanies();
-		model.addAttribute(COMPANIES, companies);
 
 		if (result.hasErrors()) {
 			return ADDCOMPUTER;
@@ -164,8 +169,7 @@ public class ComputerController {
 		if(!computerServices.addComputer(computerDTO, companies, user)) {
 			model.addAttribute("error", "An error has occured please, try again !");
 		}
-		homePageReinitialisation(model);
-		return DASHBOARD;
+		return "redirect:computer";
 	}
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.POST)
@@ -173,8 +177,6 @@ public class ComputerController {
 		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("username", userDetails.getUsername());
 		List<Company> companies = companyServices.getAllCompanies();
-		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
-
 		if (result.hasErrors()) {
 			return EDITCOMPUTER;
 		}
@@ -185,36 +187,25 @@ public class ComputerController {
 		if(!computerServices.updateComputer(computerDTO, companies, user)) {
 			model.addAttribute("error", "An error has occured please, try again !");
 		}
-		homePageReinitialisation(model);
-		return DASHBOARD;
+		return "redirect:computer";
 	}
 	
 	@RequestMapping(params = ACTION_TYPE + "=" + DELETE, method = RequestMethod.POST)
-	public String deleteComputer(@RequestParam String selection, Model model) {
-		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute("username", userDetails.getUsername());
+	public String deleteComputer(@RequestParam String selection, @RequestParam(required = false) String profil, Model model) {
 		computerServices.removeComputer(selection);
-		homePageReinitialisation(model);
-		return DASHBOARD;
+		if(profil!= null && profil.equals("user")) {
+			return "redirect:computer/description";
+		}
+		return "redirect:computer";
 	}
 
 
 	 
 	@RequestMapping(params = ACTION_TYPE + "=" + "deleteFormCompany", method = RequestMethod.POST)
 	public String deleteCompany(@RequestParam int companyIdDeleted, Model model) {
-		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute("username", userDetails.getUsername());
 		companyServices.deleteCompany(companyIdDeleted);
-		List<Company> companies = companyServices.getAllCompanies();
-		model.addAttribute(COMPANIES, companies);
-		homePageReinitialisation(model);
-		return DASHBOARD;
+		return "redirect:computer";
 	}
-	
-	private void homePageReinitialisation(Model model) {
-		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute("username", userDetails.getUsername());
-		model.addAttribute(COMPUTERS, pagination(null, null, null, model));
-	}
+
 	
 }
