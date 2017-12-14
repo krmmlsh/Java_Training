@@ -31,6 +31,10 @@ public class UserServices implements UserDetailsService {
 		return userDao.findUserByUsername(username);
 	}
 	
+	public List<Description> findAllUsers() {
+		return userDao.findAllDescriptions();
+	}
+	
 	public UserDetails loadUserByUsername (String username) throws 	UsernameNotFoundException {
 		User user = userDao.findUserByUsername(username);
 		

@@ -9,7 +9,7 @@ public class DescriptionDTO {
 
 	private int id;
 
-	@Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Email in wrong format")
+	@Pattern(regexp = "^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})?$", message = "Email in wrong format")
 	private String email;
 
 	private String information;

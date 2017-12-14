@@ -113,5 +113,15 @@ public class UserDao {
 			return new Description();
 		}
 	}
+	
+	public List<Description> findAllDescriptions() {
+		List<Description> list = null;
+		try (Session session = sessionFactory.openSession();) {
+			list = session.createCriteria(Description.class).list();
+		} catch (HibernateException e) {
+			logger.error("Error while getting all descriptions");
+		}
+		return list;
+	}
 
 }

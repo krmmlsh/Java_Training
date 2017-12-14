@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.excilys.computerdatabase.model.ComputerDTO;
+import fr.excilys.computerdatabase.model.Description;
 import fr.excilys.computerdatabase.service.ComputerServices;
 import fr.excilys.computerdatabase.service.UserServices;
 import fr.excilys.computerdatabase.validator.DescriptionDTO;
@@ -28,8 +30,6 @@ public class UserController {
 	private static final String VIEW_DESCRIPTION = "view/profilPage";
 	private static final String VIEW_DASHBOARD = "view/dashboard";
 
-
-	
 	@Autowired
 	UserServices userServices;
 
@@ -70,6 +70,10 @@ public class UserController {
 		model.addAttribute("descriptionDTO", description);
 		List<ComputerDTO> computersDTO = computerServices.getComputerByUserId(description.getUser_id());
 		model.addAttribute("computers", computersDTO);
+		List<Description> descList = userServices.findAllUsers();
+		model.addAttribute("desclist", descList);
+		List<? extends GrantedAuthority> authorities = (List<? extends GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		model.addAttribute("authority", authorities.get(0).toString());
 
 		return VIEW_DESCRIPTION;
 	}

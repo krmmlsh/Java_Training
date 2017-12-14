@@ -25,10 +25,22 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/webapp/computer?page=1"> Application - Computer Database </a>
-            <div class="pull-right" style="margin-top: 7px">
-				<a style="color:white;font-size:25px;margin-right:10px;" href="/webapp/computer/description">${username}</a>
-				<a class="btn btn-danger" href="/webapp/spring_logout" role="button" >Log out</a>
+
+			<div  class="pull-right"  style="margin-top: 7px">
+				<a	class="btn btn-danger" href="/webapp/spring_logout" role="button"><spring:message code="label.logout" /></a>
 			</div>
+			<div class="pull-right" style="margin-top: 7px;">
+				<a style="color: #9d9d9d; font-size: 25px; margin-right: 10px;" href="/webapp/computer/description">${username}</a> 
+			</div>
+			
+			<div class="pull-right"  style="margin-top: 12px;margin-right:20px;">
+				<a href="/webapp/computer?page=1&locale=fr">
+					<img src="/webapp/img/france.png" alt="Smiley face" height="25" width="25">
+				</a>
+				<a href="/webapp/computer?page=1&locale=en">
+					<img src="/webapp/img/uk.png" alt="Smiley face" height="25" width="25">
+				</a>
+			</div>		
         </div>
     </header>
 
@@ -65,9 +77,9 @@
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
+                            <input type="submit" value="<spring:message code="label.add"/>" class="btn btn-primary">
                             or
-                            <a href="/webapp/computer" class="btn btn-default">Cancel</a>
+                            <a href="/webapp/computer" class="btn btn-default"><spring:message code="label.cancel"/></a>
                         </div>
                     </form:form>
                 </div>
