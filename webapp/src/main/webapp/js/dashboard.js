@@ -99,3 +99,6 @@ $(document).keydown(function(e) {
     }
 });
 
+function menuButtonToggle(x) {
+    x.classList.toggle("change");
+} 

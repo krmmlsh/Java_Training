@@ -23,9 +23,14 @@
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
+		<div class="container">		
 			<a class="navbar-brand" href="/webapp/computer?page=1"> Application -
-				Computer Database </a>
+				Computer Database 
+			</a>
+            <div class="pull-right" style="margin-top: 7px">
+				<a style="color:white;font-size:25px;margin-right:10px;" href="/webapp/computer/description">${username}</a>
+				<a class="btn btn-danger" href="/webapp/spring_logout" role="button" >Log out</a>
+			</div>
 		</div>
 	</header>
 	<section id="main">
@@ -65,8 +70,8 @@
                             </div>                  
                         </fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="dashboard.html" class="btn btn-default">Cancel</a>
+							<input type="submit" value="Edit" class="btn btn-primary"> or
+                            <a href="/webapp/computer" class="btn btn-default">Cancel</a>
 						</div>
 					</form:form>
 				</div>
