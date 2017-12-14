@@ -116,10 +116,27 @@
 				<tbody id="results">
 					<c:forEach items="${computers}" var="computer">
 						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="${computer.id}"></td>
-							<td><a
-								href="/webapp/computer?computerId=${computer.id}&ACTION_TYPE=update">${computer.name}</a></td>
+							<c:choose>
+								<c:when test="${ userId == computer.userId}">
+									<td class="editMode"><input type="checkbox" name="cb"
+										class="cb" value="${computer.id}"></td>
+									<td><span><a style="color: mediumseagreen;" href="/webapp/computer?computerId=${computer.id}&ACTION_TYPE=update">${computer.name}</a></span></td>
+								</c:when>
+
+								<c:when
+									test="${ authority == 'ROLE_ADMIN' ||computer.userId == -1 || userId == computer.userId}">
+									<td class="editMode"><input type="checkbox" name="cb"
+										class="cb" value="${computer.id}"></td>
+									<td><a href="/webapp/computer?computerId=${computer.id}&ACTION_TYPE=update">${computer.name}</a></td>
+								</c:when>
+
+								<c:otherwise>
+									<td class="editMode"></td>
+									<td><span style="color: #7F3D17;"><c:out
+												value="${computer.name}"></c:out></span></td>
+								</c:otherwise>
+
+							</c:choose>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
 							<td>${computer.company}</td>

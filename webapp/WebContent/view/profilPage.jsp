@@ -13,7 +13,7 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="/webapp/css/bootstrap.min.css" rel="stylesheet"
+<link href="/webapp/css/bootstrap.css" rel="stylesheet"
 	media="screen">
 <link href="/webapp/css/font-awesome.css" rel="stylesheet"
 	media="screen">
@@ -26,15 +26,39 @@
 </style>
 </head>
 <body>
+	<div id="wrapper">
+    
+        <!-- Sidebar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+        	<table class="nav sidebar-nav table table-striped2 table-bordered">
+        		<tr>
+        			<th colspan="2" style="text-align: center">User list</th>
+        		</tr>
+				<tr>
+					<th><spring:message code="label.name" /></th>
+					<th><spring:message code="label.company" /></th>
+				</tr>
+				<tbody id="results">
+					<c:forEach items="${desclist}" var="desc">
+						<tr>
+							<td><a href="/webapp/computer/description">${desc.user.username}</a></td>
+							<td>${desc.company.name}</td>
+						</tr>
+					</c:forEach>
 
+				</tbody>
+			</table>
+		</nav>
 	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="pull-left" style="margin-top: 5px; margin-left: 10px;">
-			<div class="menubutton" onclick="menuButtonToggle(this)">
-				<div class="bar1"></div>
-				<div class="bar2"></div>
-				<div class="bar3"></div>
+		<c:if test="${ authority == 'ROLE_ADMIN' }">
+			<div class="pull-left" style="margin-top: 5px; margin-left: 10px;">
+				<div class="hamburger is-closed" data-toggle="offcanvas">
+					<div class="hamb-top"></div>
+					<div class="hamb-middle"></div>
+					<div class="hamb-bottom"></div>
+				</div>
 			</div>
-		</div>
+		</c:if>
 		<div class="container">
 
 			<a class="navbar-brand" href="/webapp/computer?page=1">	Application - Computer Database </a>
@@ -121,10 +145,10 @@
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
-						<th><a href="#"
+					<th><a href="#"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
-							</a></th>
+						</a></th>
 						<th><spring:message code="label.name" /></th>
 						<th><spring:message code="label.introduced" /></th>
 						<!-- Table header for Discontinued Date -->
@@ -150,7 +174,7 @@
 			</table>
 		</div>
 	</section>
-
+	</div>
 	<script src="/webapp/js/jquery.min.js"></script>
 	<script src="/webapp/js/bootstrap.min.js"></script>
 	<script src="/webapp/js/dashboard.js"></script>

@@ -1,5 +1,6 @@
 package fr.excilys.computerdatabase.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -119,7 +120,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		} finally {
 			session.close();
 		}
-		return null;
+		return new ArrayList<>();
 	}
 
 	/**
