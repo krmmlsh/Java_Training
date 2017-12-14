@@ -65,22 +65,24 @@
 			</div>
 		</div>
 		<div class="container">
-			<div class="editMode">
-				<div>
-					<label for="companyId"><spring:message code="label.companies"/></label>
+			<c:if test="${ authority == 'ROLE_ADMIN'}">
+				<div class="editMode">
+					<div>
+						<label for="companyId"><spring:message code="label.companies"/></label>
+					</div>
+					<form id="deleteFormCompany" action="/webapp/computer"	style="display:inline;"method="POST">
+						<select name="companyIdDeleted">
+							<c:forEach var="company" items="${companies}">
+								<option value="${company.id}">${company.name}</option>
+							</c:forEach>
+						</select> 
+						<input type="hidden" name="ACTION_TYPE" value="deleteFormCompany" />
+					</form>
+					<a href="#" id="deleteCompany" onclick="$.fn.deleteSelectedCompany();">
+						<i style="color: red;" class="fa fa-trash-o fa-lg"></i>
+					</a>
 				</div>
-				<form id="deleteFormCompany" action="/webapp/computer"	style="display:inline;"method="POST">
-					<select name="companyIdDeleted">
-						<c:forEach var="company" items="${companies}">
-							<option value="${company.id}">${company.name}</option>
-						</c:forEach>
-					</select> 
-					<input type="hidden" name="ACTION_TYPE" value="deleteFormCompany" />
-				</form>
-				<a href="#" id="deleteCompany" onclick="$.fn.deleteSelectedCompany();">
-					<i style="color: red;" class="fa fa-trash-o fa-lg"></i>
-				</a>
-			</div>
+			</c:if>
 		</div>
 		<form id="deleteForm" action="/webapp/computer" method="POST">
 			<input type="hidden" name="selection" value=""> <input

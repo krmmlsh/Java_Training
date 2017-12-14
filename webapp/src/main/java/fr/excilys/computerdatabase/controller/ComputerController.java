@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -110,6 +111,8 @@ public class ComputerController {
 	public String getComputerByPaging(@RequestParam( required = false) String plus, @RequestParam( required = false) String page,
 			@RequestParam( required = false) String length, Model model) {
 		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<? extends GrantedAuthority> authorities = (List<? extends GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		model.addAttribute("authority", authorities.get(0).toString());
 		model.addAttribute("username", userDetails.getUsername());
 		model.addAttribute(COMPUTERS, pagination(plus, page, length, model));
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());

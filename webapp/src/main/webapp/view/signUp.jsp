@@ -34,7 +34,7 @@
 	<section id="main">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-8 col-xs-offset-2 box">
+				<div class="col-xs-6 col-xs-offset-3 box">
 					<h1>Inscription</h1>
 					<form:form action="/webapp/signup" id="signUpForm"
 						name="signUpForm" modelAttribute="userDTO" method="POST">
@@ -53,7 +53,7 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="SignUp" class="btn btn-primary">
+							<input type="submit" value="Sign up" class="btn btn-primary">
 							or <a href="/webapp/login" class="btn btn-default">Cancel</a>
 						</div>
 					</form:form>

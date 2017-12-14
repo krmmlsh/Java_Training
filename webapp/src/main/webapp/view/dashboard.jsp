@@ -21,8 +21,9 @@
 		<div class="container">
 			<a class="navbar-brand" href="/webapp/computer?page=1">
 				Application - Computer Database </a>
-			<div class="pull-right">
-				<a class="btn btn-danger" href="/webapp/spring_logout" role="button" style="margin-top: 7px">Log out</a>
+            <div class="pull-right" style="margin-top: 7px">
+				<a style="color:white;font-size:25px;margin-right:10px;" href="/webapp/computer/description">${username}</a>
+				<a class="btn btn-danger" href="/webapp/spring_logout" role="button" >Log out</a>
 			</div>
 		</div>
 	</header>
@@ -53,22 +54,24 @@
 			</div>
 		</div>
 		<div class="container">
-			<div class="editMode">
-				<div>
-					<label for="companyId"><spring:message code="label.companies"/></label>
+			<c:if test="${ authority == 'ROLE_ADMIN'}">
+				<div class="editMode">
+					<div>
+						<label for="companyId"><spring:message code="label.companies"/></label>
+					</div>
+					<form id="deleteFormCompany" action="/webapp/computer"	style="display:inline;"method="POST">
+						<select name="companyIdDeleted">
+							<c:forEach var="company" items="${companies}">
+								<option value="${company.id}">${company.name}</option>
+							</c:forEach>
+						</select> 
+						<input type="hidden" name="ACTION_TYPE" value="deleteFormCompany" />
+					</form>
+					<a href="#" id="deleteCompany" onclick="$.fn.deleteSelectedCompany();">
+						<i style="color: red;" class="fa fa-trash-o fa-lg"></i>
+					</a>
 				</div>
-				<form id="deleteFormCompany" action="/webapp/computer"	style="display:inline;"method="POST">
-					<select name="companyIdDeleted">
-						<c:forEach var="company" items="${companies}">
-							<option value="${company.id}">${company.name}</option>
-						</c:forEach>
-					</select> 
-					<input type="hidden" name="ACTION_TYPE" value="deleteFormCompany" />
-				</form>
-				<a href="#" id="deleteCompany" onclick="$.fn.deleteSelectedCompany();">
-					<i style="color: red;" class="fa fa-trash-o fa-lg"></i>
-				</a>
-			</div>
+			</c:if>
 		</div>
 		<form id="deleteForm" action="/webapp/computer" method="POST">
 			<input type="hidden" name="selection" value=""> <input

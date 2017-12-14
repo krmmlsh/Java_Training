@@ -36,26 +36,14 @@
 			</div>
 		</div>
 		<div class="container">
-
-			<a class="navbar-brand" href="/webapp/computer?page=1">	Application - Computer Database </a>
-
-			<div  class="pull-right"  style="margin-top: 7px">
-				<a	class="btn btn-danger" href="/webapp/spring_logout" role="button"><spring:message code="label.logout" /></a>
+			<a class="navbar-brand" href="/webapp/computer?page=1">
+				Application - Computer Database </a>
+			<div class="pull-right" style="margin-top: 7px">
+				<a style="color: white; font-size: 25px; margin-right: 10px;"
+					href="/webapp/computer/description">${username}</a> <a
+					class="btn btn-danger" href="/webapp/spring_logout" role="button">Log
+					out</a>
 			</div>
-			<div class="pull-right" style="margin-top: 7px;">
-				<a style="color: #9d9d9d; font-size: 25px; margin-right: 10px;" href="/webapp/computer/description">${username}</a> 
-
-			</div>
-			
-			<div class="pull-right"  style="margin-top: 12px;margin-right:20px;">
-				<a href="/webapp/computer?page=1&locale=fr">
-					<img src="/webapp/img/france.png" alt="Smiley face" height="25" width="25">
-				</a>
-				<a href="/webapp/computer?page=1&locale=en">
-					<img src="/webapp/img/uk.png" alt="Smiley face" height="25" width="25">
-				</a>
-			</div>				
-
 		</div>
 	</header>
 
@@ -63,7 +51,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1><spring:message code="label.profilPage" /></h1>
+					<h1>Page de profil</h1>
 					<form:form action="/webapp/computer/description"
 						id="descriptionForm" name="descriptionForm"
 						modelAttribute="descriptionDTO" method="POST">
@@ -72,40 +60,40 @@
 							<form:input type="hidden" name="user_id" path="user_id"
 								id="user_id" />
 							<div class="form-group">
-								<label for="firstname"><spring:message code="label.firstname" /></label>
+								<label for="firstname">firstname</label>
 								<form:input type="text" class="form-control" id="firstname"
-									name="firstname" path="firstname" placeholder="ex : Karim" />
+									name="firstname" path="firstname" placeholder="firstname" />
 								<form:errors path="firstname" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
-								<label for="lastname"><spring:message code="label.lastname" /></label>
+								<label for="lastname">lastname</label>
 								<form:input type="text" class="form-control" id="lastname"
-									name="lastname" path="lastname" placeholder="ex : Pheng" />
+									name="lastname" path="lastname" placeholder="lastname" />
 								<form:errors path="firstname" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
-								<label for="email">Email</label>
+								<label for="email">email</label>
 								<form:input type="email" class="form-control" id="email"
 									name="email" path="email" placeholder="ex : xxx@yyy.aa" />
 								<form:errors path="email" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
-								<label for="information"><spring:message code="label.information" /></label>
+								<label for="information">Information de l'utilisateur</label>
 								<form:textarea class="form-control" id="information"
 									name="information" path="information" />
 								<form:errors path="information" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
-								<label for="company"><spring:message code="label.company" /></label>
+								<label for="company">Company</label>
 								<form:input type="text" class="form-control" id="company"
-									name="company" path="company"/>
+									name="company" path="company" placeholder="company" />
 								<form:errors path="company" cssClass="error"></form:errors>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="<spring:message code="label.modify" />"
-								class="btn btn-primary"> <spring:message code="label.or" /> <a href="/webapp/computer"
-								class="btn btn-default"><spring:message code="label.cancel" /></a>
+							<input type="submit" value="Modify Profile"
+								class="btn btn-primary"> or <a href="/webapp/computer"
+								class="btn btn-default">Cancel</a>
 						</div>
 					</form:form>
 
