@@ -21,10 +21,22 @@
 		<div class="container">
 			<a class="navbar-brand" href="/webapp/computer?page=1">
 				Application - Computer Database </a>
-            <div class="pull-right" style="margin-top: 7px">
-				<a style="color:white;font-size:25px;margin-right:10px;" href="/webapp/computer/description">${username}</a>
-				<a class="btn btn-danger" href="/webapp/spring_logout" role="button" >Log out</a>
+
+			<div  class="pull-right"  style="margin-top: 7px">
+				<a	class="btn btn-danger" href="/webapp/spring_logout" role="button"><spring:message code="label.logout" /></a>
 			</div>
+			<div class="pull-right" style="margin-top: 7px;">
+				<a style="color: #9d9d9d; font-size: 25px; margin-right: 10px;" href="/webapp/computer/description">${username}</a> 
+			</div>
+			
+			<div class="pull-right"  style="margin-top: 12px;margin-right:20px;">
+				<a href="/webapp/computer?page=1&locale=fr">
+					<img src="/webapp/img/france.png" alt="Smiley face" height="25" width="25">
+				</a>
+				<a href="/webapp/computer?page=1&locale=en">
+					<img src="/webapp/img/uk.png" alt="Smiley face" height="25" width="25">
+				</a>
+			</div>		
 		</div>
 	</header>
 
@@ -40,16 +52,15 @@
 					<form id="searchForm" action="/webapp/computer" method="GET"
 						class="form-inline">
 						<input type="hidden" name="ACTION_TYPE" value="getName" /> <input
-							type="search" id="searchbox" name="search" class="form-control"
-							placeholder="Search name" /> <input type="submit"
-							id="searchsubmit" value=<spring:message code="label.filter"/>class="btn btn-primary" />
+							type="search" id="searchbox" name="search" class="form-control" /> <input type="submit"
+							id="searchsubmit" value=<spring:message code="label.filter"/> class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
 						href="/webapp/computer?ACTION_TYPE=create"><spring:message code="label.add"/></a> <a
 						class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						onclick="$.fn.toggleEditMode();"><spring:message code="label.delete"/></a>
 				</div>
 			</div>
 		</div>

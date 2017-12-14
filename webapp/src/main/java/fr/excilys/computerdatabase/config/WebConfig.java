@@ -30,7 +30,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-
 @EnableWebSecurity
 @Configuration
 @EnableWebMvc
@@ -39,12 +38,11 @@ import com.zaxxer.hikari.HikariDataSource;
 @Import({ SecurityConfig.class })
 public class WebConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private Environment environment;
-    
-	private HikariDataSource ds;	
+	@Autowired
+	private Environment environment;
 
-	
+	private HikariDataSource ds;
+
 	@Bean
 	public SessionFactory sessionFactory() {
 		LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(restDataSource());
@@ -55,54 +53,54 @@ public class WebConfig implements WebMvcConfigurer {
 	@Bean
 	public DataSource restDataSource() {
 		HikariConfig config = new HikariConfig();
-		config.setDriverClassName( environment.getRequiredProperty("jdbc.driverClassName"));
+		config.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
 		config.setJdbcUrl(environment.getRequiredProperty("jdbc.url"));
 		config.setUsername(environment.getRequiredProperty("jdbc.username"));
 		config.setPassword(environment.getRequiredProperty("jdbc.password"));
 		ds = new HikariDataSource(config);
 		return ds;
 	}
-	
+
 	public Connection getConnection() throws SQLException {
 		return ds.getConnection();
 	}
-	
+
 	@Override
-	public void addResourceHandlers (ResourceHandlerRegistry registry) {
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/*");
-		
+
 	}
-	
+
 	@Bean
-	public InternalResourceViewResolver viewResolver(){
+	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/");
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
 	}
-	
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("/messages/messages");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
-    @Bean
-    public LocaleResolver localeResolver(){
-	CookieLocaleResolver resolver = new CookieLocaleResolver();
-	resolver.setDefaultLocale(new Locale("en"));
-	resolver.setCookieName("LocaleCookie");
-	resolver.setCookieMaxAge(4800);
-	return resolver;
-    }
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-	LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-	interceptor.setParamName("locale");
-	registry.addInterceptor(interceptor);
-    }
-	
+
+	@Bean
+	public MessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename("/messages/messages");
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
+	}
+
+	@Bean
+	public LocaleResolver localeResolver() {
+		CookieLocaleResolver resolver = new CookieLocaleResolver();
+		resolver.setDefaultLocale(new Locale("en"));
+		resolver.setCookieName("LocaleCookie");
+		resolver.setCookieMaxAge(4800);
+		return resolver;
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+		interceptor.setParamName("locale");
+		registry.addInterceptor(interceptor);
+	}
+
 }
-
-

@@ -29,32 +29,42 @@
 		<div class="container">
 			<a class="navbar-brand" href="/webapp/computer?page=1">
 				Application - Computer Database </a>
+
+		
+			<div class="pull-right"  style="margin-top: 12px;margin-right:20px;">
+				<a href="/webapp/signup?locale=fr">
+					<img src="/webapp/img/france.png" alt="Smiley face" height="25" width="25">
+				</a>
+				<a href="/webapp/signup?locale=en">
+					<img src="/webapp/img/uk.png" alt="Smiley face" height="25" width="25">
+				</a>
+			</div>
 		</div>
 	</header>
 	<section id="main">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-6 col-xs-offset-3 box">
-					<h1>Inscription</h1>
+					<h1> <spring:message code="label.signup"/></h1>
 					<form:form action="/webapp/signup" id="signUpForm"
 						name="signUpForm" modelAttribute="userDTO" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="username">Nom d'utilisateur</label>
+								<label for="username"> <spring:message code="label.username"/></label>
 								<form:input type="text" class="form-control" id="username"
 									name="username" path="username" placeholder="username" />
 								<form:errors path="username" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
-								<label for="password">Mot de passe</label>
+								<label for="password"> <spring:message code="label.password"/></label>
 								<form:input type="password" class="form-control" id="password"
 									name="password" path="password" placeholder="********" />
 								<form:errors path="password" cssClass="error"></form:errors>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Sign up" class="btn btn-primary">
-							or <a href="/webapp/login" class="btn btn-default">Cancel</a>
+							<input type="submit" value="<spring:message code="label.signup"/>" class="btn btn-primary"> </input>
+							or <a href="/webapp/login" class="btn btn-default"> <spring:message code="label.cancel"/></a>
 						</div>
 					</form:form>
 				</div>
