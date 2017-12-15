@@ -74,12 +74,24 @@
                             </div>
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="label.company"/></label>
-                                <form:select class="form-control" name="companyId" path="companyId" id="companyId">
-									<c:forEach var="company" items="${companies}">
-										<option value="${company.id}">${company.name}</option>
-									</c:forEach>
-								</form:select>
-                            </div>                  
+								<c:choose>
+                                	<c:when test="${authority == 'ROLE_ADMIN'}">
+		                                <form:select class="form-control" name="companyId" path="companyId" id="companyId">
+											<c:forEach var="company" items="${companies}">
+												<option value="${company.id}">${company.name}</option>
+											</c:forEach>
+										</form:select>
+									</c:when>
+									<c:when  test="${computerDTO.companyId == 0}">
+										<form:input type="text" class="form-control"  id="company" name="company"  path="company" value="${computerDTO.company}" disabled="true"/>
+										<form:input type="hidden" class="form-control" id="companyId" name="companyId"  path="companyId" value="${desc.company_id}"/>
+									</c:when>
+									<c:otherwise>
+										<form:input type="text" class="form-control"  id="company" name="company"  path="company" value="${computerDTO.company}" disabled="true"/>
+										<form:input type="hidden" class="form-control" id="companyId" name="companyId"  path="companyId" value="${computerDTO.companyId}"/>
+									</c:otherwise>
+								</c:choose>
+                            </div>
                         </fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="<spring:message code="label.edit"/>" class="btn btn-primary"> or

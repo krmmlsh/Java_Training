@@ -24,6 +24,7 @@ import fr.excilys.computerdatabase.model.ComputerDTO;
 import fr.excilys.computerdatabase.service.CompanyServices;
 import fr.excilys.computerdatabase.service.ComputerServices;
 import fr.excilys.computerdatabase.service.UserServices;
+import fr.excilys.computerdatabase.validator.DescriptionDTO;
 
 @RequestMapping("/computer")
 @Controller
@@ -138,7 +139,11 @@ public class ComputerController {
 	@RequestMapping(params = ACTION_TYPE + "=" + CREATE, method = RequestMethod.GET)
 	public String createPage(Model model) {
 		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<? extends GrantedAuthority> authorities = (List<? extends GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		DescriptionDTO desc = userServices.getDescription(userDetails.getUsername());
+		model.addAttribute("desc", desc);
 		model.addAttribute("username", userDetails.getUsername());
+		model.addAttribute("authority", authorities.get(0).toString());
 		model.addAttribute("computerDTO", new ComputerDTO());
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return ADDCOMPUTER;
@@ -147,7 +152,11 @@ public class ComputerController {
 	@RequestMapping(params = ACTION_TYPE + "=" + UPDATE, method = RequestMethod.GET)
 	public String updatePage(@RequestParam int computerId, Model model) {
 		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<? extends GrantedAuthority> authorities = (List<? extends GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		DescriptionDTO desc = userServices.getDescription(userDetails.getUsername());
+		model.addAttribute("desc", desc);
 		model.addAttribute("username", userDetails.getUsername());
+		model.addAttribute("authority", authorities.get(0).toString());
 		model.addAttribute("computerDTO", computerServices.getComputerById(computerId));
 		model.addAttribute(COMPANIES, companyServices.getAllCompanies());
 		return EDITCOMPUTER;
