@@ -41,7 +41,7 @@
 				<tbody id="results">
 					<c:forEach items="${desclist}" var="desc">
 						<tr>
-							<td><a href="/webapp/computer/description">${desc.user.username}</a></td>
+							<td><a href="/webapp/computer/description/user?userUsername=${desc.user.username}">${desc.user.username}</a></td>
 							<td>${desc.company.name}</td>
 						</tr>
 					</c:forEach>

@@ -69,11 +69,20 @@
                             </div>
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="label.company"/></label>
-                                <form:select class="form-control" name="companyId" path="companyId" id="companyId">
-									<c:forEach var="company" items="${companies}">
-										<option value="${company.id}">${company.name}</option>
-									</c:forEach>
-								</form:select>
+                                <c:choose>
+                                	<c:when test="${authority == 'ROLE_ADMIN'}">
+		                                <form:select class="form-control" name="companyId" path="companyId" id="companyId">
+											<c:forEach var="company" items="${companies}">
+												<option value="${company.id}">${company.name}</option>
+											</c:forEach>
+										</form:select>
+									</c:when>
+									<c:otherwise>
+										<input type="text" class="form-control"  value="${desc.company}" disabled/>
+										<form:input type="hidden" class="form-control" id="companyId" name="companyId"  path="companyId" value="${desc.company_id}"/>
+									
+									</c:otherwise>
+								</c:choose>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">

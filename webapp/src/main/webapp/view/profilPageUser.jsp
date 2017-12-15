@@ -32,7 +32,7 @@
         <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
         	<table class="nav sidebar-nav table table-striped2 table-bordered">
         		<tr>
-        			<th colspan="2" style="text-align: center">User list</th>
+        			<th colspan="2" style="text-align: center"><spring:message code="label.userList" /></th>
         		</tr>
 				<tr>
 					<th><spring:message code="label.name" /></th>
@@ -73,10 +73,10 @@
 			
 			<div class="pull-right"  style="margin-top: 12px;margin-right:20px;">
 				<a href="/webapp/computer?page=1&locale=fr">
-					<img src="/webapp/img/france.png" alt="Smiley face" height="25" width="25">
+					<img src="/webapp/img/france.png" alt="France" height="25" width="25">
 				</a>
 				<a href="/webapp/computer?page=1&locale=en">
-					<img src="/webapp/img/uk.png" alt="Smiley face" height="25" width="25">
+					<img src="/webapp/img/uk.png" alt="England" height="25" width="25">
 				</a>
 			</div>				
 
@@ -87,7 +87,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1><spring:message code="label.profilPage" /></h1>
+					<h1><spring:message code="label.profilPageUser" /> ${userUsername}</h1>
 					<form:form action="/webapp/computer/description"
 						id="descriptionForm" name="descriptionForm"
 						modelAttribute="descriptionDTO" method="POST">
@@ -98,39 +98,34 @@
 							<div class="form-group">
 								<label for="firstname"><spring:message code="label.firstname" /></label>
 								<form:input type="text" class="form-control" id="firstname"
-									name="firstname" path="firstname" placeholder="ex : Karim" />
+									name="firstname" path="firstname" disabled="true"/>
 								<form:errors path="firstname" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
 								<label for="lastname"><spring:message code="label.lastname" /></label>
 								<form:input type="text" class="form-control" id="lastname"
-									name="lastname" path="lastname" placeholder="ex : Pheng" />
+									name="lastname" path="lastname" disabled="true" />
 								<form:errors path="firstname" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
 								<label for="email">Email</label>
 								<form:input type="email" class="form-control" id="email"
-									name="email" path="email" placeholder="ex : xxx@yyy.aa" />
+									name="email" path="email" disabled="true"  />
 								<form:errors path="email" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
 								<label for="information"><spring:message code="label.information" /></label>
 								<form:textarea class="form-control" id="information"
-									name="information" path="information" />
+									name="information" path="information" disabled="true" />
 								<form:errors path="information" cssClass="error"></form:errors>
 							</div>
 							<div class="form-group">
 								<label for="company"><spring:message code="label.company" /></label>
 								<form:input type="text" class="form-control" id="company"
-									name="company" path="company"/>
+									name="company" path="company" disabled="true"/>
 								<form:errors path="company" cssClass="error"></form:errors>
 							</div>
 						</fieldset>
-						<div class="actions pull-right">
-							<input type="submit" value="<spring:message code="label.modify" />"
-								class="btn btn-primary"> <spring:message code="label.or" /> <a href="/webapp/computer"
-								class="btn btn-default"><spring:message code="label.cancel" /></a>
-						</div>
 					</form:form>
 
 
