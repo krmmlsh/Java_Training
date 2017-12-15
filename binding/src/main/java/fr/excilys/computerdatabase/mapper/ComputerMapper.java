@@ -20,6 +20,7 @@ public class ComputerMapper {
 				.discontinuedDate(
 						(computer.getDiscontinuedDate() != null) ? computer.getDiscontinuedDate().toString() : null)
 				.company((computer.getCompany() != null) ? computer.getCompany().getName() : null)
+				.compId((computer.getCompany() != null) ? computer.getCompany().getId() : 0)
 				.userId(computer.getUser() != null ? computer.getUser().getId() : -1).build();
 	}
 
