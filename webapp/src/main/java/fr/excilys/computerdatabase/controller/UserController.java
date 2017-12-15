@@ -29,6 +29,8 @@ public class UserController {
 	private static final String VIEW_SIGN_UP = "view/signUp";
 	private static final String VIEW_DESCRIPTION = "view/profilPage";
 	private static final String VIEW_DASHBOARD = "view/dashboard";
+	private static final String VIEW_DESCRIPTION_USER = "view/profilPageUser";
+
 
 	@Autowired
 	UserServices userServices;
@@ -62,6 +64,7 @@ public class UserController {
 		}
 		return VIEW_LOGIN;
 	}
+	
 	@RequestMapping(value = "/computer/description", method = RequestMethod.GET)
 	public String profilPage(Model model) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -77,6 +80,23 @@ public class UserController {
 
 		return VIEW_DESCRIPTION;
 	}
+	
+	@RequestMapping(value = "/computer/description/user", method = RequestMethod.GET)
+	public String profilPageUser(Model model, @RequestParam(required=false) String userUsername) {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("username", user.getUsername());
+		DescriptionDTO description = userServices.getDescription(userUsername);
+		model.addAttribute("descriptionDTO", description);
+		List<ComputerDTO> computersDTO = computerServices.getComputerByUserId(description.getUser_id());
+		model.addAttribute("computers", computersDTO);
+		model.addAttribute("userUsername", userUsername);
+		List<Description> descList = userServices.findAllUsers();
+		model.addAttribute("desclist", descList);
+		List<? extends GrantedAuthority> authorities = (List<? extends GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		model.addAttribute("authority", authorities.get(0).toString());
+		return VIEW_DESCRIPTION_USER;
+	}
+
 
 	@RequestMapping(value = "/computer/description", method = RequestMethod.POST)
 	public String profil(@Valid DescriptionDTO descriptionDTO, BindingResult result, Model model) {

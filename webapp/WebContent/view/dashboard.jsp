@@ -108,7 +108,7 @@
 						<!-- Table header for Discontinued Date -->
 						<th><spring:message code="label.discontinued"/></th>
 						<!-- Table header for Company -->
-						<th><spring:message code="label.name"/></th>
+						<th><spring:message code="label.company"/></th>
 
 					</tr>
 				</thead>
