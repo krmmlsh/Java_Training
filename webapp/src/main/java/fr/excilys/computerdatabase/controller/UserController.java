@@ -2,6 +2,8 @@ package fr.excilys.computerdatabase.controller;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.WebUtils;
 
 import fr.excilys.computerdatabase.model.ComputerDTO;
 import fr.excilys.computerdatabase.model.Description;
@@ -42,7 +45,7 @@ public class UserController {
 	public String login(@RequestParam(value = "error", required = false) String error, Model model) {
 
 		if (error != null) {
-			model.addAttribute("error", "Username or Password false");
+			model.addAttribute("error", "Incorrect username or password !");
 		}
 
 		return VIEW_LOGIN;
@@ -82,10 +85,13 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/computer/description/user", method = RequestMethod.GET)
-	public String profilPageUser(Model model, @RequestParam(required=false) String userUsername) {
+	public String profilPageUser(Model model, @RequestParam(required=true) String userUsername) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("username", user.getUsername());
 		DescriptionDTO description = userServices.getDescription(userUsername);
+		if (description == null) {
+			return "redirect:../../computer";
+		}
 		model.addAttribute("descriptionDTO", description);
 		List<ComputerDTO> computersDTO = computerServices.getComputerByUserId(description.getUser_id());
 		model.addAttribute("computers", computersDTO);

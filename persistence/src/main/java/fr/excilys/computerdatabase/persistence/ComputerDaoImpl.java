@@ -66,7 +66,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	 *            Name of the computer.
 	 * @return A computer.
 	 */
-	public List<Computer> findByName(String name) {
+	public List<Computer> findByName(String name, NbTotal nbTotal) {
 		logger.trace("ENTER GET COMPUTER BY ID");
 		Session session = sessionFactory.openSession();
 
@@ -78,6 +78,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			LogicalExpression le = Restrictions.or(computerName, companyName);
 			cr.add(le);
 			List<Computer> computers = cr.list();
+			nbTotal.nomberOfComputer = computers.size();
 			return computers;
 		} catch (HibernateException he) {
 			logger.error("Error while getting a computer");
@@ -87,21 +88,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		return null;
 
 	}
-
-	public List<Computer> getComputerByUserId(int user_id) {
-		Session session = sessionFactory.openSession();
-		try {
-			Criteria cr = session.createCriteria(Computer.class, "computer").createCriteria("computer.user", "user")
-					.add(Restrictions.eq("user.id", user_id));
-			List<Computer> computers = cr.list();
-			return computers;
-		} catch (HibernateException he) {
-			logger.error("Error while getting a computer");
-		} finally {
-			session.close();
-		}
-		return null;
-	}
+	
 
 	public List<Computer> findPaging(int currentPage, int limit, NbTotal nbTotal) {
 		logger.trace("ENTER GET ALL COMPUTERS");
@@ -121,6 +108,22 @@ public class ComputerDaoImpl implements ComputerDao {
 			session.close();
 		}
 		return new ArrayList<>();
+	}
+
+
+	public List<Computer> getComputerByUserId(int user_id) {
+		Session session = sessionFactory.openSession();
+		try {
+			Criteria cr = session.createCriteria(Computer.class, "computer").createCriteria("computer.user", "user")
+					.add(Restrictions.eq("user.id", user_id));
+			List<Computer> computers = cr.list();
+			return computers;
+		} catch (HibernateException he) {
+			logger.error("Error while getting a computer");
+		} finally {
+			session.close();
+		}
+		return null;
 	}
 
 	/**

@@ -162,17 +162,19 @@
 
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a id="next" href="/webapp/computer?plus=-1"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
+				<li>
+					<a id="next" href="/webapp/computer?plus=-1" aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
+				</li>
+				
 				<c:forEach items="${pages}" var="page">
-					<li><a id="${page}" href="/webapp/computer?page=${page}"
-						aria-label="${page}"> <span aria-hidden="true">${page}</span>
-					</a></li>
+					<li>
+						<a id="${page}" href="/webapp/computer?page=${page}" aria-label="${page}"> <span aria-hidden="true">${page}</span></a>
+					</li>
 				</c:forEach>
-				<li><a id="previous" href="/webapp/computer?plus=1"
-					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>
+				
+				<li>
+					<a id="previous" href="/webapp/computer?plus=1" aria-label="Next"> <span aria-hidden="true">&raquo;</span></a>
+				</li>
 			</ul>
 		</div>
 

@@ -49,8 +49,8 @@ public class ComputerServices {
 	 *            Name of the computer to be found.
 	 * @return A computer
 	 */
-	public List<ComputerDTO> getComputerByName(String name) {
-		return computerDTOList(computerDao.findByName(name));
+	public List<ComputerDTO> getComputerByName(String name, NbTotal nbTotal) {
+		return computerDTOList(computerDao.findByName(name,nbTotal));
 	}
 	
 	public List<ComputerDTO> getComputerByUserId(int user_id) {
@@ -85,7 +85,11 @@ public class ComputerServices {
 	 */
 	public boolean removeComputer(String computerIds) {
 		for (String stringId : computerIds.split(",")) {
-			if (computerDao.removeComputer(Integer.valueOf(stringId)) == false) {
+			try {
+				if (computerDao.removeComputer(Integer.valueOf(stringId)) == false) {
+					return false;
+				}
+			} catch (NumberFormatException e) {
 				return false;
 			}
 		}

@@ -41,16 +41,17 @@
 			</div>
 		</div>
 	</header>
-	<table>
-		<tr>
-			<td colspan="2" style="color: red;"><c:if
-					test="${not empty error}"> ${error}</c:if></td>
-		</tr>
-	</table>
+
 	<section id="main">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-6 col-xs-offset-3 box">
+					<table>
+						<tr>
+							<td class="error" colspan="2" style="color: red;"><c:if
+									test="${not empty error}"> ${error}</c:if></td>
+						</tr>
+					</table>
 					<h1><spring:message code="label.signin"/></h1>
 
 					<form name="loginForm" action="<c:url value='spring_security'/>"

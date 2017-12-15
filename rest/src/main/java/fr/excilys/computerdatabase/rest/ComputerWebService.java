@@ -82,7 +82,7 @@ public class ComputerWebService {
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<List<ComputerDTO>> getComputerByName(@RequestParam String search) {
-		return ResponseEntity.ok(computerServices.getComputerByName(search));
+		return ResponseEntity.ok(computerServices.getComputerByName(search, new NbTotal()));
 	}
 
 	@RequestMapping(value = "/computer", method = RequestMethod.GET)

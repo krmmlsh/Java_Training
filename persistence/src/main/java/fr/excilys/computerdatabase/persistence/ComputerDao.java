@@ -8,7 +8,7 @@ import fr.excilys.computerdatabase.model.Computer;
 public interface ComputerDao {
 
 	public Computer getComputer(int id);
-	public List<Computer> findByName(String name);
+	public List<Computer> findByName(String name, NbTotal nbTotal);
 	public List<Computer> findPaging(int currentPage, int limit, NbTotal nbTotal);
 	public boolean removeComputer(int id);
 	public boolean insertComputer(Computer computer);

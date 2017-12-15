@@ -84,6 +84,9 @@ public class UserServices implements UserDetailsService {
 
 	public DescriptionDTO getDescription(String username) {
 		Description description =  userDao.findDescription(username);
+		if (description == null) {
+			return null;
+		}
 		DescriptionDTO dDto  = new DescriptionDTO.Builder()
 				.id(description.getId())
 				.email(description.getEmail())
